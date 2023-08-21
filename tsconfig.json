@@ -1,3 +1,39 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json"
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "lib": ["dom", "esnext"],
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "allowJs": true,
+    "jsx": "react-native",
+    "isolatedModules": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@screens/*": ["src/screens/*"],
+      "@constants/*": ["src/constants/*"],
+      "@src/*": ["src/*"],
+      "@root": ["src/index"],
+      "@theme/*": ["src/theme/*"],
+      "@hooks/*": ["src/hooks/*"]
+    }
+  }
 }
