@@ -9,9 +9,7 @@ module.exports = {
   ],
   settings: {
     'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx'],
-    },
+    'import/parsers': { '@typescript-eslint/parser': ['.ts', '.tsx'] },
     'import/resolver': {
       typescript: {},
       alias: {
@@ -38,16 +36,11 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
+    ecmaFeatures: { jsx: true },
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  env: {
-    jest: true,
-    'react-native/react-native': true,
-  },
+  env: { jest: true, 'react-native/react-native': true },
   rules: {
     'no-use-before-define': 'off',
     'react/jsx-filename-extension': 'off',
@@ -59,7 +52,10 @@ module.exports = {
     'react-native/split-platform-components': 2,
     'react-native/no-inline-styles': 2,
     'react-native/no-color-literals': 2,
-    'react-native/no-raw-text': 2,
+    'react-native/no-raw-text': [
+      'error',
+      { skip: ['Text', 'TextContent', 'Title', 'RedirectionButtonContext'] },
+    ],
     'react-native/no-single-element-style-arrays': 2,
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
@@ -68,36 +64,20 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 0,
     'no-confusing-arrow': 0,
     'arrow-body-style': ['error', 'always'],
-    'object-curly-newline': ['error', 'never'],
-    'react/no-unstable-nested-components': [
-      'off',
-      {
-        allowAsProps: true,
-      },
-    ],
+    'object-curly-newline': 'off',
+    'react/no-unstable-nested-components': ['off', { allowAsProps: true }],
     'arrow-parens': ['error', 'always'],
     'no-nested-ternary': 'off',
     indent: 'off',
     'operator-linebreak': [
       1,
       'after',
-      {
-        overrides: {
-          '?': 'ignore',
-          ':': 'ignore',
-        },
-      },
+      { overrides: { '?': 'ignore', ':': 'ignore' } },
     ],
     'import/extensions': [
       'error',
       'ignorePackages',
-      {
-        ts: 'never',
-        tsx: 'never',
-        js: 'never',
-        jsx: 'never',
-        mjs: 'never',
-      },
+      { ts: 'never', tsx: 'never', js: 'never', jsx: 'never', mjs: 'never' },
     ],
   },
   globals: {
