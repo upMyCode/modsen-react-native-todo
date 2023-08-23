@@ -5,16 +5,20 @@ const { assetExts, sourceExts } = defaultConfig.resolver;
 
 const config = {
   transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
+    getTransformOptions: async () => {
+      return {
+        transform: {
+          experimentalImportSupport: false,
+          inlineRequires: true,
+        },
+      };
+    },
     babelTransformerPath: require.resolve('react-native-svg-transformer'),
   },
   resolver: {
-    assetExts: assetExts.filter((ext) => ext !== 'svg'),
+    assetExts: assetExts.filter((ext) => {
+      return ext !== 'svg';
+    }),
     sourceExts: [...sourceExts, 'svg'],
   },
 };
