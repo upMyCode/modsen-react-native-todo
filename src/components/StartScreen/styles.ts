@@ -1,12 +1,16 @@
 import styled from 'styled-components/native';
 
-import type { TextContainerProps } from './types';
+import type {
+  RedirectionButtonWrapperProps,
+  TextContainerProps,
+  TextContentProps,
+} from './types';
 
 export const TextContainer = styled.View<TextContainerProps>`
   display: flex;
   align-items: center;
-  margin-top: ${({ marginToFromTextContainer }) => {
-    return marginToFromTextContainer;
+  margin-top: ${({ marginToFromTitleContainer }) => {
+    return marginToFromTitleContainer;
   }}px;
 `;
 export const Title = styled.Text`
@@ -18,13 +22,15 @@ export const Title = styled.Text`
   line-height: 34.68px;
 `;
 
-export const TextContent = styled.Text`
+export const TextContent = styled.Text<TextContentProps>`
   font-family: 'Roboto-Regular';
   color: #8d93ab;
   font-size: 12px;
   width: 276px;
   text-align: center;
-  margin-top: 8px;
+  margin-top: ${({ marginToFromTextContentContainer }) => {
+    return marginToFromTextContentContainer;
+  }}px;
   line-height: 14.06px;
 `;
 
@@ -32,9 +38,12 @@ export const RedirectionButtonContext = styled.Text`
   color: #ffffff;
 `;
 
-export const RedirectionButtonWrapper = styled.View`
+export const RedirectionButtonWrapper = styled.View<RedirectionButtonWrapperProps>`
   flex: 1;
   align-items: center;
+  margin-top: ${({ marginToFromButtonContainer }) => {
+    return marginToFromButtonContainer;
+  }}px;
 `;
 
 export const RedirectionButton = styled.TouchableOpacity`
@@ -44,6 +53,5 @@ export const RedirectionButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  margin-top: 32px;
   font-family: 'Roboto-Medium';
 `;

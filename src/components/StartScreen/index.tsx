@@ -1,7 +1,7 @@
-import MARGIN_TOP_PROCENT from '@constants/startScreenMeasurements';
+import MEASUREMENTS from '@constants/startScreenMeasurements';
 import { ManagedStatusBar, StartScreenImage } from '@root';
 import React from 'react';
-import { Dimensions, SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 import {
   RedirectionButton,
@@ -13,22 +13,28 @@ import {
 } from './styles';
 
 export default function StartScreen() {
-  const windowHeight = Dimensions.get('window').height;
-
-  const marginToFromTextContainer = windowHeight * MARGIN_TOP_PROCENT;
+  const {
+    marginToFromTitleContainer,
+    marginToFromButtonContainer,
+    marginToFromTextContentContainer,
+  } = MEASUREMENTS;
 
   return (
     <SafeAreaView>
       <ManagedStatusBar />
       <StartScreenImage />
-      <TextContainer marginToFromTextContainer={marginToFromTextContainer}>
+      <TextContainer marginToFromTitleContainer={marginToFromTitleContainer}>
         <Title>Manage your tasks</Title>
-        <TextContent>
+        <TextContent
+          marginToFromTextContentContainer={marginToFromTextContentContainer}
+        >
           organize, plan, and collaborate on tasks with Modsen todo list.Your
           busy life deserves this.you can manage checklist and your goal.
         </TextContent>
       </TextContainer>
-      <RedirectionButtonWrapper>
+      <RedirectionButtonWrapper
+        marginToFromButtonContainer={marginToFromButtonContainer}
+      >
         <RedirectionButton>
           <RedirectionButtonContext>Get started</RedirectionButtonContext>
         </RedirectionButton>
