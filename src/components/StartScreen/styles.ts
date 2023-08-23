@@ -14,15 +14,14 @@ export const TextContainer = styled.View<TextContainerProps>`
   }}px;
 `;
 export const Title = styled.Text`
-  font-family: 'Jost-Regular';
-  font-weight: 500;
+  font-family: 'Jost-Medium';
   color: #363636;
   font-size: 24px;
   line-height: 34.68px;
 `;
 
 export const TextContent = styled.Text<TextContentProps>`
-  font-family: 'Roboto-Regular';
+  font-family: 'Roboto-Black';
   color: #8d93ab;
   font-size: 12px;
   width: 276px;
