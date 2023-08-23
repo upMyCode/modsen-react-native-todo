@@ -21,7 +21,7 @@ export const Title = styled.Text`
 `;
 
 export const TextContent = styled.Text<TextContentProps>`
-  font-family: 'Roboto-Black';
+  font-family: 'Roboto-Regular';
   color: #8d93ab;
   font-size: 12px;
   width: 276px;
