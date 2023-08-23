@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import SplashScreen from '@screens/SplashScreen';
+import LoadingScreen from '@screens/LoadingScreen';
 import React from 'react';
 
 const Stack = createStackNavigator();
@@ -10,9 +10,9 @@ export default function StackScreens() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="SplashScreen"
+        initialRouteName="LoadingScreen"
       >
-        <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Screen name="LoadingScreen" component={LoadingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
