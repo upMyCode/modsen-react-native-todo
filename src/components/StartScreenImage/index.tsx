@@ -1,5 +1,5 @@
 import MEASUREMENTS from '@constants/startScreenMeasurements';
-import BackgroundImg from '@src/assets';
+import { BackgroundImg } from '@src/assets';
 import React from 'react';
 import { Image } from 'react-native';
 

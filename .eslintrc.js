@@ -54,7 +54,16 @@ module.exports = {
     'react-native/no-color-literals': 2,
     'react-native/no-raw-text': [
       'error',
-      { skip: ['Text', 'TextContent', 'Title', 'RedirectionButtonContext'] },
+      {
+        skip: [
+          'Text',
+          'TextContent',
+          'Title',
+          'RedirectionButtonContext',
+          'TaskInfoTitleItem',
+          'TaskInfoTextContent',
+        ],
+      },
     ],
     'react-native/no-single-element-style-arrays': 2,
     'simple-import-sort/imports': 'error',

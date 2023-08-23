@@ -34,6 +34,7 @@ export const TextContent = styled.Text<TextContentProps>`
 
 export const RedirectionButtonContext = styled.Text`
   color: #ffffff;
+  font-family: 'Roboto-Medium';
 `;
 
 export const RedirectionButtonWrapper = styled.View<RedirectionButtonWrapperProps>`
@@ -42,14 +43,4 @@ export const RedirectionButtonWrapper = styled.View<RedirectionButtonWrapperProp
   margin-top: ${({ marginToFromButtonContainer }) => {
     return marginToFromButtonContainer;
   }}px;
-`;
-
-export const RedirectionButton = styled.TouchableOpacity`
-  width: 240px;
-  height: 40px;
-  background-color: #9ba3eb;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  font-family: 'Roboto-Medium';
 `;
