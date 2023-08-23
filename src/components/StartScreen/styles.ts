@@ -18,7 +18,6 @@ export const Title = styled.Text`
   font-weight: 500;
   color: #363636;
   font-size: 24px;
-  width: 200px;
   line-height: 34.68px;
 `;
 
