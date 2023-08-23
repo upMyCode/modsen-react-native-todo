@@ -1,13 +1,8 @@
-import TestComp from '@components/TestComp';
+import { StackScreens } from '@root';
 import React from 'react';
-import { SafeAreaView } from 'react-native';
 
 function App(): JSX.Element {
-  return (
-    <SafeAreaView>
-      <TestComp />
-    </SafeAreaView>
-  );
+  return <StackScreens />;
 }
 
 export default App;
