@@ -14,11 +14,9 @@ export const TextContainer = styled.View<TextContainerProps>`
   }}px;
 `;
 export const Title = styled.Text`
-  font-family: 'Jost-Regular';
-  font-weight: 500;
+  font-family: 'Jost-Medium';
   color: #363636;
   font-size: 24px;
-  width: 200px;
   line-height: 34.68px;
 `;
 
