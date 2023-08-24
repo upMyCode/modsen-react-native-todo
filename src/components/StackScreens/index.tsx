@@ -1,9 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { DrawerScreens } from '@root';
 import LoadingScreen from '@screens/LoadingScreen';
 import React from 'react';
 
-const Stack = createStackNavigator();
+import type { StackScreensParamList } from './types';
+
+const Stack = createStackNavigator<StackScreensParamList>();
 
 export default function StackScreens() {
   return (
@@ -13,6 +16,7 @@ export default function StackScreens() {
         initialRouteName="LoadingScreen"
       >
         <Stack.Screen name="LoadingScreen" component={LoadingScreen} />
+        <Stack.Screen name="DrawerScreens" component={DrawerScreens} />
       </Stack.Navigator>
     </NavigationContainer>
   );
