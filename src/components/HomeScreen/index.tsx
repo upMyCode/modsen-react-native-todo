@@ -1,5 +1,6 @@
 import type { ItemDataButtons } from '@constants/homeScreenButtons';
 import DATE_BUTTONS from '@constants/homeScreenButtons';
+import { DrawerActions } from '@react-navigation/native';
 import {
   Button,
   HomeScreenImage,
@@ -9,11 +10,12 @@ import {
 import { BurgerMenuImg } from '@src/assets';
 import React from 'react';
 import type { ListRenderItemInfo } from 'react-native';
-import { FlatList, Image, Pressable, SafeAreaView, Text } from 'react-native';
+import { FlatList, Image, Pressable, SafeAreaView } from 'react-native';
 
 import {
   DateButtonsContainer,
   DateButtonsWrapper,
+  DateText,
   Header,
   Main,
   TaskInfo,
@@ -22,6 +24,7 @@ import {
   TaskInfoTitleItem,
   Title,
 } from './styles';
+import type { NavigationProps } from './types';
 
 const renderItem = ({ item }: ListRenderItemInfo<ItemDataButtons>) => {
   return (
@@ -34,19 +37,23 @@ const renderItem = ({ item }: ListRenderItemInfo<ItemDataButtons>) => {
         return console.log(1);
       }}
     >
-      <Text>{item.value}</Text>
+      <DateText>{item.value}</DateText>
     </Button>
   );
 };
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }: NavigationProps) {
   const BURGER_MENU_IMAGE = Image.resolveAssetSource(BurgerMenuImg).uri;
+
+  const handleDrawerMenu = () => {
+    navigation.dispatch(DrawerActions.toggleDrawer());
+  };
 
   return (
     <SafeAreaView>
       <ManagedStatusBar />
       <HomeScreenImage />
       <Header>
-        <Pressable>
+        <Pressable onPress={handleDrawerMenu}>
           <Image width={24} height={24} source={{ uri: BURGER_MENU_IMAGE }} />
         </Pressable>
         <Title>Modsen Todo list</Title>

@@ -1,8 +1,8 @@
 import { ReactElement, ReactNode } from 'react';
 
 export interface ButtonProps {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   bgColor?: string;
   bRadius?: number;
   bColor?: string;
@@ -11,8 +11,8 @@ export interface ButtonProps {
 }
 
 export interface PaintedButtonProps {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   bgColor?: string;
   bRadius?: number;
   bColor?: string;

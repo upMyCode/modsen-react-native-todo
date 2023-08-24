@@ -66,3 +66,10 @@ export const DateButtonsContainer = styled.View`
   justify-content: flex-end;
   margin: 16px 16px;
 `;
+
+export const DateText = styled.Text`
+  font-family: 'Jost-Regular';
+  font-size: 16px;
+  line-height: 23.12px;
+  color: #7d7d7d;
+`;

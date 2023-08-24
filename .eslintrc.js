@@ -62,6 +62,7 @@ module.exports = {
           'RedirectionButtonContext',
           'TaskInfoTitleItem',
           'TaskInfoTextContent',
+          'TextContext',
         ],
       },
     ],
