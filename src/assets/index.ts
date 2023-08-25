@@ -6,7 +6,13 @@ import BurgerMenuImg from './img/BurgerMenu.png';
 import DailyImg from './img/Daily.png';
 import DoneImg from './img/Done.png';
 import ImportantImg from './img/Important.png';
+import PlusImg from './img/Plus.png';
+import ReadImg from './img/Read.png';
+import SchoolImg from './img/School.png';
 import SearchImg from './img/Search.png';
+import ShopImg from './img/Shop.png';
+import WorkImg from './img/Work.png';
+import WorkOutImg from './img/WorkOut.png';
 
 export {
   ArrowImg,
@@ -17,5 +23,11 @@ export {
   DailyImg,
   DoneImg,
   ImportantImg,
+  PlusImg,
+  ReadImg,
+  SchoolImg,
   SearchImg,
+  ShopImg,
+  WorkImg,
+  WorkOutImg,
 };

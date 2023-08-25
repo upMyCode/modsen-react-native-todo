@@ -21,5 +21,8 @@ const PaintedButton = styled.TouchableOpacity<PaintedButtonProps>`
   border: ${({ bColor }) => {
     return bColor || 'none';
   }};
+  box-shadow: ${({ boxShadow }) => {
+    return boxShadow ? '1px 1px rgba(0, 0, 0, 0.25)' : 'none';
+  }};
 `;
 export default PaintedButton;

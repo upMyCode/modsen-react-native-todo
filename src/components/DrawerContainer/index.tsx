@@ -24,6 +24,7 @@ export default function DrawerContainer({ navigation }: NavigationProps) {
       <BackButton navigation={navigation} />
 
       <FlatList
+        scrollEnabled={false}
         data={TASK_LIST}
         keyExtractor={({ id }) => {
           return id;

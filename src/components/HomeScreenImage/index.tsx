@@ -1,3 +1,4 @@
+import CIRCLES_DIMENSIONS from '@constants/homeScreenImage';
 import { CircleImage } from '@root';
 import { BackgroundEclipseImage1, BackgroundEclipseImage2 } from '@src/assets';
 import React from 'react';
@@ -16,14 +17,14 @@ export default function HomeScreenImage() {
   return (
     <Wrapper>
       <CircleImage
-        width={235}
-        height={235}
+        width={CIRCLES_DIMENSIONS.firstCircleWidth}
+        height={CIRCLES_DIMENSIONS.firstCircleHeight}
         image={BACKGROUND_IMAGE_1}
         positionParams={{ top: -27, left: -35 }}
       />
       <CircleImage
-        width={279}
-        height={279}
+        width={CIRCLES_DIMENSIONS.secondCircleWidth}
+        height={CIRCLES_DIMENSIONS.secondCircleHeight}
         image={BACKGROUND_IMAGE_2}
         positionParams={{ top: -27, left: 112 }}
       />

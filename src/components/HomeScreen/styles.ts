@@ -73,3 +73,7 @@ export const DateText = styled.Text`
   line-height: 23.12px;
   color: #7d7d7d;
 `;
+
+export const TaskCatigories = styled.ScrollView`
+  margin: 8px 16px 0 16px;
+`;

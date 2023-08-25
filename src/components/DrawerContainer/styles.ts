@@ -6,7 +6,7 @@ export const Wrapper = styled.SafeAreaView`
   margin-left: 16px;
 `;
 
-export const Container = styled.View<ContainerProps>`
+export const Container = styled.TouchableOpacity<ContainerProps>`
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -11,6 +11,7 @@ export default function Button({
   bRadius,
   onPress,
   bColor,
+  boxShadow,
 }: ButtonProps) {
   return (
     <PaintedButton
@@ -20,6 +21,7 @@ export default function Button({
       bRadius={bRadius}
       onPress={onPress}
       bColor={bColor}
+      boxShadow={boxShadow}
     >
       {children}
     </PaintedButton>
