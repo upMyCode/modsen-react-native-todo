@@ -3,6 +3,7 @@ import BackgroundEclipseImage1 from './img/BackgroundEclipseImage1.png';
 import BackgroundEclipseImage2 from './img/BackgroundEclipseImage2.png';
 import BackgroundImg from './img/BackgroundImg.png';
 import BurgerMenuImg from './img/BurgerMenu.png';
+import CustomImg from './img/Custom.png';
 import DailyImg from './img/Daily.png';
 import DoneImg from './img/Done.png';
 import ImportantImg from './img/Important.png';
@@ -20,6 +21,7 @@ export {
   BackgroundEclipseImage2,
   BackgroundImg,
   BurgerMenuImg,
+  CustomImg,
   DailyImg,
   DoneImg,
   ImportantImg,

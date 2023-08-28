@@ -9,11 +9,12 @@ import {
   HomeScreenImage,
   HomeScreenSearchBar,
   ManagedStatusBar,
+  ModalContainer,
 } from '@root';
 import { BurgerMenuImg } from '@src/assets';
-import React from 'react';
+import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
-import { FlatList, Image, Pressable, SafeAreaView } from 'react-native';
+import { FlatList, Image, Pressable, SafeAreaView, Text } from 'react-native';
 
 import {
   DateButtonsContainer,
@@ -69,6 +70,7 @@ const renderItemTaskCatigory = ({
 };
 
 export default function HomeScreen({ navigation }: NavigationProps) {
+  const [modalVisible, setModalVisible] = useState(true);
   const BURGER_MENU_IMAGE = Image.resolveAssetSource(BurgerMenuImg).uri;
 
   const handleDrawerMenu = () => {
@@ -77,6 +79,16 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 
   return (
     <SafeAreaView>
+      {modalVisible && (
+        <ModalContainer
+          title="Add your personal activity"
+          textContent="You can add tour personal activity ticket"
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        >
+          <Text>Hello</Text>
+        </ModalContainer>
+      )}
       <ManagedStatusBar />
       <HomeScreenImage />
       <Header>
