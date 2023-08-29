@@ -22,7 +22,15 @@ const PaintedButton = styled.TouchableOpacity<PaintedButtonProps>`
     return bColor || 'none';
   }};
   box-shadow: ${({ boxShadow }) => {
-    return boxShadow ? '1px 1px rgba(0, 0, 0, 0.25)' : 'none';
+    return boxShadow
+      ? '1px 1px rgba(0, 0, 0, 0.25)'
+      : '1px 1px rgba(0, 0, 0, 0)';
   }};
+  margin-top: ${({ mt }) => {
+    return mt || 0;
+  }}px;
+  margin-left: ${({ ml }) => {
+    return ml || 0;
+  }}px;
 `;
 export default PaintedButton;

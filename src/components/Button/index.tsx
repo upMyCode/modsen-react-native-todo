@@ -12,6 +12,8 @@ export default function Button({
   onPress,
   bColor,
   boxShadow,
+  mt,
+  ml,
 }: ButtonProps) {
   return (
     <PaintedButton
@@ -22,6 +24,8 @@ export default function Button({
       onPress={onPress}
       bColor={bColor}
       boxShadow={boxShadow}
+      mt={mt}
+      ml={ml}
     >
       {children}
     </PaintedButton>

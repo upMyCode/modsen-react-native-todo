@@ -8,4 +8,5 @@ export interface CatigoryButtonProps {
   bColor?: string;
   width: number;
   height: number;
+  onPress: () => void;
 }

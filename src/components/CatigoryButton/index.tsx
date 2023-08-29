@@ -20,6 +20,7 @@ export default function CatigoryButton({
   boxShadow,
   width,
   height,
+  onPress,
 }: CatigoryButtonProps) {
   return (
     <Wrapper>
@@ -30,16 +31,14 @@ export default function CatigoryButton({
         bRadius={bRadius}
         bColor={bColor}
         boxShadow={boxShadow}
-        onPress={() => {
-          return console.log('hello catigory');
-        }}
+        onPress={onPress}
       >
         {boxShadow && (
           <CounterTaskContainer>
             <CounterTaskTextContent>{countTasks}</CounterTaskTextContent>
           </CounterTaskContainer>
         )}
-        <Image source={{ uri: icon }} width={29.33} height={24} />
+        <Image source={{ uri: icon }} width={32} height={32} />
         {boxShadow && <TaskTextContent>{textContent}</TaskTextContent>}
       </Button>
     </Wrapper>

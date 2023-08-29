@@ -5,5 +5,7 @@ export interface ModalProps {
   title: string;
   textContent: string;
   modalVisible: boolean;
-  setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  important?: boolean | undefined;
+  modalFirstHandler: () => void;
+  modalSecondHandler: () => void;
 }

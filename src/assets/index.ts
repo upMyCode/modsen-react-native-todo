@@ -1,4 +1,6 @@
 import ArrowImg from './img/Arrow.png';
+import AsteriskOff from './img/AsteriskOff.png';
+import AsteriskOn from './img/AsteriskOn.png';
 import BackgroundEclipseImage1 from './img/BackgroundEclipseImage1.png';
 import BackgroundEclipseImage2 from './img/BackgroundEclipseImage2.png';
 import BackgroundImg from './img/BackgroundImg.png';
@@ -17,6 +19,8 @@ import WorkOutImg from './img/WorkOut.png';
 
 export {
   ArrowImg,
+  AsteriskOff,
+  AsteriskOn,
   BackgroundEclipseImage1,
   BackgroundEclipseImage2,
   BackgroundImg,

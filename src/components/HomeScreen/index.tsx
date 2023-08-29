@@ -1,5 +1,3 @@
-import type { CatigoryButtonProps } from '@constants/catigoryButton';
-import { CATIGORIES_BUTTON_LIST } from '@constants/catigoryButton';
 import type { ItemDataButtons } from '@constants/homeScreenButtons';
 import DATE_BUTTONS from '@constants/homeScreenButtons';
 import { DrawerActions } from '@react-navigation/native';
@@ -12,16 +10,24 @@ import {
   ModalContainer,
 } from '@root';
 import { BurgerMenuImg } from '@src/assets';
+import type { CatigoryButtonProps } from '@src/hooks/useGetGategoriesList';
+import useGetGategoriesList from '@src/hooks/useGetGategoriesList';
+import { addNewCategory } from '@src/slices/categoriesListSlice';
+import { changeStatusToDisable } from '@src/slices/modalSlice';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
-import { FlatList, Image, Pressable, SafeAreaView, Text } from 'react-native';
+import { FlatList, Image, Pressable, SafeAreaView } from 'react-native';
 
 import {
+  CategoryInput,
+  CategoryText,
   DateButtonsContainer,
   DateButtonsWrapper,
   DateText,
   Header,
   Main,
+  ModalContext,
   TaskCatigories,
   TaskInfo,
   TaskInfoTextContent,
@@ -65,28 +71,58 @@ const renderItemTaskCatigory = ({
       countTasks={item.countTasks}
       textContent={item.textContent}
       icon={CATIGORY_IMAGE}
+      onPress={item.onPress}
     />
   );
 };
 
 export default function HomeScreen({ navigation }: NavigationProps) {
-  const [modalVisible, setModalVisible] = useState(true);
+  const dispatch = useAppDispatch();
+  const { CATIGORIES_BUTTON_LIST } = useGetGategoriesList();
+  const [textValue, onChangeText] = useState('');
   const BURGER_MENU_IMAGE = Image.resolveAssetSource(BurgerMenuImg).uri;
-
+  const modalVisible = useAppSelector((state) => {
+    return state.modalStatusReducer.status;
+  });
   const handleDrawerMenu = () => {
     navigation.dispatch(DrawerActions.toggleDrawer());
+  };
+
+  const handleChangeText = (text: string) => {
+    onChangeText(text);
+  };
+
+  const modalSecondHandler = () => {
+    dispatch(addNewCategory({ totalTask: '', taskCategoryName: textValue }));
+    dispatch(changeStatusToDisable());
+    onChangeText('');
+  };
+
+  const modalFirstHandler = () => {
+    dispatch(changeStatusToDisable());
+    onChangeText('');
   };
 
   return (
     <SafeAreaView>
       {modalVisible && (
         <ModalContainer
+          modalFirstHandler={modalFirstHandler}
+          modalSecondHandler={modalSecondHandler}
           title="Add your personal activity"
           textContent="You can add tour personal activity ticket"
           modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
         >
-          <Text>Hello</Text>
+          <ModalContext>
+            <CategoryText>Category:</CategoryText>
+            <CategoryInput
+              editable
+              value={textValue}
+              onChangeText={handleChangeText}
+              placeholder="Add your category"
+              maxLength={8}
+            />
+          </ModalContext>
         </ModalContainer>
       )}
       <ManagedStatusBar />
@@ -129,12 +165,14 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         </DateButtonsWrapper>
         <TaskCatigories>
           <FlatList
-            columnWrapperStyle={{
+            horizontal={false}
+            scrollEnabled
+            contentContainerStyle={{
+              flexDirection: 'row',
               flexWrap: 'wrap',
             }}
-            scrollEnabled={false}
+            showsHorizontalScrollIndicator
             data={CATIGORIES_BUTTON_LIST}
-            numColumns={6}
             keyExtractor={({ id }) => {
               return id;
             }}

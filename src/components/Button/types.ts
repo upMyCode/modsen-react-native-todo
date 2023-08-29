@@ -6,9 +6,11 @@ export interface ButtonProps {
   bgColor?: string;
   bRadius?: number;
   bColor?: string;
-  children: ReactNode[] | ReactElement;
+  children?: ReactNode[] | ReactElement | undefined;
   onPress: () => void;
-  boxShadow: boolean;
+  boxShadow?: boolean;
+  mt?: number;
+  ml?: number;
 }
 
 export interface PaintedButtonProps {
@@ -17,5 +19,7 @@ export interface PaintedButtonProps {
   bgColor?: string;
   bRadius?: number;
   bColor?: string;
-  boxShadow: boolean;
+  boxShadow?: boolean;
+  mt?: number;
+  ml?: number;
 }
