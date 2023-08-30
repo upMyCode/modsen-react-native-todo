@@ -40,6 +40,7 @@ export default function StartScreen({ navigation }: NavigationProps) {
         marginToFromButtonContainer={marginToFromButtonContainer}
       >
         <Button
+          boxShadow={false}
           width={240}
           height={40}
           bRadius={12}

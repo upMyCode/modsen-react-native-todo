@@ -66,3 +66,39 @@ export const DateButtonsContainer = styled.View`
   justify-content: flex-end;
   margin: 16px 16px;
 `;
+
+export const DateText = styled.Text`
+  font-family: 'Jost-Regular';
+  font-size: 16px;
+  line-height: 23.12px;
+  color: #7d7d7d;
+`;
+
+export const TaskCatigories = styled.View`
+  height: 55%;
+  margin: 8px 16px 0 16px;
+`;
+
+export const ModalContext = styled.View`
+  display: flex;
+  margin: 0 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 17.5px;
+  height: 100px;
+`;
+
+export const CategoryInput = styled.TextInput`
+  width: 120px;
+  border-bottom-width: 0.25px;
+  color: #888888;
+  height: 22px;
+`;
+
+export const CategoryText = styled.Text`
+  font-family: 'Jost-Regular';
+  font-size: 16px;
+  line-height: 23.12px;
+  height: 30px;
+  color: #363636;
+`;

@@ -7,19 +7,30 @@ const PaintedButton = styled.TouchableOpacity<PaintedButtonProps>`
   align-items: center;
   justify-content: center;
   width: ${({ width }) => {
-    return width;
+    return width || 0;
   }}px;
   height: ${({ height }) => {
-    return height;
+    return height || 0;
   }}px;
   background-color: ${({ bgColor }) => {
     return bgColor;
   }};
   border-radius: ${({ bRadius }) => {
-    return bRadius && bRadius;
+    return bRadius || 0;
   }}px;
   border: ${({ bColor }) => {
     return bColor || 'none';
   }};
+  box-shadow: ${({ boxShadow }) => {
+    return boxShadow
+      ? '1px 1px rgba(0, 0, 0, 0.25)'
+      : '1px 1px rgba(0, 0, 0, 0)';
+  }};
+  margin-top: ${({ mt }) => {
+    return mt || 0;
+  }}px;
+  margin-left: ${({ ml }) => {
+    return ml || 0;
+  }}px;
 `;
 export default PaintedButton;
