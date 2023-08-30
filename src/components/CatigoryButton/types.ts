@@ -9,4 +9,5 @@ export interface CatigoryButtonProps {
   width: number;
   height: number;
   onPress: () => void;
+  isThird?: boolean;
 }

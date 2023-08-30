@@ -1,5 +1,9 @@
 import styled from 'styled-components/native';
 
+interface WrapperProps {
+  isThird: boolean | undefined;
+}
+
 export const CounterTaskContainer = styled.View`
   width: 100%;
   align-items: flex-end;
@@ -21,6 +25,8 @@ export const TaskTextContent = styled.Text`
   margin-top: 8px;
 `;
 
-export const Wrapper = styled.View`
-  margin: 16px 14px 0 0;
+export const Wrapper = styled.View<WrapperProps>`
+  margin: ${({ isThird }) => {
+    return isThird ? '16px 0 0 0' : '16px 14px 0 0';
+  }};
 `;

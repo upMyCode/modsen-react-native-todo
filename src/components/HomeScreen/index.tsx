@@ -17,7 +17,7 @@ import { changeStatusToDisable } from '@src/slices/modalSlice';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
-import { FlatList, Image, Pressable, SafeAreaView } from 'react-native';
+import { FlatList, Image, Pressable, View } from 'react-native';
 
 import {
   CategoryInput,
@@ -28,6 +28,7 @@ import {
   Header,
   Main,
   ModalContext,
+  TaskCategoriesContainer,
   TaskCatigories,
   TaskInfo,
   TaskInfoTextContent,
@@ -36,45 +37,6 @@ import {
   Title,
 } from './styles';
 import type { NavigationProps } from './types';
-
-const renderItemDateCatigory = ({
-  item,
-}: ListRenderItemInfo<ItemDataButtons>) => {
-  return (
-    <Button
-      boxShadow={false}
-      width={71}
-      height={27}
-      bColor="#646FD4"
-      bRadius={14}
-      onPress={() => {
-        return console.log(1);
-      }}
-    >
-      <DateText>{item.value}</DateText>
-    </Button>
-  );
-};
-
-const renderItemTaskCatigory = ({
-  item,
-}: ListRenderItemInfo<CatigoryButtonProps>) => {
-  const CATIGORY_IMAGE = Image.resolveAssetSource(item.icon).uri;
-  return (
-    <CatigoryButton
-      boxShadow={item.boxShadow}
-      width={item.width}
-      height={item.height}
-      bColor={item.bColor}
-      bRadius={item.bRadius}
-      bgColor={item.bgColor}
-      countTasks={item.countTasks}
-      textContent={item.textContent}
-      icon={CATIGORY_IMAGE}
-      onPress={item.onPress}
-    />
-  );
-};
 
 export default function HomeScreen({ navigation }: NavigationProps) {
   const dispatch = useAppDispatch();
@@ -103,8 +65,48 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     onChangeText('');
   };
 
+  const renderItemDateCatigory = ({
+    item,
+  }: ListRenderItemInfo<ItemDataButtons>) => {
+    return (
+      <Button
+        boxShadow={false}
+        width={71}
+        height={27}
+        bColor="#646FD4"
+        bRadius={14}
+        onPress={() => {
+          return console.log(1);
+        }}
+      >
+        <DateText>{item.value}</DateText>
+      </Button>
+    );
+  };
+
+  const renderItemTaskCatigory = ({
+    item,
+  }: ListRenderItemInfo<CatigoryButtonProps>) => {
+    const CATIGORY_IMAGE = Image.resolveAssetSource(item.icon).uri;
+
+    return (
+      <CatigoryButton
+        boxShadow={item.boxShadow}
+        width={item.width}
+        height={item.height}
+        bColor={item.bColor}
+        bRadius={item.bRadius}
+        bgColor={item.bgColor}
+        countTasks={item.countTasks}
+        textContent={item.textContent}
+        icon={CATIGORY_IMAGE}
+        onPress={item.onPress}
+      />
+    );
+  };
+
   return (
-    <SafeAreaView>
+    <View>
       {modalVisible && (
         <ModalContainer
           modalFirstHandler={modalFirstHandler}
@@ -163,23 +165,25 @@ export default function HomeScreen({ navigation }: NavigationProps) {
             />
           </DateButtonsContainer>
         </DateButtonsWrapper>
-        <TaskCatigories>
-          <FlatList
-            horizontal={false}
-            scrollEnabled
-            contentContainerStyle={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-            }}
-            showsHorizontalScrollIndicator
-            data={CATIGORIES_BUTTON_LIST}
-            keyExtractor={({ id }) => {
-              return id;
-            }}
-            renderItem={renderItemTaskCatigory}
-          />
-        </TaskCatigories>
+        <TaskCategoriesContainer>
+          <TaskCatigories>
+            <FlatList
+              horizontal={false}
+              scrollEnabled
+              contentContainerStyle={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+              showsHorizontalScrollIndicator
+              data={CATIGORIES_BUTTON_LIST}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTaskCatigory}
+            />
+          </TaskCatigories>
+        </TaskCategoriesContainer>
       </Main>
-    </SafeAreaView>
+    </View>
   );
 }

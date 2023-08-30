@@ -21,9 +21,10 @@ export default function CatigoryButton({
   width,
   height,
   onPress,
+  isThird,
 }: CatigoryButtonProps) {
   return (
-    <Wrapper>
+    <Wrapper isThird={isThird}>
       <Button
         width={width}
         height={height}

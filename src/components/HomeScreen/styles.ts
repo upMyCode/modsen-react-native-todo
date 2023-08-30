@@ -74,9 +74,16 @@ export const DateText = styled.Text`
   color: #7d7d7d;
 `;
 
-export const TaskCatigories = styled.View`
+export const TaskCategoriesContainer = styled.View`
+  width: 100%;
+  display: flex;
+  align-items: center;
   height: 55%;
-  margin: 8px 16px 0 16px;
+`;
+
+export const TaskCatigories = styled.View`
+  max-width: 346px;
+  margin-top: 8px;
 `;
 
 export const ModalContext = styled.View`

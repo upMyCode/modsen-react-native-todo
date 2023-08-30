@@ -1,5 +1,5 @@
-import type { TaskItem } from '@constants/drawerButtons';
-import { TASK_LIST } from '@constants/drawerButtons';
+import type { TaskItem } from '@hooks/useGetDrawerTaskList';
+import useGetDrawerTaskList from '@hooks/useGetDrawerTaskList';
 import { BackButton } from '@root';
 import React from 'react';
 import type { ListRenderItemInfo } from 'react-native';
@@ -11,7 +11,7 @@ import { NavigationProps } from './types';
 const renderItem = ({ item }: ListRenderItemInfo<TaskItem>) => {
   const TASK_IMAGE = Image.resolveAssetSource(item.img).uri;
   return (
-    <Container mTop={item.mTop}>
+    <Container onPress={item.onPress} mTop={item.mTop}>
       <Image width={20} height={20} source={{ uri: TASK_IMAGE }} />
       <TextContext>{item.textContent}</TextContext>
     </Container>
@@ -19,6 +19,7 @@ const renderItem = ({ item }: ListRenderItemInfo<TaskItem>) => {
 };
 
 export default function DrawerContainer({ navigation }: NavigationProps) {
+  const { TASK_LIST } = useGetDrawerTaskList();
   return (
     <Wrapper>
       <BackButton navigation={navigation} />
