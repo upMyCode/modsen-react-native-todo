@@ -8,4 +8,19 @@ export interface ModalProps {
   important?: boolean | undefined;
   modalFirstHandler: () => void;
   modalSecondHandler: () => void;
+  isEditableModal?: boolean;
+  modalFirstHandlerText: string;
+  modalSecondHandlerText: string;
+  titleMaxSymbol?: number;
+  textContextMaxSymbol?: number;
+  modalTitle?: string;
+  handleChangeTitle?: (text: string) => void;
+  modalTextContent?: string;
+  handleChangeTextContent: (text: string) => void;
+  importantTaskStatus?: boolean;
+  handleImportantTaskStatus?: () => void;
+}
+
+export interface ContentHeaderProps {
+  isEditableModal: boolean | undefined;
 }

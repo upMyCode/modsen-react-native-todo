@@ -65,6 +65,7 @@ module.exports = {
           'TextContext',
           'ButtonTextContent',
           'CategoryText',
+          'DatePeriodText',
         ],
       },
     ],

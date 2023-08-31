@@ -82,7 +82,7 @@ export const TaskCategoriesContainer = styled.View`
 `;
 
 export const TaskCatigories = styled.View`
-  max-width: 346px;
+  max-width: 400px;
   margin-top: 8px;
 `;
 
@@ -92,7 +92,7 @@ export const ModalContext = styled.View`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 17.5px;
-  height: 100px;
+  margin-bottom: 70px;
 `;
 
 export const CategoryInput = styled.TextInput`

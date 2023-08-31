@@ -1,6 +1,10 @@
 import CIRCLES_DIMENSIONS from '@constants/homeScreenImage';
 import { CircleImage } from '@root';
-import { BackgroundEclipseImage1, BackgroundEclipseImage2 } from '@src/assets';
+import {
+  BackgroundEclipseImage1,
+  BackgroundEclipseImage2,
+  BackgroundEclipseImage3,
+} from '@src/assets';
 import React from 'react';
 import { Image } from 'react-native';
 
@@ -13,7 +17,9 @@ export default function TaskScreenImage() {
   const BACKGROUND_IMAGE_2 = Image.resolveAssetSource(
     BackgroundEclipseImage2
   ).uri;
-
+  const BACKGROUND_IMAGE_3 = Image.resolveAssetSource(
+    BackgroundEclipseImage3
+  ).uri;
   return (
     <Wrapper>
       <CircleImage
@@ -27,6 +33,12 @@ export default function TaskScreenImage() {
         height={CIRCLES_DIMENSIONS.secondCircleHeight}
         image={BACKGROUND_IMAGE_2}
         positionParams={{ top: -27, left: 112 }}
+      />
+      <CircleImage
+        width={CIRCLES_DIMENSIONS.thirdCircleWidth}
+        height={CIRCLES_DIMENSIONS.thirdCircleHeight}
+        image={BACKGROUND_IMAGE_3}
+        positionParams={{ top: -62.52, left: 93.83 }}
       />
     </Wrapper>
   );

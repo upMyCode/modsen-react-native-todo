@@ -47,30 +47,30 @@ export default function useGetGategoriesList() {
   };
   const categoriesPreload = [
     {
-      totalTask: '5',
+      totalTask: '0',
       taskCategoryName: 'School',
     },
     {
-      totalTask: '3',
+      totalTask: '0',
       taskCategoryName: 'Work',
     },
     {
-      totalTask: '12',
+      totalTask: '0',
       taskCategoryName: 'Shop',
     },
     {
-      totalTask: '2',
+      totalTask: '0',
       taskCategoryName: 'Read',
     },
     {
-      totalTask: '3',
+      totalTask: '0',
       taskCategoryName: 'work out',
     },
   ];
   const CATIGORIES_BUTTON_LIST: CatigoryButtonProps[] = [
     {
       id: '1',
-      countTasks: 5,
+      countTasks: 0,
       icon: SchoolImg,
       textContent: 'School',
       bgColor: '#2A8899',
@@ -84,7 +84,7 @@ export default function useGetGategoriesList() {
     },
     {
       id: '2',
-      countTasks: 3,
+      countTasks: 0,
       icon: WorkImg,
       textContent: 'Work',
       bgColor: '#5EB0D2',
@@ -98,7 +98,7 @@ export default function useGetGategoriesList() {
     },
     {
       id: '3',
-      countTasks: 12,
+      countTasks: 0,
       icon: ShopImg,
       textContent: 'Shop',
       bgColor: '#BE8972',
@@ -112,7 +112,7 @@ export default function useGetGategoriesList() {
     },
     {
       id: '4',
-      countTasks: 2,
+      countTasks: 0,
       icon: ReadImg,
       textContent: 'Read',
       bgColor: '#646FD4',
@@ -126,7 +126,7 @@ export default function useGetGategoriesList() {
     },
     {
       id: '5',
-      countTasks: 3,
+      countTasks: 0,
       icon: WorkOutImg,
       textContent: 'work out',
       bgColor: '#83BC74',

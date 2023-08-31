@@ -11,6 +11,7 @@ export interface ButtonProps {
   boxShadow?: boolean;
   mt?: number;
   ml?: number;
+  disabled?: boolean | undefined;
 }
 
 export interface PaintedButtonProps {

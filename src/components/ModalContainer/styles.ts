@@ -1,6 +1,8 @@
 import { BlurView } from '@react-native-community/blur';
 import styled from 'styled-components/native';
 
+import { ContentHeaderProps } from './types';
+
 export const Wrapper = styled.View`
   flex: 1;
   justify-content: center;
@@ -70,4 +72,19 @@ export const Blur = styled(BlurView)`
   left: 0;
   bottom: 0;
   right: 0;
+`;
+
+export const TitleInput = styled.TextInput`
+  font-family: 'Signika-Light';
+  color: #363636;
+  font-size: 13px;
+  line-height: 16.02px;
+`;
+
+export const TextContentInput = styled.TextInput`
+  font-family: 'Signika-Light';
+  max-width: 130px;
+  color: #cccccc;
+  font-size: 8px;
+  line-height: 9.86px;
 `;

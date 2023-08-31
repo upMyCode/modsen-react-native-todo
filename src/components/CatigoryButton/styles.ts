@@ -27,6 +27,6 @@ export const TaskTextContent = styled.Text`
 
 export const Wrapper = styled.View<WrapperProps>`
   margin: ${({ isThird }) => {
-    return isThird ? '16px 0 0 0' : '16px 14px 0 0';
+    return isThird ? '16px 0 0 0' : '16px 14px 0 15px';
   }};
 `;

@@ -10,6 +10,7 @@ import {
   ModalContainer,
 } from '@root';
 import { BurgerMenuImg } from '@src/assets';
+import getActualDate from '@src/helpers/getActualDate';
 import type { CatigoryButtonProps } from '@src/hooks/useGetGategoriesList';
 import useGetGategoriesList from '@src/hooks/useGetGategoriesList';
 import { addNewCategory } from '@src/slices/categoriesListSlice';
@@ -49,6 +50,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const handleDrawerMenu = () => {
     navigation.dispatch(DrawerActions.toggleDrawer());
   };
+  const actualDate = getActualDate();
 
   const handleChangeText = (text: string) => {
     onChangeText(text);
@@ -114,6 +116,8 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           title="Add your personal activity"
           textContent="You can add tour personal activity ticket"
           modalVisible={modalVisible}
+          modalFirstHandlerText="Cancel"
+          modalSecondHandlerText="Ok"
         >
           <ModalContext>
             <CategoryText>Category:</CategoryText>
@@ -148,7 +152,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               {`${' '} today ! `}
             </TaskInfoTitleItem>
           </TaskInfoTitle>
-          <TaskInfoTextContent>Saturday,september 10,2022</TaskInfoTextContent>
+          <TaskInfoTextContent>{actualDate}</TaskInfoTextContent>
         </TaskInfo>
         <HomeScreenSearchBar />
         <DateButtonsWrapper>
