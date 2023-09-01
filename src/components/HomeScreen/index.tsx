@@ -172,17 +172,18 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         <TaskCategoriesContainer>
           <TaskCatigories>
             <FlatList
-              horizontal={false}
-              scrollEnabled
-              contentContainerStyle={{
-                flexDirection: 'row',
+              columnWrapperStyle={{
                 flexWrap: 'wrap',
+                flexDirection: 'row',
               }}
+              scrollEnabled
+              contentContainerStyle={{}}
               showsHorizontalScrollIndicator
               data={CATIGORIES_BUTTON_LIST}
               keyExtractor={({ id }) => {
                 return id;
               }}
+              numColumns={3}
               renderItem={renderItemTaskCatigory}
             />
           </TaskCatigories>
