@@ -177,7 +177,6 @@ export default function HomeScreen({ navigation }: NavigationProps) {
                 flexDirection: 'row',
               }}
               scrollEnabled
-              contentContainerStyle={{}}
               showsHorizontalScrollIndicator
               data={CATIGORIES_BUTTON_LIST}
               keyExtractor={({ id }) => {
