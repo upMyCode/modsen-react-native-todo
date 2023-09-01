@@ -49,3 +49,8 @@ export const DatePeriodText = styled.Text`
   line-height: 16.02px;
   color: #888888;
 `;
+
+export const Main = styled.View`
+  height: 50%;
+  margin-top: 20px;
+`;

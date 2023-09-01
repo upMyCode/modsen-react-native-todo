@@ -9,12 +9,14 @@ import BurgerMenuImg from './img/BurgerMenu.png';
 import CustomImg from './img/Custom.png';
 import DailyImg from './img/Daily.png';
 import DoneImg from './img/Done.png';
+import DoneStatusImg from './img/DoneStatus.png';
 import ImportantImg from './img/Important.png';
 import PlusImg from './img/Plus.png';
 import ReadImg from './img/Read.png';
 import SchoolImg from './img/School.png';
 import SearchImg from './img/Search.png';
 import ShopImg from './img/Shop.png';
+import SpreadImg from './img/Spread.png';
 import WhiteArrowImg from './img/WhiteArrow.png';
 import WhitePlusImg from './img/WhitePlus.png';
 import WorkImg from './img/Work.png';
@@ -32,12 +34,14 @@ export {
   CustomImg,
   DailyImg,
   DoneImg,
+  DoneStatusImg,
   ImportantImg,
   PlusImg,
   ReadImg,
   SchoolImg,
   SearchImg,
   ShopImg,
+  SpreadImg,
   WhiteArrowImg,
   WhitePlusImg,
   WorkImg,

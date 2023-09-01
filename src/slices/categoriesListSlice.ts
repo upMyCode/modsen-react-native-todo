@@ -5,11 +5,11 @@ interface Category {
   taskCategoryName: string;
 }
 
-interface ModalStatus {
+interface Categories {
   categories: Category[];
 }
 
-const initialState: ModalStatus = {
+const initialState: Categories = {
   categories: [],
 };
 

@@ -3,22 +3,18 @@ import {
   ManagedStatusBar,
   ModalContainer,
   TaskScreenImage,
+  TaskTicket,
 } from '@root';
 import { WhiteArrowImg, WhitePlusImg } from '@src/assets';
 import {
   changeStatusToActive,
   changeStatusToDisable,
 } from '@src/slices/modalSlice';
+import { addNewTask } from '@src/slices/taskListSlice';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import React, { useState } from 'react';
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  SafeAreaView,
-  Text,
-  View,
-} from 'react-native';
+import type { ListRenderItemInfo } from 'react-native';
+import { Dimensions, FlatList, Image, SafeAreaView, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
 import {
@@ -27,20 +23,27 @@ import {
   DatePeriodText,
   Footer,
   Header,
+  Main,
   Title,
 } from './styles';
-import type { NavigationProps } from './types';
+import type { NavigationProps, Task } from './types';
 
 export default function TaskListScreen({ navigation }: NavigationProps) {
+  const tasks = useAppSelector((state) => {
+    return state.tasksListSlice.tasks;
+  });
   const [modalTitle, setModalTitle] = useState<string>('');
   const [modalTextContent, setModalTextContent] = useState<string>('');
   const ARROW_IMAGE = Image.resolveAssetSource(WhiteArrowImg).uri;
   const WHITE_PLUS_IMAGE = Image.resolveAssetSource(WhitePlusImg).uri;
   const windowHeight = Dimensions.get('window').height;
-  const PROCENT = 0.76;
+  const PROCENT = 0.3;
   const marginTopToAddTaskButton = windowHeight * PROCENT;
   const dispatch = useAppDispatch();
-  const [date, setDate] = useState<Date>(new Date());
+  const [fromDate, setFromDate] = useState<Date>(new Date());
+  const [tillDate, setTillDate] = useState<Date>(new Date());
+  const [fromTime, setFromTime] = useState<Date>(new Date());
+  const [tillTime, setTillTime] = useState<Date>(new Date());
   const [importantTaskStatus, setImportantTaskStatus] =
     useState<boolean>(false);
   const [modalName, setModalName] = useState<string>('date');
@@ -48,10 +51,34 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
     return state.modalStatusReducer.status;
   });
 
+  const renderItemTask = ({ item }: ListRenderItemInfo<Task>) => {
+    return (
+      <TaskTicket
+        timeFrom={item.taskTimeFrom.toString()}
+        timeTill={item.taskTimeTill.toString()}
+        taskTitle={item.taskTitle}
+        taskDescription={item.taskDescription}
+      />
+    );
+  };
   const handleImportantTaskStatus = () => {
     setImportantTaskStatus((prevStatus) => {
       return !prevStatus;
     });
+  };
+
+  const handleAddNewTask = () => {
+    dispatch(
+      addNewTask({
+        taskTitle: modalTitle,
+        taskDescription: modalTextContent,
+        taskImportantStatus: importantTaskStatus,
+        taskDateFrom: fromDate,
+        taskDateTill: tillDate,
+        taskTimeFrom: fromTime,
+        taskTimeTill: tillTime,
+      })
+    );
   };
 
   const modalEventList = [
@@ -82,10 +109,20 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
         dispatch(changeStatusToDisable());
       },
       modalSecondHandler: () => {
+        handleAddNewTask();
         dispatch(changeStatusToDisable());
+        setModalName('date');
+        setModalTitle('');
+        setModalTextContent('');
+        setImportantTaskStatus(false);
+        setFromDate(new Date());
+        setTillDate(new Date());
+        setFromTime(new Date());
+        setTillTime(new Date());
       },
     },
   ];
+
   const handleGoBack = () => {
     navigation.navigate('MainScreen');
   };
@@ -100,6 +137,22 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
 
   const handleChangeTextContent = (text: string) => {
     setModalTextContent(text);
+  };
+
+  const handleChangeDateFrom = (date: Date) => {
+    setFromDate(date);
+  };
+
+  const handleChangeDateTill = (date: Date) => {
+    setTillDate(date);
+  };
+
+  const handleChangeTimeFrom = (date: Date) => {
+    setFromTime(date);
+  };
+
+  const handleChangeTimeTill = (date: Date) => {
+    setTillTime(date);
   };
 
   return (
@@ -131,7 +184,8 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
             <DatePicker
               style={{ height: 50, width: 300 }}
               mode="date"
-              date={date}
+              date={fromDate}
+              onDateChange={handleChangeDateFrom}
             />
           </DateContainer>
           <DateContainer>
@@ -139,7 +193,8 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
             <DatePicker
               style={{ height: 50, width: 300 }}
               mode="date"
-              date={date}
+              date={tillDate}
+              onDateChange={handleChangeDateTill}
             />
           </DateContainer>
         </ModalContainer>
@@ -169,7 +224,8 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
             <DatePicker
               style={{ height: 50, width: 300 }}
               mode="time"
-              date={date}
+              date={fromTime}
+              onDateChange={handleChangeTimeFrom}
             />
           </DateContainer>
           <DateContainer>
@@ -177,7 +233,8 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
             <DatePicker
               style={{ height: 50, width: 300 }}
               mode="time"
-              date={date}
+              date={tillTime}
+              onDateChange={handleChangeTimeTill}
             />
           </DateContainer>
         </ModalContainer>
@@ -210,6 +267,18 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           </BackButton>
           <Title>Today’s task</Title>
         </Header>
+        <Main>
+          <FlatList
+            contentContainerStyle={{
+              alignItems: 'center',
+            }}
+            data={tasks}
+            keyExtractor={({ id }) => {
+              return id;
+            }}
+            renderItem={renderItemTask}
+          />
+        </Main>
         <Footer mTop={marginTopToAddTaskButton}>
           <Button
             width={56}

@@ -1,14 +1,21 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import categoriesListReducer from '@src/slices/categoriesListSlice';
 import modalStatusReducer from '@src/slices/modalSlice';
+import tasksListSlice from '@src/slices/taskListSlice';
 
 const rootReducer = combineReducers({
   modalStatusReducer,
   categoriesListReducer,
+  tasksListSlice,
 });
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({
+      serializableCheck: false,
+    });
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
