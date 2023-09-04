@@ -18,3 +18,8 @@ export interface Task {
   taskTimeFrom: Date;
   taskTimeTill: Date;
 }
+
+export interface SubTask {
+  id: string;
+  subTaskText: string;
+}

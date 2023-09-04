@@ -2,7 +2,7 @@ import { Button } from '@root';
 import { AsteriskOff, AsteriskOn } from '@src/assets';
 import { changeStatusToDisable } from '@src/slices/modalSlice';
 import { useAppDispatch } from '@src/store/hooks';
-import React, { useState } from 'react';
+import React from 'react';
 import { Image, Modal, View } from 'react-native';
 
 import {
@@ -14,6 +14,7 @@ import {
   ContentMain,
   TextContent,
   TextContentContainer,
+  TextContentContainerSubTask,
   TextContentInput,
   Title,
   TitleInput,
@@ -40,6 +41,8 @@ export default function ModalContainer({
   handleChangeTextContent,
   importantTaskStatus,
   handleImportantTaskStatus,
+  isOpenAddSubtaskMenu,
+  subTaskTitle,
 }: ModalProps) {
   const ASTERISK_ON_IMAGE = Image.resolveAssetSource(AsteriskOn).uri;
   const ASTERISK_OFF_IMAGE = Image.resolveAssetSource(AsteriskOff).uri;
@@ -63,7 +66,7 @@ export default function ModalContainer({
         <Content>
           <ContentHeader>
             <TextContentContainer>
-              {isEditableModal ? (
+              {isEditableModal && !isOpenAddSubtaskMenu ? (
                 <View>
                   <TitleInput
                     editable={isEditableModal}
@@ -83,6 +86,20 @@ export default function ModalContainer({
                     numberOfLines={2}
                     multiline
                   />
+                </View>
+              ) : isEditableModal && isOpenAddSubtaskMenu ? (
+                <View>
+                  <Title>{subTaskTitle}</Title>
+                  <TextContentContainerSubTask>
+                    <TextContentInput
+                      editable={isEditableModal}
+                      placeholderTextColor="#cccccc"
+                      value={modalTextContent}
+                      onChangeText={handleChangeTextContent}
+                      placeholder={textContent}
+                      maxLength={textContextMaxSymbol}
+                    />
+                  </TextContentContainerSubTask>
                 </View>
               ) : (
                 <View>

@@ -2,6 +2,7 @@ import {
   Button,
   ManagedStatusBar,
   ModalContainer,
+  SubTaskItem,
   TaskScreenImage,
   TaskTicket,
 } from '@root';
@@ -24,15 +25,21 @@ import {
   Footer,
   Header,
   Main,
+  ModalFooter,
+  SubTaskList,
   Title,
 } from './styles';
-import type { NavigationProps, Task } from './types';
+import type { NavigationProps, SubTask, Task } from './types';
 
 export default function TaskListScreen({ navigation }: NavigationProps) {
   const tasks = useAppSelector((state) => {
     return state.tasksListSlice.tasks;
   });
+
+  const [subTaskList, setSubTaskList] = useState<Array<SubTask>>([]);
+
   const [modalTitle, setModalTitle] = useState<string>('');
+  const [modalAddSubTaskTitle, setModalAddSubTaskTitle] = useState<string>('');
   const [modalTextContent, setModalTextContent] = useState<string>('');
   const ARROW_IMAGE = Image.resolveAssetSource(WhiteArrowImg).uri;
   const WHITE_PLUS_IMAGE = Image.resolveAssetSource(WhitePlusImg).uri;
@@ -54,13 +61,18 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
   const renderItemTask = ({ item }: ListRenderItemInfo<Task>) => {
     return (
       <TaskTicket
-        timeFrom={item.taskTimeFrom.toString()}
-        timeTill={item.taskTimeTill.toString()}
+        timeFrom={item.taskTimeFrom}
+        timeTill={item.taskTimeTill}
         taskTitle={item.taskTitle}
         taskDescription={item.taskDescription}
       />
     );
   };
+
+  const renderItemSubTask = ({ item }: ListRenderItemInfo<SubTask>) => {
+    return <SubTaskItem subtask={item.subTaskText} />;
+  };
+
   const handleImportantTaskStatus = () => {
     setImportantTaskStatus((prevStatus) => {
       return !prevStatus;
@@ -77,10 +89,25 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
         taskDateTill: tillDate,
         taskTimeFrom: fromTime,
         taskTimeTill: tillTime,
+        subTasks: [...subTaskList],
       })
     );
   };
 
+  const handleAddSubTask = () => {
+    const initId = 0;
+    setSubTaskList((subtask) => {
+      return [
+        ...subtask,
+        {
+          id: subtask[subtask.length - 1]
+            ? (Number(subtask[subtask.length - 1].id) + 1).toString()
+            : initId.toString(),
+          subTaskText: modalAddSubTaskTitle,
+        },
+      ];
+    });
+  };
   const modalEventList = [
     {
       modalFirstHandler: () => {
@@ -119,6 +146,21 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
         setTillDate(new Date());
         setFromTime(new Date());
         setTillTime(new Date());
+        setSubTaskList([]);
+      },
+    },
+    {
+      modalFirstHandler: () => {
+        dispatch(changeStatusToDisable());
+        setModalName('subtask');
+        dispatch(changeStatusToActive());
+      },
+      modalSecondHandler: () => {
+        dispatch(changeStatusToDisable());
+        setModalName('subtask');
+        setModalAddSubTaskTitle('');
+        handleAddSubTask();
+        dispatch(changeStatusToActive());
       },
     },
   ];
@@ -139,6 +181,10 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
     setModalTextContent(text);
   };
 
+  const handleChangeAddSubTaskTextContent = (text: string) => {
+    setModalAddSubTaskTitle(text);
+  };
+
   const handleChangeDateFrom = (date: Date) => {
     setFromDate(date);
   };
@@ -153,6 +199,10 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
 
   const handleChangeTimeTill = (date: Date) => {
     setTillTime(date);
+  };
+
+  const handleOpenAddSubTaskMenu = () => {
+    setModalName('add-subtask');
   };
 
   return (
@@ -258,6 +308,52 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           isEditableModal={false}
           textContextMaxSymbol={40}
           important
+        >
+          <SubTaskList>
+            <FlatList
+              data={subTaskList}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemSubTask}
+            />
+          </SubTaskList>
+          <ModalFooter>
+            <Button
+              width={32}
+              height={32}
+              bRadius={32}
+              bgColor="#646FD4"
+              onPress={handleOpenAddSubTaskMenu}
+            >
+              <Image
+                width={14}
+                height={14}
+                source={{ uri: WHITE_PLUS_IMAGE }}
+              />
+            </Button>
+          </ModalFooter>
+        </ModalContainer>
+      )}
+      {modalVisible && modalName === 'add-subtask' && (
+        <ModalContainer
+          modalTitle={modalTitle}
+          modalTextContent={modalAddSubTaskTitle}
+          importantTaskStatus={importantTaskStatus}
+          handleChangeTitle={handleChangeTitle}
+          subTaskTitle="Please, add your subtask title"
+          textContent={modalAddSubTaskTitle || 'Please, add your subtask'}
+          handleChangeTextContent={handleChangeAddSubTaskTextContent}
+          handleImportantTaskStatus={handleImportantTaskStatus}
+          modalFirstHandler={modalEventList[3].modalFirstHandler}
+          modalSecondHandler={modalEventList[3].modalSecondHandler}
+          modalFirstHandlerText="Cancel"
+          modalSecondHandlerText="Ok"
+          modalVisible={modalVisible}
+          isOpenAddSubtaskMenu
+          titleMaxSymbol={16}
+          isEditableModal
+          textContextMaxSymbol={40}
         />
       )}
       <SafeAreaView>

@@ -1,8 +1,6 @@
 import { BlurView } from '@react-native-community/blur';
 import styled from 'styled-components/native';
 
-import { ContentHeaderProps } from './types';
-
 export const Wrapper = styled.View`
   flex: 1;
   justify-content: center;
@@ -87,4 +85,8 @@ export const TextContentInput = styled.TextInput`
   color: #cccccc;
   font-size: 8px;
   line-height: 9.86px;
+`;
+
+export const TextContentContainerSubTask = styled.View`
+  margin-bottom: 110px;
 `;

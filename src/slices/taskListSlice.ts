@@ -9,6 +9,7 @@ interface Task {
   taskDateTill: Date;
   taskTimeFrom: Date;
   taskTimeTill: Date;
+  subTasks: Array<string>;
 }
 
 interface Tasks {
@@ -36,6 +37,7 @@ const tasksListSlice = createSlice({
         taskDateTill: action.payload.taskDateTill,
         taskTimeFrom: action.payload.taskTimeFrom,
         taskTimeTill: action.payload.taskTimeTill,
+        subTasks: action.payload.subTasks,
       });
     },
   },

@@ -1,5 +1,6 @@
 import { Button } from '@root';
 import { DoneStatusImg, SpreadImg } from '@src/assets';
+import getTime from '@src/helpers/getTime';
 import React, { useState } from 'react';
 import { Dimensions, Image, View } from 'react-native';
 
@@ -39,8 +40,8 @@ export default function TaskTicket({
     <Wrapper totalTaskWidth={totalTaskWidth}>
       <Container>
         <Time>
-          <TimeText>{timeFrom}</TimeText>
-          <TimeText>{timeTill}</TimeText>
+          <TimeText>{getTime(timeFrom)}</TimeText>
+          <TimeText>{getTime(timeTill)}</TimeText>
         </Time>
         <MainContent>
           <ImageWrapper>

@@ -12,6 +12,7 @@ export { default as ModalContainer } from '@components/ModalContainer';
 export { default as StackScreens } from '@components/StackScreens';
 export { default as StartScreen } from '@components/StartScreen';
 export { default as StartScreenImage } from '@components/StartScreenImage';
+export { default as SubTaskItem } from '@components/SubTaskItem';
 export { default as TaskListScreen } from '@components/TaskListScreen';
 export { default as TaskScreenImage } from '@components/TaskScreenImage';
 export { default as TaskTicket } from '@components/TaskTicket';

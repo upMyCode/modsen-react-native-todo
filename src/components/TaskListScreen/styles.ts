@@ -54,3 +54,14 @@ export const Main = styled.View`
   height: 50%;
   margin-top: 20px;
 `;
+
+export const ModalFooter = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+`;
+
+export const SubTaskList = styled.View`
+  height: 60.68%;
+`;

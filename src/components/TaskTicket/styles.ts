@@ -12,14 +12,15 @@ export const Wrapper = styled.View<WrapperProps>`
 `;
 
 export const Time = styled.View`
+  display: flex;
+  justify-content: center;
   width: 64px;
-  height: 20px;
 `;
 
 export const TimeText = styled.Text`
   font-size: 8px;
   font-family: 'Signika-Light';
-  font-color: #888888;
+  color: #888888;
 `;
 
 export const Container = styled.View`

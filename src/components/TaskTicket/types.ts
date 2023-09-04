@@ -3,8 +3,8 @@ export interface WrapperProps {
 }
 
 export interface TaskTicketProps {
-  timeFrom: string;
-  timeTill: string;
+  timeFrom: Date;
+  timeTill: Date;
   taskTitle: string;
   taskDescription: string;
 }

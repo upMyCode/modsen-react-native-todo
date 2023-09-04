@@ -2,8 +2,8 @@ import { ReactElement, ReactNode } from 'react';
 
 export interface ModalProps {
   children?: ReactElement | ReactNode[];
-  title: string;
-  textContent: string;
+  title?: string;
+  textContent?: string;
   modalVisible: boolean;
   important?: boolean | undefined;
   modalFirstHandler: () => void;
@@ -18,7 +18,9 @@ export interface ModalProps {
   modalTextContent?: string;
   handleChangeTextContent: (text: string) => void;
   importantTaskStatus?: boolean;
-  handleImportantTaskStatus?: () => void;
+  handleImportantTaskStatus?: undefined | (() => void);
+  isOpenAddSubtaskMenu?: boolean | undefined;
+  subTaskTitle?: string | undefined;
 }
 
 export interface ContentHeaderProps {
