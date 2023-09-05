@@ -32,7 +32,6 @@ export const Container = styled.View`
 export const MainContent = styled.View`
   display: flex;
   flex-direction: row;
-
   width: 223px;
   height: 37px;
   margin-left: 8.5px;
@@ -58,6 +57,8 @@ export const Description = styled.Text`
   color: #e7e7e7;
 `;
 
-export const TaskTextContent = styled.Text`
+export const TaskTextContent = styled.View`
   margin-left: 4px;
+  display: flex;
+  flex-direction: column;
 `;

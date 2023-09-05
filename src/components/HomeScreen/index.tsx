@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
 import { FlatList, Image, Pressable, View } from 'react-native';
+import * as Yup from 'yup';
 
 import {
   CategoryInput,
@@ -26,9 +27,11 @@ import {
   DateButtonsContainer,
   DateButtonsWrapper,
   DateText,
+  ErrorTextContent,
   Header,
   Main,
   ModalContext,
+  ModalContextInput,
   TaskCategoriesContainer,
   TaskCatigories,
   TaskInfo,
@@ -38,9 +41,11 @@ import {
   Title,
 } from './styles';
 import type { NavigationProps } from './types';
+import formSchema from './validate';
 
 export default function HomeScreen({ navigation }: NavigationProps) {
   const dispatch = useAppDispatch();
+  const [errors, setErrors] = useState({});
   const { CATIGORIES_BUTTON_LIST } = useGetGategoriesList();
   const [textValue, onChangeText] = useState('');
   const BURGER_MENU_IMAGE = Image.resolveAssetSource(BurgerMenuImg).uri;
@@ -56,10 +61,37 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     onChangeText(text);
   };
 
-  const modalSecondHandler = () => {
-    dispatch(addNewCategory({ totalTask: '', taskCategoryName: textValue }));
-    dispatch(changeStatusToDisable());
-    onChangeText('');
+  const workWithForm = async () => {
+    let status = true;
+    try {
+      await formSchema.validate({ textValue }, { abortEarly: false });
+
+      setErrors({});
+
+      status = true;
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const yupErrors = {};
+        error.inner.forEach((innerError) => {
+          yupErrors[innerError.path] = innerError.message;
+        });
+
+        status = false;
+        setErrors(yupErrors);
+      }
+    }
+
+    return status;
+  };
+
+  const modalSecondHandler = async () => {
+    const status = await workWithForm();
+
+    if (status) {
+      dispatch(addNewCategory({ totalTask: '', taskCategoryName: textValue }));
+      dispatch(changeStatusToDisable());
+      onChangeText('');
+    }
   };
 
   const modalFirstHandler = () => {
@@ -120,14 +152,19 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           modalSecondHandlerText="Ok"
         >
           <ModalContext>
-            <CategoryText>Category:</CategoryText>
-            <CategoryInput
-              editable
-              value={textValue}
-              onChangeText={handleChangeText}
-              placeholder="Add your category"
-              maxLength={8}
-            />
+            <ModalContextInput>
+              <CategoryText>Category:</CategoryText>
+              <CategoryInput
+                editable
+                value={textValue}
+                onChangeText={handleChangeText}
+                placeholder="Add your category"
+                maxLength={8}
+              />
+            </ModalContextInput>
+            {errors.textValue && (
+              <ErrorTextContent>{errors.textValue}</ErrorTextContent>
+            )}
           </ModalContext>
         </ModalContainer>
       )}

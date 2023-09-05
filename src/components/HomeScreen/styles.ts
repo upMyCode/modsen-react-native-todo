@@ -87,12 +87,16 @@ export const TaskCatigories = styled.View`
 `;
 
 export const ModalContext = styled.View`
-  display: flex;
   margin: 0 20px;
-  flex-direction: row;
-  justify-content: space-between;
+  height: 10px;
   margin-top: 17.5px;
   margin-bottom: 70px;
+`;
+
+export const ModalContextInput = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const CategoryInput = styled.TextInput`
@@ -108,4 +112,12 @@ export const CategoryText = styled.Text`
   line-height: 23.12px;
   height: 30px;
   color: #363636;
+`;
+
+export const ErrorTextContent = styled.Text`
+  font-family: 'Signika-Light';
+  width: 300px;
+  color: #c70216;
+  font-size: 8px;
+  line-height: 9.86px;
 `;

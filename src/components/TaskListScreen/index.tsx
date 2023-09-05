@@ -17,6 +17,7 @@ import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
 import { Dimensions, FlatList, Image, SafeAreaView, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import * as Yup from 'yup';
 
 import {
   BackButton,
@@ -29,7 +30,15 @@ import {
   SubTaskList,
   Title,
 } from './styles';
-import type { NavigationProps, SubTask, Task } from './types';
+import type {
+  FormSubTask,
+  FormTask,
+  NavigationProps,
+  SubTask,
+  Task,
+  WorkWithFormProps,
+} from './types';
+import { formSchemaSubTask, formSchemaTask } from './validate';
 
 export default function TaskListScreen({ navigation }: NavigationProps) {
   const tasks = useAppSelector((state) => {
@@ -51,12 +60,45 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
   const [tillDate, setTillDate] = useState<Date>(new Date());
   const [fromTime, setFromTime] = useState<Date>(new Date());
   const [tillTime, setTillTime] = useState<Date>(new Date());
+  const [taskModalErrors, setTaskModalErrors] = useState<FormTask | object>({});
+  const [subTaskModalErrors, setSubTaskModalErrors] = useState<
+    FormSubTask | object
+  >({});
   const [importantTaskStatus, setImportantTaskStatus] =
     useState<boolean>(false);
   const [modalName, setModalName] = useState<string>('date');
   const modalVisible = useAppSelector((state) => {
     return state.modalStatusReducer.status;
   });
+
+  const workWithForm: WorkWithFormProps = async (
+    validationSchema,
+    fields,
+    setErrorHandler
+  ) => {
+    let status = true;
+
+    try {
+      await validationSchema.validate(fields, { abortEarly: false });
+
+      setErrorHandler({});
+
+      status = true;
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const yupErrors = {};
+
+        error.inner.forEach((innerError) => {
+          yupErrors[innerError.path] = innerError.message;
+        });
+
+        status = false;
+        setErrorHandler(yupErrors);
+      }
+    }
+
+    return status;
+  };
 
   const renderItemTask = ({ item }: ListRenderItemInfo<Task>) => {
     return (
@@ -113,10 +155,21 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
       modalFirstHandler: () => {
         dispatch(changeStatusToDisable());
       },
-      modalSecondHandler: () => {
-        dispatch(changeStatusToDisable());
-        setModalName('subtask');
-        dispatch(changeStatusToActive());
+      modalSecondHandler: async () => {
+        const status = await workWithForm(
+          formSchemaTask,
+          {
+            modalTitle,
+            modalTextContent,
+          },
+          setTaskModalErrors
+        );
+
+        if (status) {
+          dispatch(changeStatusToDisable());
+          setModalName('subtask');
+          dispatch(changeStatusToActive());
+        }
       },
     },
     {
@@ -155,12 +208,22 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
         setModalName('subtask');
         dispatch(changeStatusToActive());
       },
-      modalSecondHandler: () => {
-        dispatch(changeStatusToDisable());
-        setModalName('subtask');
-        setModalAddSubTaskTitle('');
-        handleAddSubTask();
-        dispatch(changeStatusToActive());
+      modalSecondHandler: async () => {
+        const status = await workWithForm(
+          formSchemaSubTask,
+          {
+            modalAddSubTaskTitle,
+          },
+          setSubTaskModalErrors
+        );
+
+        if (status) {
+          dispatch(changeStatusToDisable());
+          setModalName('subtask');
+          setModalAddSubTaskTitle('');
+          handleAddSubTask();
+          dispatch(changeStatusToActive());
+        }
       },
     },
   ];
@@ -211,6 +274,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
       <TaskScreenImage />
       {modalVisible && modalName === 'date' && (
         <ModalContainer
+          errors={taskModalErrors}
           modalTitle={modalTitle}
           importantTaskStatus={importantTaskStatus}
           modalTextContent={modalTextContent}
@@ -232,7 +296,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           <DateContainer>
             <DatePeriodText>from</DatePeriodText>
             <DatePicker
-              style={{ height: 50, width: 300 }}
+              style={{ height: 40, width: 300 }}
               mode="date"
               date={fromDate}
               onDateChange={handleChangeDateFrom}
@@ -241,7 +305,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           <DateContainer>
             <DatePeriodText>till</DatePeriodText>
             <DatePicker
-              style={{ height: 50, width: 300 }}
+              style={{ height: 40, width: 300 }}
               mode="date"
               date={tillDate}
               onDateChange={handleChangeDateTill}
@@ -272,7 +336,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           <DateContainer>
             <DatePeriodText>from</DatePeriodText>
             <DatePicker
-              style={{ height: 50, width: 300 }}
+              style={{ height: 40, width: 300 }}
               mode="time"
               date={fromTime}
               onDateChange={handleChangeTimeFrom}
@@ -281,7 +345,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           <DateContainer>
             <DatePeriodText>till</DatePeriodText>
             <DatePicker
-              style={{ height: 50, width: 300 }}
+              style={{ height: 40, width: 300 }}
               mode="time"
               date={tillTime}
               onDateChange={handleChangeTimeTill}
@@ -337,6 +401,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
       )}
       {modalVisible && modalName === 'add-subtask' && (
         <ModalContainer
+          errors={subTaskModalErrors}
           modalTitle={modalTitle}
           modalTextContent={modalAddSubTaskTitle}
           importantTaskStatus={importantTaskStatus}
@@ -354,6 +419,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           titleMaxSymbol={16}
           isEditableModal
           textContextMaxSymbol={40}
+          isNullChildren
         />
       )}
       <SafeAreaView>

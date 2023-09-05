@@ -12,6 +12,7 @@ import {
   ContentFooter,
   ContentHeader,
   ContentMain,
+  ErrorTextContent,
   TextContent,
   TextContentContainer,
   TextContentContainerSubTask,
@@ -43,6 +44,8 @@ export default function ModalContainer({
   handleImportantTaskStatus,
   isOpenAddSubtaskMenu,
   subTaskTitle,
+  errors,
+  isNullChildren,
 }: ModalProps) {
   const ASTERISK_ON_IMAGE = Image.resolveAssetSource(AsteriskOn).uri;
   const ASTERISK_OFF_IMAGE = Image.resolveAssetSource(AsteriskOff).uri;
@@ -76,6 +79,9 @@ export default function ModalContainer({
                     placeholder={title}
                     maxLength={titleMaxSymbol}
                   />
+                  {errors && errors.modalTitle && (
+                    <ErrorTextContent>{errors.modalTitle}</ErrorTextContent>
+                  )}
                   <TextContentInput
                     editable={isEditableModal}
                     placeholderTextColor="#cccccc"
@@ -86,6 +92,11 @@ export default function ModalContainer({
                     numberOfLines={2}
                     multiline
                   />
+                  {errors && errors.modalTextContent && (
+                    <ErrorTextContent>
+                      {errors.modalTextContent}
+                    </ErrorTextContent>
+                  )}
                 </View>
               ) : isEditableModal && isOpenAddSubtaskMenu ? (
                 <View>
@@ -99,6 +110,11 @@ export default function ModalContainer({
                       placeholder={textContent}
                       maxLength={textContextMaxSymbol}
                     />
+                    {errors && errors.modalAddSubTaskTitle && (
+                      <ErrorTextContent>
+                        {errors.modalAddSubTaskTitle}
+                      </ErrorTextContent>
+                    )}
                   </TextContentContainerSubTask>
                 </View>
               ) : (
@@ -132,7 +148,7 @@ export default function ModalContainer({
             </Button>
           </ContentHeader>
           <ContentMain>{children}</ContentMain>
-          <ContentFooter>
+          <ContentFooter isNullChildren={isNullChildren}>
             <Button width={43} height={15} onPress={modalFirstHandler}>
               <ButtonTextContent>{modalFirstHandlerText}</ButtonTextContent>
             </Button>
