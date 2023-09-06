@@ -6,7 +6,7 @@ import {
   TaskScreenImage,
   TaskTicket,
 } from '@root';
-import { WhiteArrowImg, WhitePlusImg } from '@src/assets';
+import { ArrowDownImg, WhiteArrowImg, WhitePlusImg } from '@src/assets';
 import {
   changeStatusToActive,
   changeStatusToDisable,
@@ -25,9 +25,12 @@ import {
   DatePeriodText,
   Footer,
   Header,
+  LineDevider,
   Main,
   ModalFooter,
   SubTaskList,
+  TaskSwitcher,
+  TaskSwitcherText,
   Title,
 } from './styles';
 import type {
@@ -44,7 +47,9 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
   const tasks = useAppSelector((state) => {
     return state.tasksListSlice.tasks;
   });
-
+  const doneTasks = useAppSelector((state) => {
+    return state.tasksListSlice.doneTasks;
+  });
   const [subTaskList, setSubTaskList] = useState<Array<SubTask>>([]);
 
   const [modalTitle, setModalTitle] = useState<string>('');
@@ -52,6 +57,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
   const [modalTextContent, setModalTextContent] = useState<string>('');
   const ARROW_IMAGE = Image.resolveAssetSource(WhiteArrowImg).uri;
   const WHITE_PLUS_IMAGE = Image.resolveAssetSource(WhitePlusImg).uri;
+  const ARROW_DOWN_IMAGE = Image.resolveAssetSource(ArrowDownImg).uri;
   const windowHeight = Dimensions.get('window').height;
   const PROCENT = 0.3;
   const marginTopToAddTaskButton = windowHeight * PROCENT;
@@ -70,6 +76,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
   const modalVisible = useAppSelector((state) => {
     return state.modalStatusReducer.status;
   });
+  const [isTaskListDoneOpened, setTaskListDoneOpened] = useState(false);
 
   const workWithForm: WorkWithFormProps = async (
     validationSchema,
@@ -103,6 +110,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
   const renderItemTask = ({ item }: ListRenderItemInfo<Task>) => {
     return (
       <TaskTicket
+        id={item.id}
         timeFrom={item.taskTimeFrom}
         timeTill={item.taskTimeTill}
         taskTitle={item.taskTitle}
@@ -132,6 +140,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
         taskTimeFrom: fromTime,
         taskTimeTill: tillTime,
         subTasks: [...subTaskList],
+        doneStatus: false,
       })
     );
   };
@@ -266,6 +275,12 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
 
   const handleOpenAddSubTaskMenu = () => {
     setModalName('add-subtask');
+  };
+
+  const handleChangeTasksGroup = () => {
+    setTaskListDoneOpened((opened) => {
+      return !opened;
+    });
   };
 
   return (
@@ -430,16 +445,48 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           <Title>Today’s task</Title>
         </Header>
         <Main>
-          <FlatList
-            contentContainerStyle={{
-              alignItems: 'center',
-            }}
-            data={tasks}
-            keyExtractor={({ id }) => {
-              return id;
-            }}
-            renderItem={renderItemTask}
-          />
+          {isTaskListDoneOpened ? (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={doneTasks}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          ) : (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={tasks}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+
+          <LineDevider />
+          <TaskSwitcher>
+            {isTaskListDoneOpened ? (
+              <TaskSwitcherText>{`tasks in progress (${tasks.length})`}</TaskSwitcherText>
+            ) : (
+              <TaskSwitcherText>
+                {`done tasks (${doneTasks.length})`}
+              </TaskSwitcherText>
+            )}
+
+            <Button width={24} height={24} onPress={handleChangeTasksGroup}>
+              <Image
+                width={13.92}
+                height={8.16}
+                source={{ uri: ARROW_DOWN_IMAGE }}
+              />
+            </Button>
+          </TaskSwitcher>
         </Main>
         <Footer mTop={marginTopToAddTaskButton}>
           <Button

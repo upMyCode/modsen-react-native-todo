@@ -51,6 +51,8 @@ export const DatePeriodText = styled.Text`
 `;
 
 export const Main = styled.View`
+  display: flex;
+  align-items: center;
   height: 50%;
   margin-top: 20px;
 `;
@@ -63,4 +65,25 @@ export const ModalFooter = styled.View`
 
 export const SubTaskList = styled.View`
   height: 50.68%;
+`;
+
+export const LineDevider = styled.View`
+  width: 90%;
+  height: 1px;
+  background-color: #888888;
+`;
+
+export const TaskSwitcher = styled.View`
+  display: flex;
+  width: 90%;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 8px;
+`;
+
+export const TaskSwitcherText = styled.Text`
+  font-family: 'Jost-Regular';
+  font-size: 16px;
+  line-height: 23.12px;
+  color: #363636;
 `;
