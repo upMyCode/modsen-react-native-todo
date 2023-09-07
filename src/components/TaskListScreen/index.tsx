@@ -1,3 +1,4 @@
+import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
 import {
   Button,
   ManagedStatusBar,
@@ -43,7 +44,13 @@ import type {
 } from './types';
 import { formSchemaSubTask, formSchemaTask } from './validate';
 
-export default function TaskListScreen({ navigation }: NavigationProps) {
+export default function TaskListScreen({ route, navigation }: NavigationProps) {
+  const { sortTag } = route.params;
+  const { IMPORTANT_TASK_LIST, DONE_TASKS, ALL_TASKS } =
+    useGetTasksCategoriesLists(sortTag);
+  const DATE_CATEGORY = useAppSelector((state) => {
+    return state.addDateCategorySlice.dateCategory;
+  });
   const tasks = useAppSelector((state) => {
     return state.tasksListSlice.tasks;
   });
@@ -110,6 +117,7 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
   const renderItemTask = ({ item }: ListRenderItemInfo<Task>) => {
     return (
       <TaskTicket
+        sortTag={sortTag}
         id={item.id}
         timeFrom={item.taskTimeFrom}
         timeTill={item.taskTimeTill}
@@ -442,51 +450,85 @@ export default function TaskListScreen({ navigation }: NavigationProps) {
           <BackButton onPress={handleGoBack}>
             <Image width={32} height={32} source={{ uri: ARROW_IMAGE }} />
           </BackButton>
-          <Title>Today’s task</Title>
+          <Title>
+            {sortTag === 'daily'
+              ? 'Today’s task'
+              : DATE_CATEGORY === 'Today'
+              ? 'Today’s task'
+              : DATE_CATEGORY === 'Month'
+              ? 'Month’s task'
+              : 'Weeks’s task'}
+          </Title>
         </Header>
         <Main>
-          {isTaskListDoneOpened ? (
+          {sortTag === 'daily' && isTaskListDoneOpened && (
             <FlatList
               contentContainerStyle={{
                 alignItems: 'center',
               }}
-              data={doneTasks}
-              keyExtractor={({ id }) => {
-                return id;
-              }}
-              renderItem={renderItemTask}
-            />
-          ) : (
-            <FlatList
-              contentContainerStyle={{
-                alignItems: 'center',
-              }}
-              data={tasks}
+              data={DONE_TASKS}
               keyExtractor={({ id }) => {
                 return id;
               }}
               renderItem={renderItemTask}
             />
           )}
+          {sortTag === 'daily' && !isTaskListDoneOpened && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === 'important' && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={IMPORTANT_TASK_LIST}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === 'done' && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={DONE_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === 'daily' && <LineDevider />}
+          {sortTag === 'daily' && (
+            <TaskSwitcher>
+              {sortTag === 'daily' && isTaskListDoneOpened ? (
+                <TaskSwitcherText>{`tasks in progress (${tasks.length})`}</TaskSwitcherText>
+              ) : (
+                <TaskSwitcherText>
+                  {`done tasks (${doneTasks.length})`}
+                </TaskSwitcherText>
+              )}
 
-          <LineDevider />
-          <TaskSwitcher>
-            {isTaskListDoneOpened ? (
-              <TaskSwitcherText>{`tasks in progress (${tasks.length})`}</TaskSwitcherText>
-            ) : (
-              <TaskSwitcherText>
-                {`done tasks (${doneTasks.length})`}
-              </TaskSwitcherText>
-            )}
-
-            <Button width={24} height={24} onPress={handleChangeTasksGroup}>
-              <Image
-                width={13.92}
-                height={8.16}
-                source={{ uri: ARROW_DOWN_IMAGE }}
-              />
-            </Button>
-          </TaskSwitcher>
+              <Button width={24} height={24} onPress={handleChangeTasksGroup}>
+                <Image
+                  width={13.92}
+                  height={8.16}
+                  source={{ uri: ARROW_DOWN_IMAGE }}
+                />
+              </Button>
+            </TaskSwitcher>
+          )}
         </Main>
         <Footer mTop={marginTopToAddTaskButton}>
           <Button

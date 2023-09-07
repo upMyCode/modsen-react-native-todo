@@ -2,5 +2,5 @@ export type StackScreensParamList = {
   LoadingScreen: undefined;
   DrawerScreens: undefined;
   MainScreen: undefined;
-  ToDoListScreen: undefined;
+  ToDoListScreen: { sortTag: string };
 };

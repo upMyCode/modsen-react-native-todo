@@ -1,8 +1,13 @@
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import {
+  NavigationProp,
+  ParamListBase,
+  RouteProp,
+} from '@react-navigation/native';
 import * as yup from 'yup';
 
 export interface NavigationProps {
   navigation: NavigationProp<ParamListBase>;
+  route: RouteProp<{ params: { sortTag: string } }, 'params'>;
 }
 
 export interface FooterProps {

@@ -1,5 +1,5 @@
-import type { ItemDataButtons } from '@constants/homeScreenButtons';
-import DATE_BUTTONS from '@constants/homeScreenButtons';
+import type { ItemDataButtons } from '@hooks/useGetDateCategoriesButtons';
+import useGetDateCategoriesButtons from '@hooks/useGetDateCategoriesButtons';
 import { DrawerActions } from '@react-navigation/native';
 import {
   Button,
@@ -44,6 +44,7 @@ import type { NavigationProps } from './types';
 import formSchema from './validate';
 
 export default function HomeScreen({ navigation }: NavigationProps) {
+  const { DATE_BUTTONS } = useGetDateCategoriesButtons();
   const dispatch = useAppDispatch();
   const [errors, setErrors] = useState({});
   const { CATIGORIES_BUTTON_LIST } = useGetGategoriesList();
@@ -109,9 +110,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         height={27}
         bColor="#646FD4"
         bRadius={14}
-        onPress={() => {
-          return console.log(1);
-        }}
+        onPress={item.onPress}
       >
         <DateText>{item.value}</DateText>
       </Button>

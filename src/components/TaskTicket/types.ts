@@ -8,6 +8,7 @@ export interface TaskTicketProps {
   timeTill: Date;
   taskTitle: string;
   taskDescription: string;
+  sortTag: string;
 }
 
 export interface Task {

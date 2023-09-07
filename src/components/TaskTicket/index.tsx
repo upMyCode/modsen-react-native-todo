@@ -1,8 +1,9 @@
+import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
 import { Button } from '@root';
 import { DoneStatusImg, SpreadImg } from '@src/assets';
 import getTime from '@src/helpers/getTime';
 import { setTaskAsDone, setTaskAsInProgress } from '@src/slices/taskListSlice';
-import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { useAppDispatch } from '@src/store/hooks';
 import React, { useState } from 'react';
 import { Dimensions, Image, View } from 'react-native';
 
@@ -25,6 +26,7 @@ export default function TaskTicket({
   timeTill,
   taskTitle,
   taskDescription,
+  sortTag,
 }: TaskTicketProps) {
   const windowWidth = Dimensions.get('window').width;
   const [isDone, setDoneStatus] = useState<boolean>(false);
@@ -33,12 +35,7 @@ export default function TaskTicket({
   const WINDOW_PROC = 0.91;
   const totalTaskWidth = windowWidth * WINDOW_PROC;
   const dispatch = useAppDispatch();
-  const DONE_TASKS = useAppSelector((state) => {
-    return state.tasksListSlice.doneTasks;
-  });
-  const TASKS = useAppSelector((state) => {
-    return state.tasksListSlice.tasks;
-  });
+  const { DONE_TASKS, ALL_TASKS } = useGetTasksCategoriesLists(sortTag);
 
   const getTaskById = (itemId: string, tasksList: Task[]) => {
     return tasksList.filter((task) => {
@@ -54,7 +51,7 @@ export default function TaskTicket({
     const task = getTaskById(id, DONE_TASKS);
 
     if (task.length !== 1) {
-      const taskInProgress = getTaskById(id, TASKS);
+      const taskInProgress = getTaskById(id, ALL_TASKS);
       dispatch(setTaskAsDone({ id, task: taskInProgress[0] }));
     } else {
       task[0].doneStatus = false;
