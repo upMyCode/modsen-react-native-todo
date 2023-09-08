@@ -2,6 +2,7 @@ import {
   importantTaskListFilter,
   taskInCurrentDayFilter,
   taskInCurrentMonthFilter,
+  taskInCurrentWeekFilter,
 } from '@src/helpers/filters';
 import { useAppSelector } from '@src/store/hooks';
 
@@ -70,6 +71,28 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
         console.log(DONE_TASK_IN_CURRENT_MONTH);
 
         DONE_TASKS = DONE_TASK_IN_CURRENT_MONTH;
+      }
+      if (sortTag === 'daily') {
+        const DONE_TASK_IN_CURRENT_DAY =
+          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
+        const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
+
+        ALL_TASKS = TASK_IN_CURRENT_DAY;
+        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
+      }
+    }
+  } else if (DATE_CATEGORY === 'Week') {
+    if (sortTag) {
+      if (sortTag === 'important') {
+        const TASK_IN_CURRENT_WEEK = taskInCurrentWeekFilter(ALL_TASKS_PRELOAD);
+
+        IMPORTANT_TASK_LIST = importantTaskListFilter(TASK_IN_CURRENT_WEEK);
+      }
+      if (sortTag === 'done') {
+        const DONE_TASK_IN_CURRENT_WEEK =
+          taskInCurrentWeekFilter(DONE_TASKS_PRELOAD);
+
+        DONE_TASKS = DONE_TASK_IN_CURRENT_WEEK;
       }
       if (sortTag === 'daily') {
         const DONE_TASK_IN_CURRENT_DAY =
