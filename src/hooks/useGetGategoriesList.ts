@@ -1,3 +1,6 @@
+import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
+import { useNavigation } from '@react-navigation/core';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import {
   CustomImg,
   PlusImg,
@@ -27,7 +30,17 @@ export interface CatigoryButtonProps {
   onPress: () => void;
 }
 
+export type StackScreensParamList = {
+  LoadingScreen: undefined;
+  DrawerScreens: undefined;
+  MainScreen: undefined;
+  ToDoListScreen: { sortTag: string } | undefined;
+};
+
 export default function useGetGategoriesList() {
+  const { MAIN_MENU_DEFAULT_FILTER_CATEGORIES } = useGetTasksCategoriesLists();
+  const navigation =
+    useNavigation<StackNavigationProp<StackScreensParamList>>();
   const categories = useAppSelector((state) => {
     return state.categoriesListReducer.categories;
   });
@@ -70,7 +83,7 @@ export default function useGetGategoriesList() {
   const CATIGORIES_BUTTON_LIST: CatigoryButtonProps[] = [
     {
       id: '1',
-      countTasks: 0,
+      countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.schoolCategory,
       icon: SchoolImg,
       textContent: 'School',
       bgColor: '#2A8899',
@@ -79,12 +92,14 @@ export default function useGetGategoriesList() {
       width: 100,
       height: 100,
       onPress: () => {
-        console.log('School');
+        return navigation.navigate('ToDoListScreen', {
+          sortTag: 'school',
+        });
       },
     },
     {
       id: '2',
-      countTasks: 0,
+      countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.workCategory,
       icon: WorkImg,
       textContent: 'Work',
       bgColor: '#5EB0D2',
@@ -93,12 +108,14 @@ export default function useGetGategoriesList() {
       width: 100,
       height: 100,
       onPress: () => {
-        console.log('Work');
+        return navigation.navigate('ToDoListScreen', {
+          sortTag: 'work',
+        });
       },
     },
     {
       id: '3',
-      countTasks: 0,
+      countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.shopCategory,
       icon: ShopImg,
       textContent: 'Shop',
       bgColor: '#BE8972',
@@ -107,12 +124,14 @@ export default function useGetGategoriesList() {
       width: 100,
       height: 100,
       onPress: () => {
-        console.log('Shop');
+        return navigation.navigate('ToDoListScreen', {
+          sortTag: 'shop',
+        });
       },
     },
     {
       id: '4',
-      countTasks: 0,
+      countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.readCategory,
       icon: ReadImg,
       textContent: 'Read',
       bgColor: '#646FD4',
@@ -121,12 +140,14 @@ export default function useGetGategoriesList() {
       width: 100,
       height: 100,
       onPress: () => {
-        console.log('Read');
+        return navigation.navigate('ToDoListScreen', {
+          sortTag: 'read',
+        });
       },
     },
     {
       id: '5',
-      countTasks: 0,
+      countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.workOutCategory,
       icon: WorkOutImg,
       textContent: 'work out',
       bgColor: '#83BC74',
@@ -135,7 +156,9 @@ export default function useGetGategoriesList() {
       width: 100,
       height: 100,
       onPress: () => {
-        console.log('Work out');
+        return navigation.navigate('ToDoListScreen', {
+          sortTag: 'workout',
+        });
       },
     },
   ];
@@ -148,7 +171,7 @@ export default function useGetGategoriesList() {
 
   for (let i = 0; i < categories.length; i += 1) {
     if (CATIGORIES_BUTTON_LIST[i]) {
-      CATIGORIES_BUTTON_LIST[i].countTasks = Number(categories[i].totalTask);
+      // CATIGORIES_BUTTON_LIST[i].countTasks = Number(categories[i].totalTask);
     } else {
       id += 1;
       CATIGORIES_BUTTON_LIST.push({
@@ -162,7 +185,9 @@ export default function useGetGategoriesList() {
         width: 100,
         height: 100,
         onPress: () => {
-          console.log('Work out');
+          return navigation.navigate('ToDoListScreen', {
+            sortTag: categories[i].taskCategoryName,
+          });
         },
       });
     }

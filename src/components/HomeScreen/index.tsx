@@ -56,6 +56,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const handleDrawerMenu = () => {
     navigation.dispatch(DrawerActions.toggleDrawer());
   };
+
   const actualDate = getActualDate();
 
   const handleChangeText = (text: string) => {

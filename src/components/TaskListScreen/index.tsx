@@ -65,6 +65,9 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
   const ARROW_IMAGE = Image.resolveAssetSource(WhiteArrowImg).uri;
   const WHITE_PLUS_IMAGE = Image.resolveAssetSource(WhitePlusImg).uri;
   const ARROW_DOWN_IMAGE = Image.resolveAssetSource(ArrowDownImg).uri;
+  const categories = useAppSelector((state) => {
+    return state.categoriesListReducer.categories;
+  });
   const windowHeight = Dimensions.get('window').height;
   const PROCENT = 0.3;
   const marginTopToAddTaskButton = windowHeight * PROCENT;
@@ -461,6 +464,78 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           </Title>
         </Header>
         <Main>
+          {sortTag === 'read' && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === categories[categories.length - 1].taskCategoryName && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === 'school' && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === 'work' && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === 'workout' && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === 'shop' && (
+            <FlatList
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
           {sortTag === 'daily' && isTaskListDoneOpened && (
             <FlatList
               contentContainerStyle={{
