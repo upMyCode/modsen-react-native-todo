@@ -14,6 +14,11 @@ export interface FooterProps {
   mTop: number;
 }
 
+export interface SubTask {
+  id: string;
+  subTaskText: string;
+}
+
 export interface Task {
   id: string;
   taskTitle: string;
@@ -23,11 +28,8 @@ export interface Task {
   taskDateTill: Date;
   taskTimeFrom: Date;
   taskTimeTill: Date;
-}
-
-export interface SubTask {
-  id: string;
-  subTaskText: string;
+  subTasks: Array<SubTask>;
+  doneStatus: boolean;
 }
 
 export interface FormTask {

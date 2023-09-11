@@ -1,3 +1,4 @@
+import { BlurView } from '@react-native-community/blur';
 import styled from 'styled-components/native';
 
 import { WrapperProps } from './types';
@@ -57,8 +58,60 @@ export const Description = styled.Text`
   color: #e7e7e7;
 `;
 
+export const SpreadMenuButtonContext = styled.Text`
+  font-size: 10px;
+  font-family: 'Signika-Light';
+  line-height: 9.86px;
+  color: #29a8ff;
+`;
+
 export const TaskTextContent = styled.View`
   margin-left: 4px;
   display: flex;
   flex-direction: column;
+`;
+
+export const SpreadMenu = styled.View`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  z-index: 100;
+  top: 40%;
+  left: 20%;
+  border-radius: 12px;
+  background-color: #ffffff;
+  width: 250px;
+  height: 70px;
+`;
+
+export const SpreadMenuContainer = styled.View`
+  display: flex;
+  margin: 10px 20px;
+`;
+
+export const SpreadMenuContainerText = styled.Text`
+  font-size: 13px;
+  font-family: 'Signika-Light';
+  line-height: 16.02px;
+  color: #363636;
+`;
+
+export const SpreadMenuContainerButtons = styled.View`
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
+`;
+
+export const Blur = styled(BlurView)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+`;
+
+export const ButtonListContainer = styled.View`
+  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
 `;

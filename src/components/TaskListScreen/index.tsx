@@ -12,7 +12,7 @@ import {
   changeStatusToActive,
   changeStatusToDisable,
 } from '@src/slices/modalSlice';
-import { addNewTask } from '@src/slices/taskListSlice';
+import { addNewTask, changeTask } from '@src/slices/taskListSlice';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
@@ -51,8 +51,9 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
   const DATE_CATEGORY = useAppSelector((state) => {
     return state.addDateCategorySlice.dateCategory;
   });
-
+  const [taskIdForChange, setTaskIdForChange] = useState<string>('');
   const [subTaskList, setSubTaskList] = useState<Array<SubTask>>([]);
+  const [changeTaskStatus, setChangeTaskStatus] = useState<boolean>(false);
 
   const [modalTitle, setModalTitle] = useState<string>('');
   const [modalAddSubTaskTitle, setModalAddSubTaskTitle] = useState<string>('');
@@ -112,6 +113,33 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
     return status;
   };
 
+  const handleChangeChangedTaskStatus = () => {
+    setChangeTaskStatus((change) => {
+      return !change;
+    });
+  };
+
+  const handleChangeTask = () => {
+    dispatch(
+      changeTask({
+        id: taskIdForChange,
+        taskTitle: modalTitle,
+        taskDescription: modalTextContent,
+        taskImportantStatus: importantTaskStatus,
+        taskDateFrom: fromDate,
+        taskDateTill: tillDate,
+        taskTimeFrom: fromTime,
+        taskTimeTill: tillTime,
+        subTasks: subTaskList,
+        doneStatus: false,
+      })
+    );
+  };
+  const handleSetId = (id: string) => {
+    setTaskIdForChange(id);
+  };
+
+  console.log(taskIdForChange);
   const renderItemTask = ({ item }: ListRenderItemInfo<Task>) => {
     return (
       <TaskTicket
@@ -121,6 +149,22 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         timeTill={item.taskTimeTill}
         taskTitle={item.taskTitle}
         taskDescription={item.taskDescription}
+        handleChangeChangedTaskStatus={handleChangeChangedTaskStatus}
+        setModalName={setModalName}
+        handleSetId={handleSetId}
+        taskImportantStatus={item.taskImportantStatus}
+        taskDateFrom={item.taskDateFrom}
+        taskDateTill={item.taskDateTill}
+        subTasks={item.subTasks}
+        doneStatus={item.doneStatus}
+        setFromDate={setFromDate}
+        setTillDate={setTillDate}
+        setFromTime={setFromTime}
+        setTillTime={setTillTime}
+        setModalTitle={setModalTitle}
+        setModalTextContent={setModalTextContent}
+        setSubTaskList={setSubTaskList}
+        setImportantTaskStatus={setImportantTaskStatus}
       />
     );
   };
@@ -165,10 +209,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
       ];
     });
   };
+
   const modalEventList = [
     {
       modalFirstHandler: () => {
         dispatch(changeStatusToDisable());
+        handleChangeChangedTaskStatus();
       },
       modalSecondHandler: async () => {
         const status = await workWithForm(
@@ -202,19 +248,35 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
     {
       modalFirstHandler: () => {
         dispatch(changeStatusToDisable());
+        handleChangeChangedTaskStatus();
       },
       modalSecondHandler: () => {
-        handleAddNewTask();
-        dispatch(changeStatusToDisable());
-        setModalName('date');
-        setModalTitle('');
-        setModalTextContent('');
-        setImportantTaskStatus(false);
-        setFromDate(new Date());
-        setTillDate(new Date());
-        setFromTime(new Date());
-        setTillTime(new Date());
-        setSubTaskList([]);
+        console.log(changeTaskStatus);
+        if (!changeTaskStatus) {
+          handleAddNewTask();
+          dispatch(changeStatusToDisable());
+          setModalName('date');
+          setModalTitle('');
+          setModalTextContent('');
+          setImportantTaskStatus(false);
+          setFromDate(new Date());
+          setTillDate(new Date());
+          setFromTime(new Date());
+          setTillTime(new Date());
+          setSubTaskList([]);
+        } else {
+          handleChangeTask();
+          dispatch(changeStatusToDisable());
+          setModalName('date');
+          setModalTitle('');
+          setModalTextContent('');
+          setImportantTaskStatus(false);
+          setFromDate(new Date());
+          setTillDate(new Date());
+          setFromTime(new Date());
+          setTillTime(new Date());
+          setSubTaskList([]);
+        }
       },
     },
     {
@@ -304,8 +366,16 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           handleChangeTextContent={handleChangeTextContent}
           modalFirstHandler={modalEventList[0].modalFirstHandler}
           modalSecondHandler={modalEventList[0].modalSecondHandler}
-          title="Please, add your task title"
-          textContent="Please, add your task title"
+          title={
+            changeTaskStatus
+              ? 'Please, change your task title'
+              : 'Please, add your task title'
+          }
+          textContent={
+            changeTaskStatus
+              ? 'Please, change your task text context'
+              : 'Please, add your task text context'
+          }
           modalFirstHandlerText="Cancel"
           modalSecondHandlerText="Ok"
           modalVisible={modalVisible}
