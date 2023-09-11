@@ -10,10 +10,8 @@ import {
   WorkImg,
   WorkOutImg,
 } from '@src/assets';
-import { updateCategoryList } from '@src/slices/categoriesListSlice';
 import { changeStatusToActive } from '@src/slices/modalSlice';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import { useEffect } from 'react';
 import type { ImageSourcePropType } from 'react-native';
 
 export interface CatigoryButtonProps {
@@ -58,28 +56,7 @@ export default function useGetGategoriesList() {
       dispatch(changeStatusToActive());
     },
   };
-  const categoriesPreload = [
-    {
-      totalTask: '0',
-      taskCategoryName: 'School',
-    },
-    {
-      totalTask: '0',
-      taskCategoryName: 'Work',
-    },
-    {
-      totalTask: '0',
-      taskCategoryName: 'Shop',
-    },
-    {
-      totalTask: '0',
-      taskCategoryName: 'Read',
-    },
-    {
-      totalTask: '0',
-      taskCategoryName: 'work out',
-    },
-  ];
+
   const CATIGORIES_BUTTON_LIST: CatigoryButtonProps[] = [
     {
       id: '1',
@@ -163,34 +140,29 @@ export default function useGetGategoriesList() {
     },
   ];
 
-  useEffect(() => {
-    dispatch(updateCategoryList(categoriesPreload));
-  }, []);
-
   let id = 6;
 
   for (let i = 0; i < categories.length; i += 1) {
-    if (CATIGORIES_BUTTON_LIST[i]) {
-      // CATIGORIES_BUTTON_LIST[i].countTasks = Number(categories[i].totalTask);
-    } else {
-      id += 1;
-      CATIGORIES_BUTTON_LIST.push({
-        id: id.toString(),
-        countTasks: Number(categories[i].totalTask),
-        icon: CustomImg,
-        textContent: categories[i].taskCategoryName,
-        bgColor: '#000000',
-        bRadius: 16,
-        boxShadow: true,
-        width: 100,
-        height: 100,
-        onPress: () => {
-          return navigation.navigate('ToDoListScreen', {
-            sortTag: categories[i].taskCategoryName,
-          });
-        },
-      });
-    }
+    const taskName = categories[i].taskCategoryName;
+
+    id += 1;
+
+    CATIGORIES_BUTTON_LIST.push({
+      id: id.toString(),
+      countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES[taskName] ?? 0,
+      icon: CustomImg,
+      textContent: taskName,
+      bgColor: '#000000',
+      bRadius: 16,
+      boxShadow: true,
+      width: 100,
+      height: 100,
+      onPress: () => {
+        return navigation.navigate('ToDoListScreen', {
+          sortTag: categories[i].taskCategoryName,
+        });
+      },
+    });
   }
 
   CATIGORIES_BUTTON_LIST.push(ADD_CATEGORIES_BUTTON);

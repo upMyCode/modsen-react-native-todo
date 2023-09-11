@@ -35,7 +35,15 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
   const DATE_CATEGORY = useAppSelector((state) => {
     return state.addDateCategorySlice.dateCategory;
   });
-  let MAIN_MENU_DEFAULT_FILTER_CATEGORIES = {
+  const categories = useAppSelector((state) => {
+    return state.categoriesListReducer.categories;
+  });
+
+  interface CATEGORIES {
+    [key: string]: number;
+  }
+
+  let MAIN_MENU_DEFAULT_FILTER_CATEGORIES: CATEGORIES = {
     readCategory: searchReadCategory(ALL_TASKS_PRELOAD).length,
     schoolCategory: searchSchoolCategory(ALL_TASKS_PRELOAD).length,
     workCategory: searchWorkCategory(ALL_TASKS_PRELOAD).length,
@@ -43,9 +51,32 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
     workOutCategory: workOutCategory(ALL_TASKS_PRELOAD).length,
   };
 
+  const addCategory = (tasks: Task[]) => {
+    for (let i = 0; i < categories.length; i += 1) {
+      const categoryName = categories[i].taskCategoryName;
+
+      MAIN_MENU_DEFAULT_FILTER_CATEGORIES[categoryName] = userCategory(
+        tasks,
+        categoryName
+      ).length;
+    }
+  };
+
+  addCategory(ALL_TASKS_PRELOAD);
+
   let IMPORTANT_TASK_LIST: Task[] = importantTaskListFilter(ALL_TASKS_PRELOAD);
   let DONE_TASKS: Task[] = DONE_TASKS_PRELOAD;
   let ALL_TASKS: Task[] = ALL_TASKS_PRELOAD;
+
+  const getCustomCategories = (tasks: Task[]) => {
+    for (let i = 0; i < categories.length; i += 1) {
+      if (categories[i].taskCategoryName === sortTag) {
+        const CUSTOM = userCategory(tasks, sortTag);
+
+        ALL_TASKS = CUSTOM;
+      }
+    }
+  };
 
   if (DATE_CATEGORY === 'Today') {
     const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
@@ -57,6 +88,8 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
       shopCategory: searchShopCategory(TASK_IN_CURRENT_DAY).length,
       workOutCategory: workOutCategory(TASK_IN_CURRENT_DAY).length,
     };
+
+    addCategory(TASK_IN_CURRENT_DAY);
 
     if (sortTag) {
       if (sortTag === 'important') {
@@ -109,6 +142,8 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
 
         ALL_TASKS = TASK_IN_CURRENT_DAY_WORKOUT;
       }
+
+      getCustomCategories(TASK_IN_CURRENT_DAY);
     }
   } else if (DATE_CATEGORY === 'Month') {
     const TASK_IN_CURRENT_MONTH = taskInCurrentMonthFilter(ALL_TASKS_PRELOAD);
@@ -119,6 +154,8 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
       shopCategory: searchShopCategory(TASK_IN_CURRENT_MONTH).length,
       workOutCategory: workOutCategory(TASK_IN_CURRENT_MONTH).length,
     };
+
+    addCategory(TASK_IN_CURRENT_MONTH);
 
     if (sortTag) {
       if (sortTag === 'important') {
@@ -178,6 +215,8 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
 
         ALL_TASKS = TASK_IN_CURRENT_MONTH_WORKOUT;
       }
+
+      getCustomCategories(TASK_IN_CURRENT_MONTH);
     }
   } else if (DATE_CATEGORY === 'Week') {
     const TASK_IN_CURRENT_WEEK = taskInCurrentWeekFilter(ALL_TASKS_PRELOAD);
@@ -189,6 +228,8 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
       shopCategory: searchShopCategory(TASK_IN_CURRENT_WEEK).length,
       workOutCategory: workOutCategory(TASK_IN_CURRENT_WEEK).length,
     };
+
+    addCategory(TASK_IN_CURRENT_WEEK);
 
     if (sortTag) {
       if (sortTag === 'read') {
@@ -245,6 +286,8 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
         ALL_TASKS = TASK_IN_CURRENT_DAY;
         DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
       }
+
+      getCustomCategories(TASK_IN_CURRENT_WEEK);
     }
   }
 

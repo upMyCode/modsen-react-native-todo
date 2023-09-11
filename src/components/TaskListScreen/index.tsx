@@ -51,12 +51,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
   const DATE_CATEGORY = useAppSelector((state) => {
     return state.addDateCategorySlice.dateCategory;
   });
-  const tasks = useAppSelector((state) => {
-    return state.tasksListSlice.tasks;
-  });
-  const doneTasks = useAppSelector((state) => {
-    return state.tasksListSlice.doneTasks;
-  });
+
   const [subTaskList, setSubTaskList] = useState<Array<SubTask>>([]);
 
   const [modalTitle, setModalTitle] = useState<string>('');
@@ -460,7 +455,11 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
               ? 'Today’s task'
               : DATE_CATEGORY === 'Month'
               ? 'Month’s task'
-              : 'Weeks’s task'}
+              : DATE_CATEGORY === 'Week'
+              ? 'Weeks’s task'
+              : DATE_CATEGORY === 'all' && sortTag === 'daily'
+              ? 'Today’s task'
+              : 'task in all time'}
           </Title>
         </Header>
         <Main>
@@ -476,18 +475,24 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
               renderItem={renderItemTask}
             />
           )}
-          {sortTag === categories[categories.length - 1].taskCategoryName && (
-            <FlatList
-              contentContainerStyle={{
-                alignItems: 'center',
-              }}
-              data={ALL_TASKS}
-              keyExtractor={({ id }) => {
-                return id;
-              }}
-              renderItem={renderItemTask}
-            />
-          )}
+          {categories.map((item) => {
+            if (item.taskCategoryName === sortTag) {
+              return (
+                <FlatList
+                  contentContainerStyle={{
+                    alignItems: 'center',
+                  }}
+                  data={ALL_TASKS}
+                  keyExtractor={({ id }) => {
+                    return id;
+                  }}
+                  renderItem={renderItemTask}
+                />
+              );
+            }
+
+            return null;
+          })}
           {sortTag === 'school' && (
             <FlatList
               contentContainerStyle={{
@@ -588,10 +593,10 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           {sortTag === 'daily' && (
             <TaskSwitcher>
               {sortTag === 'daily' && isTaskListDoneOpened ? (
-                <TaskSwitcherText>{`tasks in progress (${tasks.length})`}</TaskSwitcherText>
+                <TaskSwitcherText>{`tasks in progress (${ALL_TASKS.length})`}</TaskSwitcherText>
               ) : (
                 <TaskSwitcherText>
-                  {`done tasks (${doneTasks.length})`}
+                  {`done tasks (${DONE_TASKS.length})`}
                 </TaskSwitcherText>
               )}
 

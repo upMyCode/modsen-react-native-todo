@@ -1,5 +1,6 @@
 import type { ItemDataButtons } from '@hooks/useGetDateCategoriesButtons';
 import useGetDateCategoriesButtons from '@hooks/useGetDateCategoriesButtons';
+import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
 import { DrawerActions } from '@react-navigation/native';
 import {
   Button,
@@ -44,7 +45,11 @@ import type { NavigationProps } from './types';
 import formSchema from './validate';
 
 export default function HomeScreen({ navigation }: NavigationProps) {
+  const DATE_CATEGORY = useAppSelector((state) => {
+    return state.addDateCategorySlice.dateCategory;
+  });
   const { DATE_BUTTONS } = useGetDateCategoriesButtons();
+  const { ALL_TASKS } = useGetTasksCategoriesLists();
   const dispatch = useAppDispatch();
   const [errors, setErrors] = useState({});
   const { CATIGORIES_BUTTON_LIST } = useGetGategoriesList();
@@ -183,10 +188,22 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               {`you have ${' '}`}
             </TaskInfoTitleItem>
             <TaskInfoTitleItem color="#FFFFFF" fSize={24} lHeight={34.68}>
-              5 you have
+              {`${ALL_TASKS.length} ${
+                ALL_TASKS.length >= 0 && ALL_TASKS.length < 2
+                  ? 'task'
+                  : 'tasks`s'
+              }`}
             </TaskInfoTitleItem>
             <TaskInfoTitleItem color="#363636" fSize={20} lHeight={29.9}>
-              {`${' '} today ! `}
+              {`${' '} ${
+                DATE_CATEGORY === 'Today'
+                  ? 'today'
+                  : DATE_CATEGORY === 'Month'
+                  ? 'in this month'
+                  : DATE_CATEGORY === 'Week'
+                  ? 'in this week'
+                  : 'in all time'
+              } ! `}
             </TaskInfoTitleItem>
           </TaskInfoTitle>
           <TaskInfoTextContent>{actualDate}</TaskInfoTextContent>
