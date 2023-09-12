@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 
 import { WrapperProps } from './types';
 
-export const Wrapper = styled.View<WrapperProps>`
+export const Wrapper = styled.TouchableOpacity<WrapperProps>`
   width: ${({ totalTaskWidth }) => {
     return totalTaskWidth;
   }}px;
@@ -62,7 +62,7 @@ export const SpreadMenuButtonContext = styled.Text`
   font-size: 10px;
   font-family: 'Signika-Light';
   line-height: 9.86px;
-  color: #29a8ff;
+  color: #194aa6;
 `;
 
 export const TaskTextContent = styled.View`
@@ -81,7 +81,7 @@ export const SpreadMenu = styled.View`
   border-radius: 12px;
   background-color: #ffffff;
   width: 250px;
-  height: 70px;
+  height: 75px;
 `;
 
 export const SpreadMenuContainer = styled.View`
@@ -94,6 +94,7 @@ export const SpreadMenuContainerText = styled.Text`
   font-family: 'Signika-Light';
   line-height: 16.02px;
   color: #363636;
+  text-align: center;
 `;
 
 export const SpreadMenuContainerButtons = styled.View`
@@ -114,4 +115,14 @@ export const ButtonListContainer = styled.View`
   margin-left: 20px;
   display: flex;
   flex-direction: row;
+  width: 150px;
+  justify-content: space-between;
+`;
+
+export const SubtaskListWrapper = styled.ScrollView`
+  flex: 1;
+`;
+
+export const List = styled.FlatList`
+  height: 200px;
 `;

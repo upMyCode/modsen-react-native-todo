@@ -9,13 +9,14 @@ export interface SubTask {
 export interface TaskTicketProps {
   id: string;
   timeFrom: Date;
+  task: Task;
   timeTill: Date;
   taskDateFrom: Date;
   taskDateTill: Date;
   taskTitle: string;
   taskDescription: string;
   sortTag: string;
-  handleChangeChangedTaskStatus: () => void;
+  setChangedTaskStatusToActive: () => void;
   handleSetId: (id: string) => void;
   setModalName: React.Dispatch<React.SetStateAction<string>>;
   taskImportantStatus: boolean;
@@ -29,6 +30,9 @@ export interface TaskTicketProps {
   setModalTextContent: React.Dispatch<React.SetStateAction<string>>;
   setSubTaskList: React.Dispatch<React.SetStateAction<SubTask[]>>;
   setImportantTaskStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setTicketForChangeDoneStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  doneTasks: Task[];
+  allTasks: Task[];
 }
 
 export interface Task {

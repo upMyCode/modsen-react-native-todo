@@ -72,6 +72,8 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
   const [tillDate, setTillDate] = useState<Date>(new Date());
   const [fromTime, setFromTime] = useState<Date>(new Date());
   const [tillTime, setTillTime] = useState<Date>(new Date());
+  const [ticketForChangeDoneStatus, setTicketForChangeDoneStatus] =
+    useState<boolean>(false);
   const [taskModalErrors, setTaskModalErrors] = useState<FormTask | object>({});
   const [subTaskModalErrors, setSubTaskModalErrors] = useState<
     FormSubTask | object
@@ -113,10 +115,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
     return status;
   };
 
-  const handleChangeChangedTaskStatus = () => {
-    setChangeTaskStatus((change) => {
-      return !change;
-    });
+  const setChangedTaskStatusToActive = () => {
+    setChangeTaskStatus(true);
+  };
+
+  const setChangedTaskStatusToDisable = () => {
+    setChangeTaskStatus(false);
   };
 
   const handleChangeTask = () => {
@@ -131,7 +135,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         taskTimeFrom: fromTime,
         taskTimeTill: tillTime,
         subTasks: subTaskList,
-        doneStatus: false,
+        doneStatus: ticketForChangeDoneStatus,
       })
     );
   };
@@ -139,17 +143,17 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
     setTaskIdForChange(id);
   };
 
-  console.log(taskIdForChange);
   const renderItemTask = ({ item }: ListRenderItemInfo<Task>) => {
     return (
       <TaskTicket
         sortTag={sortTag}
         id={item.id}
+        task={item}
         timeFrom={item.taskTimeFrom}
         timeTill={item.taskTimeTill}
         taskTitle={item.taskTitle}
         taskDescription={item.taskDescription}
-        handleChangeChangedTaskStatus={handleChangeChangedTaskStatus}
+        setChangedTaskStatusToActive={setChangedTaskStatusToActive}
         setModalName={setModalName}
         handleSetId={handleSetId}
         taskImportantStatus={item.taskImportantStatus}
@@ -165,6 +169,9 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         setModalTextContent={setModalTextContent}
         setSubTaskList={setSubTaskList}
         setImportantTaskStatus={setImportantTaskStatus}
+        setTicketForChangeDoneStatus={setTicketForChangeDoneStatus}
+        doneTasks={DONE_TASKS}
+        allTasks={ALL_TASKS}
       />
     );
   };
@@ -214,7 +221,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
     {
       modalFirstHandler: () => {
         dispatch(changeStatusToDisable());
-        handleChangeChangedTaskStatus();
+        setChangedTaskStatusToDisable();
       },
       modalSecondHandler: async () => {
         const status = await workWithForm(
@@ -248,10 +255,9 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
     {
       modalFirstHandler: () => {
         dispatch(changeStatusToDisable());
-        handleChangeChangedTaskStatus();
+        setChangedTaskStatusToDisable();
       },
       modalSecondHandler: () => {
-        console.log(changeTaskStatus);
         if (!changeTaskStatus) {
           handleAddNewTask();
           dispatch(changeStatusToDisable());
@@ -310,6 +316,16 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
   };
 
   const handleOpenAddTaskMenu = () => {
+    setModalName('date');
+    setModalTitle('');
+    setModalTextContent('');
+    setImportantTaskStatus(false);
+    setFromDate(new Date());
+    setTillDate(new Date());
+    setFromTime(new Date());
+    setTillTime(new Date());
+    setSubTaskList([]);
+    setChangedTaskStatusToDisable();
     dispatch(changeStatusToActive());
   };
 
@@ -535,6 +551,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         <Main>
           {sortTag === 'read' && (
             <FlatList
+              nestedScrollEnabled
               contentContainerStyle={{
                 alignItems: 'center',
               }}
@@ -549,6 +566,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
             if (item.taskCategoryName === sortTag) {
               return (
                 <FlatList
+                  nestedScrollEnabled
                   contentContainerStyle={{
                     alignItems: 'center',
                   }}
@@ -565,10 +583,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           })}
           {sortTag === 'school' && (
             <FlatList
+              nestedScrollEnabled
               contentContainerStyle={{
                 alignItems: 'center',
               }}
               data={ALL_TASKS}
+              extraData={ALL_TASKS}
               keyExtractor={({ id }) => {
                 return id;
               }}
@@ -577,10 +597,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           )}
           {sortTag === 'work' && (
             <FlatList
+              nestedScrollEnabled
               contentContainerStyle={{
                 alignItems: 'center',
               }}
               data={ALL_TASKS}
+              extraData={ALL_TASKS}
               keyExtractor={({ id }) => {
                 return id;
               }}
@@ -589,10 +611,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           )}
           {sortTag === 'workout' && (
             <FlatList
+              nestedScrollEnabled
               contentContainerStyle={{
                 alignItems: 'center',
               }}
               data={ALL_TASKS}
+              extraData={ALL_TASKS}
               keyExtractor={({ id }) => {
                 return id;
               }}
@@ -601,10 +625,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           )}
           {sortTag === 'shop' && (
             <FlatList
+              nestedScrollEnabled
               contentContainerStyle={{
                 alignItems: 'center',
               }}
               data={ALL_TASKS}
+              extraData={ALL_TASKS}
               keyExtractor={({ id }) => {
                 return id;
               }}
@@ -613,10 +639,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           )}
           {sortTag === 'daily' && isTaskListDoneOpened && (
             <FlatList
+              nestedScrollEnabled
               contentContainerStyle={{
                 alignItems: 'center',
               }}
               data={DONE_TASKS}
+              extraData={DONE_TASKS}
               keyExtractor={({ id }) => {
                 return id;
               }}
@@ -625,10 +653,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           )}
           {sortTag === 'daily' && !isTaskListDoneOpened && (
             <FlatList
+              nestedScrollEnabled
               contentContainerStyle={{
                 alignItems: 'center',
               }}
               data={ALL_TASKS}
+              extraData={ALL_TASKS}
               keyExtractor={({ id }) => {
                 return id;
               }}
@@ -637,10 +667,12 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
           )}
           {sortTag === 'important' && (
             <FlatList
+              nestedScrollEnabled
               contentContainerStyle={{
                 alignItems: 'center',
               }}
               data={IMPORTANT_TASK_LIST}
+              extraData={IMPORTANT_TASK_LIST}
               keyExtractor={({ id }) => {
                 return id;
               }}
@@ -652,7 +684,9 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
               contentContainerStyle={{
                 alignItems: 'center',
               }}
+              nestedScrollEnabled
               data={DONE_TASKS}
+              extraData={DONE_TASKS}
               keyExtractor={({ id }) => {
                 return id;
               }}

@@ -87,6 +87,17 @@ const tasksListSlice = createSlice({
         return task;
       });
     },
+    changeSubtasksList: (state, action) => {
+      state.tasks = state.tasks.map((task) => {
+        if (task.id === action.payload.idTask) {
+          task.subTasks = task.subTasks.filter((subtask) => {
+            return subtask.id !== action.payload.idSubtask;
+          });
+        }
+
+        return task;
+      });
+    },
   },
 });
 
@@ -96,6 +107,7 @@ export const {
   setTaskAsInProgress,
   deleteTask,
   changeTask,
+  changeSubtasksList,
 } = tasksListSlice.actions;
 
 export default tasksListSlice.reducer;
