@@ -6,5 +6,8 @@ import {
 
 export interface NavigationProps {
   navigation: NavigationProp<ParamListBase>;
-  route: RouteProp<{ params: { sortTag: string } }, 'params'>;
+  route: RouteProp<
+    { params: { sortTag: string; searchData: string } },
+    'params'
+  >;
 }

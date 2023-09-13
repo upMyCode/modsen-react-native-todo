@@ -25,7 +25,10 @@ interface Task {
   doneStatus: boolean;
 }
 
-export default function useGetTasksCategoriesLists(sortTag?: string) {
+export default function useGetTasksCategoriesLists(
+  sortTag: string,
+  searchData: string
+) {
   const ALL_TASKS_PRELOAD: Task[] = useAppSelector((state) => {
     return state.tasksListSlice.tasks;
   });
@@ -143,6 +146,10 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
         ALL_TASKS = TASK_IN_CURRENT_DAY_WORKOUT;
       }
 
+      if (sortTag === 'search') {
+        ALL_TASKS = userCategory(TASK_IN_CURRENT_DAY, searchData);
+      }
+
       getCustomCategories(TASK_IN_CURRENT_DAY);
     }
   } else if (DATE_CATEGORY === 'Month') {
@@ -216,6 +223,10 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
         ALL_TASKS = TASK_IN_CURRENT_MONTH_WORKOUT;
       }
 
+      if (sortTag === 'search') {
+        ALL_TASKS = userCategory(TASK_IN_CURRENT_MONTH, searchData);
+      }
+
       getCustomCategories(TASK_IN_CURRENT_MONTH);
     }
   } else if (DATE_CATEGORY === 'Week') {
@@ -287,7 +298,68 @@ export default function useGetTasksCategoriesLists(sortTag?: string) {
         DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
       }
 
+      if (sortTag === 'search') {
+        ALL_TASKS = userCategory(TASK_IN_CURRENT_WEEK, searchData);
+      }
+
       getCustomCategories(TASK_IN_CURRENT_WEEK);
+    }
+  } else if (DATE_CATEGORY === 'all') {
+    if (sortTag) {
+      if (sortTag === 'important') {
+        IMPORTANT_TASK_LIST = importantTaskListFilter(ALL_TASKS_PRELOAD);
+      }
+      if (sortTag === 'done') {
+        const DONE_TASK_IN_CURRENT_DAY =
+          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
+
+        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
+      }
+      if (sortTag === 'read') {
+        const TASK_IN_CURRENT_DAY_READ = searchReadCategory(ALL_TASKS_PRELOAD);
+
+        ALL_TASKS = TASK_IN_CURRENT_DAY_READ;
+      }
+
+      if (sortTag === 'daily') {
+        const DONE_TASK_IN_CURRENT_DAY =
+          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
+        const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
+
+        ALL_TASKS = TASK_IN_CURRENT_DAY;
+        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
+      }
+
+      if (sortTag === 'school') {
+        const TASK_IN_CURRENT_DAY_SCHOOL =
+          searchSchoolCategory(ALL_TASKS_PRELOAD);
+
+        ALL_TASKS = TASK_IN_CURRENT_DAY_SCHOOL;
+      }
+
+      if (sortTag === 'work') {
+        const TASK_IN_CURRENT_DAY_WORK = searchWorkCategory(ALL_TASKS_PRELOAD);
+
+        ALL_TASKS = TASK_IN_CURRENT_DAY_WORK;
+      }
+
+      if (sortTag === 'shop') {
+        const TASK_IN_CURRENT_DAY_SHOP = searchShopCategory(ALL_TASKS_PRELOAD);
+
+        ALL_TASKS = TASK_IN_CURRENT_DAY_SHOP;
+      }
+
+      if (sortTag === 'workout') {
+        const TASK_IN_CURRENT_DAY_WORKOUT = workOutCategory(ALL_TASKS_PRELOAD);
+
+        ALL_TASKS = TASK_IN_CURRENT_DAY_WORKOUT;
+      }
+
+      if (sortTag === 'search') {
+        ALL_TASKS = userCategory(ALL_TASKS_PRELOAD, searchData);
+      }
+
+      getCustomCategories(ALL_TASKS_PRELOAD);
     }
   }
 

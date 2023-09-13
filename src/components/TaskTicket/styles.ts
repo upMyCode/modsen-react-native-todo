@@ -120,9 +120,6 @@ export const ButtonListContainer = styled.View`
 `;
 
 export const SubtaskListWrapper = styled.ScrollView`
-  flex: 1;
-`;
-
-export const List = styled.FlatList`
-  height: 200px;
+  margin-left: 72px;
+  margin-bottom: 4px;
 `;

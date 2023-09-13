@@ -235,11 +235,13 @@ export default function TaskTicket({
               <Description>{taskDescription}</Description>
             </TaskTextContent>
           </MainContent>
-          <ImageWrapper>
-            <Button width={4} height={20} onPress={handleOpenSpreadMenu}>
-              <Image width={4} height={20} source={{ uri: SPREAD_IMAGE }} />
-            </Button>
-          </ImageWrapper>
+          {!doneStatus && (
+            <ImageWrapper>
+              <Button width={4} height={20} onPress={handleOpenSpreadMenu}>
+                <Image width={4} height={20} source={{ uri: SPREAD_IMAGE }} />
+              </Button>
+            </ImageWrapper>
+          )}
         </Container>
         {isTaskTicketHaveSubtasks && (
           <SubtaskListWrapper>

@@ -45,9 +45,9 @@ import type {
 import { formSchemaSubTask, formSchemaTask } from './validate';
 
 export default function TaskListScreen({ route, navigation }: NavigationProps) {
-  const { sortTag } = route.params;
+  const { sortTag, searchData } = route.params;
   const { IMPORTANT_TASK_LIST, DONE_TASKS, ALL_TASKS } =
-    useGetTasksCategoriesLists(sortTag);
+    useGetTasksCategoriesLists(sortTag, searchData);
   const DATE_CATEGORY = useAppSelector((state) => {
     return state.addDateCategorySlice.dateCategory;
   });
@@ -551,6 +551,19 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         </Header>
         <Main>
           {sortTag === 'read' && (
+            <FlatList
+              nestedScrollEnabled
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === 'search' && (
             <FlatList
               nestedScrollEnabled
               contentContainerStyle={{

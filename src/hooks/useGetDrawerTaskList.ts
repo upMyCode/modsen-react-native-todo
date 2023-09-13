@@ -16,7 +16,7 @@ export type StackScreensParamList = {
   LoadingScreen: undefined;
   DrawerScreens: undefined;
   MainScreen: undefined;
-  ToDoListScreen: { sortTag: string } | undefined;
+  ToDoListScreen: { sortTag: string; searchData: string } | undefined;
 };
 
 export default function useGetDrawerTaskList() {
@@ -31,6 +31,7 @@ export default function useGetDrawerTaskList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: 'daily',
+          searchData: '',
         });
       },
     },
@@ -42,6 +43,7 @@ export default function useGetDrawerTaskList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: 'important',
+          searchData: '',
         });
       },
     },
@@ -53,6 +55,7 @@ export default function useGetDrawerTaskList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: 'done',
+          searchData: '',
         });
       },
     },

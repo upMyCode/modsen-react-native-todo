@@ -49,19 +49,33 @@ const tasksListSlice = createSlice({
         doneStatus: action.payload.doneStatus,
       });
     },
-
     setTaskAsDone: (state, action) => {
+      const task = state.tasks.filter((task) => {
+        if (task.id === action.payload.id) {
+          task.doneStatus = true;
+          return true;
+        }
+      });
+
       state.tasks = state.tasks.filter((task) => {
         return task.id !== action.payload.id;
       });
-      state.doneTasks.push(action.payload.task);
+
+      state.doneTasks.push(task[0]);
     },
     setTaskAsInProgress: (state, action) => {
+      const task = state.doneTasks.filter((task) => {
+        if (task.id === action.payload.id) {
+          task.doneStatus = false;
+          return true;
+        }
+      });
+
       state.doneTasks = state.doneTasks.filter((task) => {
         return task.id !== action.payload.id;
       });
 
-      state.tasks.push(action.payload.task);
+      state.tasks.push(task[0]);
     },
     deleteTask: (state, action) => {
       state.tasks = state.tasks.filter((task) => {
@@ -112,6 +126,8 @@ const tasksListSlice = createSlice({
           }
           task.subTasks = [];
           state.doneTasks.push(task);
+        } else {
+          return true;
         }
       });
     },

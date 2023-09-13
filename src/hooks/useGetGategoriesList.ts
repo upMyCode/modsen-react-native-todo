@@ -32,7 +32,7 @@ export type StackScreensParamList = {
   LoadingScreen: undefined;
   DrawerScreens: undefined;
   MainScreen: undefined;
-  ToDoListScreen: { sortTag: string } | undefined;
+  ToDoListScreen: { sortTag: string; searchData: string } | undefined;
 };
 
 export default function useGetGategoriesList() {
@@ -71,6 +71,7 @@ export default function useGetGategoriesList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: 'school',
+          searchData: '',
         });
       },
     },
@@ -87,6 +88,7 @@ export default function useGetGategoriesList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: 'work',
+          searchData: '',
         });
       },
     },
@@ -103,6 +105,7 @@ export default function useGetGategoriesList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: 'shop',
+          searchData: '',
         });
       },
     },
@@ -119,6 +122,7 @@ export default function useGetGategoriesList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: 'read',
+          searchData: '',
         });
       },
     },
@@ -135,6 +139,7 @@ export default function useGetGategoriesList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: 'workout',
+          searchData: '',
         });
       },
     },
@@ -160,6 +165,7 @@ export default function useGetGategoriesList() {
       onPress: () => {
         return navigation.navigate('ToDoListScreen', {
           sortTag: categories[i].taskCategoryName,
+          searchData: '',
         });
       },
     });

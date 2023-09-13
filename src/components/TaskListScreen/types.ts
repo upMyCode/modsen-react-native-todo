@@ -7,7 +7,10 @@ import * as yup from 'yup';
 
 export interface NavigationProps {
   navigation: NavigationProp<ParamListBase>;
-  route: RouteProp<{ params: { sortTag: string } }, 'params'>;
+  route: RouteProp<
+    { params: { sortTag: string; searchData: string } },
+    'params'
+  >;
 }
 
 export interface FooterProps {
