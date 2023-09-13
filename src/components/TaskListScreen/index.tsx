@@ -212,6 +212,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
             ? (Number(subtask[subtask.length - 1].id) + 1).toString()
             : initId.toString(),
           subTaskText: modalAddSubTaskTitle,
+          doneStatus: false,
         },
       ];
     });

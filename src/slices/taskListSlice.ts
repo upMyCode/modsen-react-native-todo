@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface SubTask {
   id: string;
   subTaskText: string;
+  doneStatus: boolean;
 }
 interface Task {
   id: string;
@@ -90,12 +91,28 @@ const tasksListSlice = createSlice({
     changeSubtasksList: (state, action) => {
       state.tasks = state.tasks.map((task) => {
         if (task.id === action.payload.idTask) {
-          task.subTasks = task.subTasks.filter((subtask) => {
-            return subtask.id !== action.payload.idSubtask;
+          task.subTasks = task.subTasks.map((subtask) => {
+            if (subtask.id === action.payload.idSubtask) {
+              subtask.doneStatus = !subtask.doneStatus;
+            }
+            return subtask;
           });
         }
 
         return task;
+      });
+
+      state.tasks = state.tasks.filter((task) => {
+        if (task.id === action.payload.idTask) {
+          const isTasks = task.subTasks.some((elem) => {
+            return !elem.doneStatus;
+          });
+          if (isTasks) {
+            return isTasks;
+          }
+          task.subTasks = [];
+          state.doneTasks.push(task);
+        }
       });
     },
   },

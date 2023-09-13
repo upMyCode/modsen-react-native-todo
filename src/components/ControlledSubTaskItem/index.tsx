@@ -1,8 +1,8 @@
 import { Button } from '@root';
 import { DoneStatusImg } from '@src/assets';
 import { changeSubtasksList, setTaskAsDone } from '@src/slices/taskListSlice';
-import { useAppDispatch } from '@src/store/hooks';
-import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import React, { useState } from 'react';
 import { Image, View } from 'react-native';
 
 import { ImageWrapper, SubTaskContainer, SubTaskText } from './styles';
@@ -16,6 +16,10 @@ export default function ControlledSubTaskItem({
 }: SubTaskItemProps) {
   const [isDone, setDoneStatus] = useState<boolean>(false);
   const DONE_STATUS_IMAGE = Image.resolveAssetSource(DoneStatusImg).uri;
+  const tasks = useAppSelector((state) => {
+    return state.tasksListSlice.tasks;
+  });
+
   const dispatch = useAppDispatch();
 
   const handleDoneStatus = () => {
@@ -23,13 +27,7 @@ export default function ControlledSubTaskItem({
       return !done;
     });
 
-    if (!isDone) {
-      dispatch(changeSubtasksList({ idTask, idSubtask }));
-
-      if (task.subTasks.length === 1) {
-        dispatch(setTaskAsDone({ id: idTask, task }));
-      }
-    }
+    dispatch(changeSubtasksList({ idTask, idSubtask }));
   };
   return (
     <SubTaskContainer>
