@@ -37,8 +37,6 @@ import { SubTask, Task, TaskTicketProps } from './types';
 export default function TaskTicket({
   id,
   timeFrom,
-  doneTasks,
-  allTasks,
   task,
   timeTill,
   taskTitle,

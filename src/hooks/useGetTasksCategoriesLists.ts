@@ -35,6 +35,7 @@ export default function useGetTasksCategoriesLists(
   const DONE_TASKS_PRELOAD: Task[] = useAppSelector((state) => {
     return state.tasksListSlice.doneTasks;
   });
+
   const DATE_CATEGORY = useAppSelector((state) => {
     return state.addDateCategorySlice.dateCategory;
   });

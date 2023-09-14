@@ -1,12 +1,15 @@
 import { StackScreens } from '@root';
-import store from '@src/store';
+import store, { persistor } from '@src/store';
 import React from 'react';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App(): JSX.Element {
   return (
     <Provider store={store}>
-      <StackScreens />
+      <PersistGate loading={null} persistor={persistor}>
+        <StackScreens />
+      </PersistGate>
     </Provider>
   );
 }

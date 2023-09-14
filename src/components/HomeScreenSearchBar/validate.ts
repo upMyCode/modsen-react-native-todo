@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 const SearchSchemaTask = Yup.object().shape({
   searchText: Yup.string()
-    .min(3, '* Search text should a minimum of 3 characters')
+    .min(1, '* Search text should a minimum of 3 characters')
     .max(16, '* Search text should a maximum of 16 characters')
     .matches(
       /^\s+|[A-ZА-ЯЁ\s]/gi,
