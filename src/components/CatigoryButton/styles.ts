@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 
 interface WrapperProps {
   isThird: boolean | undefined;
+  isBigDevice: boolean;
 }
 
 export const CounterTaskContainer = styled.View`
@@ -26,7 +27,11 @@ export const TaskTextContent = styled.Text`
 `;
 
 export const Wrapper = styled.View<WrapperProps>`
-  margin: ${({ isThird }) => {
-    return isThird ? '16px 0 0 0' : '16px 14px 0 15px';
+  margin: ${({ isThird, isBigDevice }) => {
+    return isThird
+      ? '16px 0 0 0'
+      : isBigDevice
+      ? '16px 14px 0 15px'
+      : '16px 12px 0 12px';
   }};
 `;

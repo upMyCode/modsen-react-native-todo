@@ -49,10 +49,7 @@ export default function TaskTicket({
   taskDateTill,
   subTasks,
   doneStatus,
-  setFromDate,
-  setTillDate,
-  setFromTime,
-  setTillTime,
+  setDate,
   setModalTitle,
   setSubTaskList,
   setModalTextContent,
@@ -70,11 +67,11 @@ export default function TaskTicket({
   const WINDOW_PROC = 0.91;
   const totalTaskWidth = windowWidth * WINDOW_PROC;
   const dispatch = useAppDispatch();
-  const { DONE_TASKS, ALL_TASKS } = useGetTasksCategoriesLists(sortTag);
+  const { DONE_TASKS } = useGetTasksCategoriesLists(sortTag);
 
   const getTaskById = (itemId: string, tasksList: Task[]) => {
-    return tasksList.filter((task) => {
-      return task.id === itemId;
+    return tasksList.filter((taskItem) => {
+      return taskItem.id === itemId;
     });
   };
 
@@ -83,15 +80,12 @@ export default function TaskTicket({
       return !done;
     });
 
-    const task = getTaskById(id, DONE_TASKS);
+    const preloadTask = getTaskById(id, DONE_TASKS);
 
-    if (task.length !== 1) {
-      const taskInProgress = getTaskById(id, ALL_TASKS);
-      dispatch(setTaskAsDone({ id, task: taskInProgress[0] }));
+    if (preloadTask.length !== 1) {
+      dispatch(setTaskAsDone({ id }));
     } else {
-      task[0].doneStatus = false;
-
-      dispatch(setTaskAsInProgress({ id, task: task[0] }));
+      dispatch(setTaskAsInProgress({ id }));
     }
   };
 
@@ -121,10 +115,12 @@ export default function TaskTicket({
     setModalName('date');
     setChangedTaskStatusToActive();
     handleSetId(id);
-    setFromDate(taskDateFrom);
-    setTillDate(taskDateTill);
-    setFromTime(timeFrom);
-    setTillTime(timeFrom);
+    setDate({
+      fromDate: taskDateFrom,
+      tillDate: taskDateTill,
+      fromTime: timeFrom,
+      tillTime: timeTill,
+    });
     setModalTitle(taskTitle);
     setSubTaskList(subTasks);
     setTicketForChangeDoneStatus(isDone);

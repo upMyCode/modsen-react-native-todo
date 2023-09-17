@@ -18,12 +18,14 @@ import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
 import { Dimensions, FlatList, Image, SafeAreaView, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import { Notifications } from 'react-native-notifications';
 import * as Yup from 'yup';
 
 import {
   BackButton,
   DateContainer,
   DatePeriodText,
+  ErrorTextContent,
   Footer,
   Header,
   LineDevider,
@@ -35,8 +37,10 @@ import {
   Title,
 } from './styles';
 import type {
+  DateError,
   FormSubTask,
   FormTask,
+  ModalDate,
   NavigationProps,
   SubTask,
   Task,
@@ -68,16 +72,22 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
   const PROCENT = 0.3;
   const marginTopToAddTaskButton = windowHeight * PROCENT;
   const dispatch = useAppDispatch();
-  const [fromDate, setFromDate] = useState<Date>(new Date());
-  const [tillDate, setTillDate] = useState<Date>(new Date());
-  const [fromTime, setFromTime] = useState<Date>(new Date());
-  const [tillTime, setTillTime] = useState<Date>(new Date());
+  const [modalDate, setDate] = useState<ModalDate>({
+    fromDate: new Date(),
+    tillDate: new Date(),
+    fromTime: new Date(),
+    tillTime: new Date(),
+  });
   const [ticketForChangeDoneStatus, setTicketForChangeDoneStatus] =
     useState<boolean>(false);
   const [taskModalErrors, setTaskModalErrors] = useState<FormTask | object>({});
   const [subTaskModalErrors, setSubTaskModalErrors] = useState<
     FormSubTask | object
   >({});
+  const [dateError, setDateError] = useState<DateError>({
+    dateError: '',
+    timeError: '',
+  });
   const [importantTaskStatus, setImportantTaskStatus] =
     useState<boolean>(false);
   const [modalName, setModalName] = useState<string>('date');
@@ -130,10 +140,10 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         taskTitle: modalTitle,
         taskDescription: modalTextContent,
         taskImportantStatus: importantTaskStatus,
-        taskDateFrom: fromDate,
-        taskDateTill: tillDate,
-        taskTimeFrom: fromTime,
-        taskTimeTill: tillTime,
+        taskDateFrom: modalDate.fromDate,
+        taskDateTill: modalDate.tillDate,
+        taskTimeFrom: modalDate.fromTime,
+        taskTimeTill: modalDate.tillTime,
         subTasks: subTaskList,
         doneStatus: ticketForChangeDoneStatus,
       })
@@ -161,10 +171,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         taskDateTill={item.taskDateTill}
         subTasks={item.subTasks}
         doneStatus={item.doneStatus}
-        setFromDate={setFromDate}
-        setTillDate={setTillDate}
-        setFromTime={setFromTime}
-        setTillTime={setTillTime}
+        setDate={setDate}
         setModalTitle={setModalTitle}
         setModalTextContent={setModalTextContent}
         setSubTaskList={setSubTaskList}
@@ -192,10 +199,10 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         taskTitle: modalTitle,
         taskDescription: modalTextContent,
         taskImportantStatus: importantTaskStatus,
-        taskDateFrom: fromDate,
-        taskDateTill: tillDate,
-        taskTimeFrom: fromTime,
-        taskTimeTill: tillTime,
+        taskDateFrom: modalDate.fromDate,
+        taskDateTill: modalDate.tillDate,
+        taskTimeFrom: modalDate.fromTime,
+        taskTimeTill: modalDate.tillTime,
         subTasks: [...subTaskList],
         doneStatus: false,
       })
@@ -218,6 +225,30 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
     });
   };
 
+  const checkIsDateCorrect = (dateFor: Date, dateTill: Date, type: string) => {
+    if (dateFor <= dateTill) {
+      return true;
+    }
+    if (type === 'date') {
+      setDateError((error) => {
+        return {
+          ...error,
+          dateError: 'Please, add correct date',
+        };
+      });
+      return false;
+    }
+    if (type === 'time') {
+      setDateError((error) => {
+        return {
+          ...error,
+          timeError: 'Please, add correct time',
+        };
+      });
+      return false;
+    }
+  };
+
   const modalEventList = [
     {
       modalFirstHandler: () => {
@@ -235,9 +266,16 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         );
 
         if (status) {
-          dispatch(changeStatusToDisable());
-          setModalName('subtask');
-          dispatch(changeStatusToActive());
+          const isCorrectDate = checkIsDateCorrect(
+            modalDate.fromDate,
+            modalDate.tillDate,
+            'date'
+          );
+          if (isCorrectDate) {
+            dispatch(changeStatusToDisable());
+            setModalName('subtask');
+            dispatch(changeStatusToActive());
+          }
         }
       },
     },
@@ -259,30 +297,87 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         setChangedTaskStatusToDisable();
       },
       modalSecondHandler: () => {
-        if (!changeTaskStatus) {
-          handleAddNewTask();
-          dispatch(changeStatusToDisable());
-          setModalName('date');
-          setModalTitle('');
-          setModalTextContent('');
-          setImportantTaskStatus(false);
-          setFromDate(new Date());
-          setTillDate(new Date());
-          setFromTime(new Date());
-          setTillTime(new Date());
-          setSubTaskList([]);
-        } else {
-          handleChangeTask();
-          dispatch(changeStatusToDisable());
-          setModalName('date');
-          setModalTitle('');
-          setModalTextContent('');
-          setImportantTaskStatus(false);
-          setFromDate(new Date());
-          setTillDate(new Date());
-          setFromTime(new Date());
-          setTillTime(new Date());
-          setSubTaskList([]);
+        const isCorrectDate = checkIsDateCorrect(
+          modalDate.fromTime,
+          modalDate.tillTime,
+          'time'
+        );
+        if (isCorrectDate) {
+          if (!changeTaskStatus) {
+            Notifications.registerRemoteNotifications();
+
+            Notifications.events().registerNotificationReceivedForeground(
+              (notification: Notification, completion) => {
+                console.log(
+                  `Notification received in foreground: ${notification.title} : ${notification.body}`
+                );
+                completion({ alert: false, sound: false, badge: false });
+              }
+            );
+
+            Notifications.events().registerNotificationOpened(
+              (notification: Notification, completion) => {
+                console.log(`Notification opened: ${notification.payload}`);
+                completion();
+              }
+            );
+
+            const localNotification = Notifications.postLocalNotification({
+              body: 'Local notification!',
+              title: 'Local Notification Title',
+              sound: 'chime.aiff',
+              silent: false,
+              category: 'SOME_CATEGORY',
+              userInfo: {},
+              fireDate: new Date(),
+            });
+
+            Notifications.ios.checkPermissions().then((currentPermissions) => {
+              console.log(`Badges enabled: ${!!currentPermissions.badge}`);
+              console.log(`Sounds enabled: ${!!currentPermissions.sound}`);
+              console.log(`Alerts enabled: ${!!currentPermissions.alert}`);
+              console.log(`Car Play enabled: ${!!currentPermissions.carPlay}`);
+              console.log(
+                `Critical Alerts enabled: ${!!currentPermissions.criticalAlert}`
+              );
+              console.log(
+                `Provisional enabled: ${!!currentPermissions.provisional}`
+              );
+              console.log(
+                `Provides App Notification Settings enabled: ${!!currentPermissions.providesAppNotificationSettings}`
+              );
+              console.log(
+                `Announcement enabled: ${!!currentPermissions.announcement}`
+              );
+            });
+            handleAddNewTask();
+            dispatch(changeStatusToDisable());
+            setModalName('date');
+            setModalTitle('');
+            setModalTextContent('');
+            setImportantTaskStatus(false);
+            setDate({
+              fromDate: new Date(),
+              tillDate: new Date(),
+              fromTime: new Date(),
+              tillTime: new Date(),
+            });
+            setSubTaskList([]);
+          } else {
+            handleChangeTask();
+            dispatch(changeStatusToDisable());
+            setModalName('date');
+            setModalTitle('');
+            setModalTextContent('');
+            setImportantTaskStatus(false);
+            setDate({
+              fromDate: new Date(),
+              tillDate: new Date(),
+              fromTime: new Date(),
+              tillTime: new Date(),
+            });
+            setSubTaskList([]);
+          }
         }
       },
     },
@@ -321,10 +416,16 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
     setModalTitle('');
     setModalTextContent('');
     setImportantTaskStatus(false);
-    setFromDate(new Date());
-    setTillDate(new Date());
-    setFromTime(new Date());
-    setTillTime(new Date());
+    setDate({
+      fromDate: new Date(),
+      tillDate: new Date(),
+      fromTime: new Date(),
+      tillTime: new Date(),
+    });
+    setDateError({
+      dateError: '',
+      timeError: '',
+    });
     setSubTaskList([]);
     setChangedTaskStatusToDisable();
     dispatch(changeStatusToActive());
@@ -343,19 +444,39 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
   };
 
   const handleChangeDateFrom = (date: Date) => {
-    setFromDate(date);
+    setDate((prevDate) => {
+      return {
+        ...prevDate,
+        fromDate: date,
+      };
+    });
   };
 
   const handleChangeDateTill = (date: Date) => {
-    setTillDate(date);
+    setDate((prevDate) => {
+      return {
+        ...prevDate,
+        tillDate: date,
+      };
+    });
   };
 
   const handleChangeTimeFrom = (date: Date) => {
-    setFromTime(date);
+    setDate((prevDate) => {
+      return {
+        ...prevDate,
+        fromTime: date,
+      };
+    });
   };
 
   const handleChangeTimeTill = (date: Date) => {
-    setTillTime(date);
+    setDate((prevDate) => {
+      return {
+        ...prevDate,
+        tillTime: date,
+      };
+    });
   };
 
   const handleOpenAddSubTaskMenu = () => {
@@ -406,7 +527,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
             <DatePicker
               style={{ height: 40, width: 300 }}
               mode="date"
-              date={fromDate}
+              date={modalDate.fromDate}
               onDateChange={handleChangeDateFrom}
             />
           </DateContainer>
@@ -415,10 +536,13 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
             <DatePicker
               style={{ height: 40, width: 300 }}
               mode="date"
-              date={tillDate}
+              date={modalDate.tillDate}
               onDateChange={handleChangeDateTill}
             />
           </DateContainer>
+          {dateError.dateError && (
+            <ErrorTextContent>{dateError.dateError}</ErrorTextContent>
+          )}
         </ModalContainer>
       )}
       {modalVisible && modalName === 'time' && (
@@ -446,7 +570,7 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
             <DatePicker
               style={{ height: 40, width: 300 }}
               mode="time"
-              date={fromTime}
+              date={modalDate.fromTime}
               onDateChange={handleChangeTimeFrom}
             />
           </DateContainer>
@@ -455,10 +579,13 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
             <DatePicker
               style={{ height: 40, width: 300 }}
               mode="time"
-              date={tillTime}
+              date={modalDate.tillTime}
               onDateChange={handleChangeTimeTill}
             />
           </DateContainer>
+          {dateError.timeError && (
+            <ErrorTextContent>{dateError.timeError}</ErrorTextContent>
+          )}
         </ModalContainer>
       )}
       {modalVisible && modalName === 'subtask' && (

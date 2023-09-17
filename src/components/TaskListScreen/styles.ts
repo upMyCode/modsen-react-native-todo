@@ -87,3 +87,14 @@ export const TaskSwitcherText = styled.Text`
   line-height: 23.12px;
   color: #363636;
 `;
+
+export const ErrorTextContent = styled.Text`
+  position: absolute;
+  font-family: 'Signika-Light';
+  color: #c70216;
+  font-size: 12px;
+  line-height: 9.86px;
+  padding: 10px 5px;
+  top: 95%;
+  left: 20%;
+`;

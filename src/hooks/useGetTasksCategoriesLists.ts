@@ -12,6 +12,11 @@ import {
 } from '@src/helpers/filters';
 import { useAppSelector } from '@src/store/hooks';
 
+export interface SubTask {
+  id: string;
+  subTaskText: string;
+  doneStatus: boolean;
+}
 interface Task {
   id: string;
   taskTitle: string;
@@ -21,13 +26,13 @@ interface Task {
   taskDateTill: Date;
   taskTimeFrom: Date;
   taskTimeTill: Date;
-  subTasks: Array<string>;
+  subTasks: Array<SubTask>;
   doneStatus: boolean;
 }
 
 export default function useGetTasksCategoriesLists(
-  sortTag: string,
-  searchData: string
+  sortTag?: string,
+  searchData?: string
 ) {
   const ALL_TASKS_PRELOAD: Task[] = useAppSelector((state) => {
     return state.tasksListSlice.tasks;
@@ -84,6 +89,8 @@ export default function useGetTasksCategoriesLists(
 
   if (DATE_CATEGORY === 'Today') {
     const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
+
+    ALL_TASKS = TASK_IN_CURRENT_DAY;
 
     MAIN_MENU_DEFAULT_FILTER_CATEGORIES = {
       readCategory: searchReadCategory(TASK_IN_CURRENT_DAY).length,
@@ -148,13 +155,18 @@ export default function useGetTasksCategoriesLists(
       }
 
       if (sortTag === 'search') {
-        ALL_TASKS = userCategory(TASK_IN_CURRENT_DAY, searchData);
+        if (searchData) {
+          ALL_TASKS = userCategory(TASK_IN_CURRENT_DAY, searchData);
+        }
       }
 
       getCustomCategories(TASK_IN_CURRENT_DAY);
     }
   } else if (DATE_CATEGORY === 'Month') {
     const TASK_IN_CURRENT_MONTH = taskInCurrentMonthFilter(ALL_TASKS_PRELOAD);
+
+    ALL_TASKS = TASK_IN_CURRENT_MONTH;
+
     MAIN_MENU_DEFAULT_FILTER_CATEGORIES = {
       readCategory: searchReadCategory(TASK_IN_CURRENT_MONTH).length,
       schoolCategory: searchSchoolCategory(TASK_IN_CURRENT_MONTH).length,
@@ -225,13 +237,17 @@ export default function useGetTasksCategoriesLists(
       }
 
       if (sortTag === 'search') {
-        ALL_TASKS = userCategory(TASK_IN_CURRENT_MONTH, searchData);
+        if (searchData) {
+          ALL_TASKS = userCategory(TASK_IN_CURRENT_MONTH, searchData);
+        }
       }
 
       getCustomCategories(TASK_IN_CURRENT_MONTH);
     }
   } else if (DATE_CATEGORY === 'Week') {
     const TASK_IN_CURRENT_WEEK = taskInCurrentWeekFilter(ALL_TASKS_PRELOAD);
+
+    ALL_TASKS = TASK_IN_CURRENT_WEEK;
 
     MAIN_MENU_DEFAULT_FILTER_CATEGORIES = {
       readCategory: searchReadCategory(TASK_IN_CURRENT_WEEK).length,
@@ -300,7 +316,9 @@ export default function useGetTasksCategoriesLists(
       }
 
       if (sortTag === 'search') {
-        ALL_TASKS = userCategory(TASK_IN_CURRENT_WEEK, searchData);
+        if (searchData) {
+          ALL_TASKS = userCategory(TASK_IN_CURRENT_WEEK, searchData);
+        }
       }
 
       getCustomCategories(TASK_IN_CURRENT_WEEK);
@@ -357,7 +375,9 @@ export default function useGetTasksCategoriesLists(
       }
 
       if (sortTag === 'search') {
-        ALL_TASKS = userCategory(ALL_TASKS_PRELOAD, searchData);
+        if (searchData) {
+          ALL_TASKS = userCategory(ALL_TASKS_PRELOAD, searchData);
+        }
       }
 
       getCustomCategories(ALL_TASKS_PRELOAD);

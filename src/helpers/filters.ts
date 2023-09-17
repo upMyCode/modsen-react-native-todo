@@ -1,3 +1,8 @@
+export interface SubTask {
+  id: string;
+  subTaskText: string;
+  doneStatus: boolean;
+}
 interface Task {
   id: string;
   taskTitle: string;
@@ -7,7 +12,7 @@ interface Task {
   taskDateTill: Date;
   taskTimeFrom: Date;
   taskTimeTill: Date;
-  subTasks: Array<string>;
+  subTasks: Array<SubTask>;
   doneStatus: boolean;
 }
 

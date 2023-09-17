@@ -38,6 +38,8 @@ const rootReducer = combineReducers({
   addDateCategorySlice,
 });
 
+export type RootReducer = ReturnType<typeof rootReducer>;
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({

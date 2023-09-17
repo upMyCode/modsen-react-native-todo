@@ -7,6 +7,13 @@ export interface SubTask {
   subTaskText: string;
   doneStatus: boolean;
 }
+
+export interface ModalDate {
+  fromDate: Date;
+  tillDate: Date;
+  fromTime: Date;
+  tillTime: Date;
+}
 export interface TaskTicketProps {
   id: string;
   timeFrom: Date;
@@ -23,10 +30,7 @@ export interface TaskTicketProps {
   taskImportantStatus: boolean;
   subTasks: Array<SubTask>;
   doneStatus: boolean;
-  setFromDate: React.Dispatch<React.SetStateAction<Date>>;
-  setTillDate: React.Dispatch<React.SetStateAction<Date>>;
-  setFromTime: React.Dispatch<React.SetStateAction<Date>>;
-  setTillTime: React.Dispatch<React.SetStateAction<Date>>;
+  setDate: React.Dispatch<React.SetStateAction<ModalDate>>;
   setModalTitle: React.Dispatch<React.SetStateAction<string>>;
   setModalTextContent: React.Dispatch<React.SetStateAction<string>>;
   setSubTaskList: React.Dispatch<React.SetStateAction<SubTask[]>>;

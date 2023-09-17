@@ -61,3 +61,15 @@ export type FormSchemaTask = yup.ObjectSchema<{
 export type FormSchemaSubTask = yup.ObjectSchema<{
   modalAddSubTaskTitle: string;
 }>;
+
+export interface ModalDate {
+  fromDate: Date;
+  tillDate: Date;
+  fromTime: Date;
+  tillTime: Date;
+}
+
+export interface DateError {
+  dateError: string;
+  timeError: string;
+}

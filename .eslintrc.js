@@ -67,6 +67,8 @@ module.exports = {
           'CategoryText',
           'DatePeriodText',
           'SpreadMenuButtonContext',
+          'TaskSwitcherText',
+          'SpreadMenuContainerText',
         ],
       },
     ],
