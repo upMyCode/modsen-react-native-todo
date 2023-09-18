@@ -7,10 +7,11 @@ export interface ButtonProps {
   bRadius?: number;
   bColor?: string;
   children?: ReactNode[] | ReactElement | undefined;
-  onPress: () => void;
+  onPress: undefined | (() => void);
   boxShadow?: boolean;
   mt?: number;
   ml?: number;
+  disabled?: boolean | undefined;
 }
 
 export interface PaintedButtonProps {

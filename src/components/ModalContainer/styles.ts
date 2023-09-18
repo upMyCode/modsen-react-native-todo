@@ -1,6 +1,8 @@
 import { BlurView } from '@react-native-community/blur';
 import styled from 'styled-components/native';
 
+import { ContentFooterProps } from './types';
+
 export const Wrapper = styled.View`
   flex: 1;
   justify-content: center;
@@ -22,6 +24,7 @@ export const Content = styled.View`
 
 export const ContentHeader = styled.View`
   padding: 0 16px 0 17px;
+  height: 60px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -42,7 +45,15 @@ export const TextContent = styled.Text`
   font-family: 'Signika-Light';
   max-width: 130px;
   color: #cccccc;
-  font-size: 8px;
+  font-size: 10px;
+  line-height: 9.86px;
+`;
+
+export const ErrorTextContent = styled.Text`
+  font-family: 'Signika-Light';
+  width: 300px;
+  color: #c70216;
+  font-size: 10px;
   line-height: 9.86px;
 `;
 
@@ -50,8 +61,10 @@ export const ContentMain = styled.View`
   max-height: 130px;
 `;
 
-export const ContentFooter = styled.View`
-  margin: 26px 16.1px 16px 0;
+export const ContentFooter = styled.View<ContentFooterProps>`
+  margin: ${({ isNullChildren }) => {
+    return isNullChildren ? '140px 0 0 0' : '46px 16.1px 16px 0';
+  }};
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -70,4 +83,23 @@ export const Blur = styled(BlurView)`
   left: 0;
   bottom: 0;
   right: 0;
+`;
+
+export const TitleInput = styled.TextInput`
+  font-family: 'Signika-Light';
+  color: #363636;
+  font-size: 13px;
+  line-height: 16.02px;
+`;
+
+export const TextContentInput = styled.TextInput`
+  font-family: 'Signika-Light';
+  max-width: 130px;
+  color: #cccccc;
+  font-size: 10px;
+  line-height: 9.86px;
+`;
+
+export const TextContentContainerSubTask = styled.View`
+  margin-bottom: 110px;
 `;

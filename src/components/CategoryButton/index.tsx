@@ -1,6 +1,6 @@
 import { Button } from '@root';
 import React from 'react';
-import { Image } from 'react-native';
+import { Dimensions, Image } from 'react-native';
 
 import {
   CounterTaskContainer,
@@ -8,9 +8,9 @@ import {
   TaskTextContent,
   Wrapper,
 } from './styles';
-import type { CatigoryButtonProps } from './types';
+import type { CategoryButtonProps } from './types';
 
-export default function CatigoryButton({
+export default function CategoryButton({
   countTasks,
   icon,
   textContent,
@@ -21,9 +21,14 @@ export default function CatigoryButton({
   width,
   height,
   onPress,
-}: CatigoryButtonProps) {
+  isThird,
+}: CategoryButtonProps) {
+  const WINDOW_HEIGHT = Dimensions.get('window').height;
+  const WINDOW_WIDTH = Dimensions.get('window').width;
+  const isBigDevice = WINDOW_HEIGHT / WINDOW_WIDTH >= 2;
+
   return (
-    <Wrapper>
+    <Wrapper isThird={isThird} isBigDevice={isBigDevice}>
       <Button
         width={width}
         height={height}

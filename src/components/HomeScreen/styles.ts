@@ -74,18 +74,29 @@ export const DateText = styled.Text`
   color: #7d7d7d;
 `;
 
-export const TaskCatigories = styled.View`
+export const TaskCategoriesContainer = styled.View`
+  width: 100%;
+  display: flex;
+  align-items: center;
   height: 55%;
-  margin: 8px 16px 0 16px;
+`;
+
+export const TaskCategories = styled.View`
+  max-width: 400px;
+  margin-top: 8px;
 `;
 
 export const ModalContext = styled.View`
-  display: flex;
   margin: 0 20px;
+  height: 10px;
+  margin-top: 17.5px;
+  margin-bottom: 70px;
+`;
+
+export const ModalContextInput = styled.View`
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 17.5px;
-  height: 100px;
 `;
 
 export const CategoryInput = styled.TextInput`
@@ -101,4 +112,12 @@ export const CategoryText = styled.Text`
   line-height: 23.12px;
   height: 30px;
   color: #363636;
+`;
+
+export const ErrorTextContent = styled.Text`
+  font-family: 'Signika-Light';
+  width: 300px;
+  color: #c70216;
+  font-size: 8px;
+  line-height: 9.86px;
 `;

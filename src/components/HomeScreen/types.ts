@@ -9,3 +9,7 @@ export interface TaskInfoTitleItemProps {
 export interface NavigationProps {
   navigation: NavigationProp<ParamListBase>;
 }
+
+export interface ValidationErrors {
+  textValue: string;
+}

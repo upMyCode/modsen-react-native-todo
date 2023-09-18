@@ -14,9 +14,11 @@ export default function Button({
   boxShadow,
   mt,
   ml,
+  disabled,
 }: ButtonProps) {
   return (
     <PaintedButton
+      disabled={disabled}
       width={width}
       height={height}
       bgColor={bgColor}

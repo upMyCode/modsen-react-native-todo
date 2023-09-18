@@ -1,15 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface Category {
-  totalTask: string;
   taskCategoryName: string;
 }
 
-interface ModalStatus {
+interface Categories {
   categories: Category[];
 }
 
-const initialState: ModalStatus = {
+const initialState: Categories = {
   categories: [],
 };
 
@@ -19,7 +18,6 @@ const categoriesListSlice = createSlice({
   reducers: {
     addNewCategory: (state, action) => {
       state.categories.push({
-        totalTask: action.payload.totalTask,
         taskCategoryName: action.payload.taskCategoryName,
       });
     },

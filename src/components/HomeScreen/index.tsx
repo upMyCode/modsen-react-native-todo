@@ -1,23 +1,26 @@
-import type { ItemDataButtons } from '@constants/homeScreenButtons';
-import DATE_BUTTONS from '@constants/homeScreenButtons';
+import type { ItemDataButtons } from '@hooks/useGetDateCategoriesButtons';
+import useGetDateCategoriesButtons from '@hooks/useGetDateCategoriesButtons';
+import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
 import { DrawerActions } from '@react-navigation/native';
 import {
   Button,
-  CatigoryButton,
+  CategoryButton,
   HomeScreenImage,
   HomeScreenSearchBar,
   ManagedStatusBar,
   ModalContainer,
 } from '@root';
 import { BurgerMenuImg } from '@src/assets';
-import type { CatigoryButtonProps } from '@src/hooks/useGetGategoriesList';
-import useGetGategoriesList from '@src/hooks/useGetGategoriesList';
+import getActualDate from '@src/helpers/getActualDate';
+import type { CategoryButtonProps } from '@src/hooks/useGetCategoriesList';
+import useGetCategoriesList from '@src/hooks/useGetCategoriesList';
 import { addNewCategory } from '@src/slices/categoriesListSlice';
 import { changeStatusToDisable } from '@src/slices/modalSlice';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
-import { FlatList, Image, Pressable, SafeAreaView } from 'react-native';
+import { FlatList, Image, Pressable, View } from 'react-native';
+import * as Yup from 'yup';
 
 import {
   CategoryInput,
@@ -25,60 +28,31 @@ import {
   DateButtonsContainer,
   DateButtonsWrapper,
   DateText,
+  ErrorTextContent,
   Header,
   Main,
   ModalContext,
-  TaskCatigories,
+  ModalContextInput,
+  TaskCategories,
+  TaskCategoriesContainer,
   TaskInfo,
   TaskInfoTextContent,
   TaskInfoTitle,
   TaskInfoTitleItem,
   Title,
 } from './styles';
-import type { NavigationProps } from './types';
-
-const renderItemDateCatigory = ({
-  item,
-}: ListRenderItemInfo<ItemDataButtons>) => {
-  return (
-    <Button
-      boxShadow={false}
-      width={71}
-      height={27}
-      bColor="#646FD4"
-      bRadius={14}
-      onPress={() => {
-        return console.log(1);
-      }}
-    >
-      <DateText>{item.value}</DateText>
-    </Button>
-  );
-};
-
-const renderItemTaskCatigory = ({
-  item,
-}: ListRenderItemInfo<CatigoryButtonProps>) => {
-  const CATIGORY_IMAGE = Image.resolveAssetSource(item.icon).uri;
-  return (
-    <CatigoryButton
-      boxShadow={item.boxShadow}
-      width={item.width}
-      height={item.height}
-      bColor={item.bColor}
-      bRadius={item.bRadius}
-      bgColor={item.bgColor}
-      countTasks={item.countTasks}
-      textContent={item.textContent}
-      icon={CATIGORY_IMAGE}
-      onPress={item.onPress}
-    />
-  );
-};
+import type { NavigationProps, ValidationErrors } from './types';
+import formSchema from './validate';
 
 export default function HomeScreen({ navigation }: NavigationProps) {
+  const DATE_CATEGORY = useAppSelector((state) => {
+    return state.addDateCategorySlice.dateCategory;
+  });
+  const { DATE_BUTTONS } = useGetDateCategoriesButtons();
+  const { ALL_TASKS } = useGetTasksCategoriesLists();
   const dispatch = useAppDispatch();
-  const { CATIGORIES_BUTTON_LIST } = useGetGategoriesList();
+  const [errors, setErrors] = useState<ValidationErrors | object>({});
+  const { CATEGORIES_BUTTON_LIST } = useGetCategoriesList();
   const [textValue, onChangeText] = useState('');
   const BURGER_MENU_IMAGE = Image.resolveAssetSource(BurgerMenuImg).uri;
   const modalVisible = useAppSelector((state) => {
@@ -88,14 +62,50 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     navigation.dispatch(DrawerActions.toggleDrawer());
   };
 
+  const actualDate = getActualDate();
+
   const handleChangeText = (text: string) => {
     onChangeText(text);
   };
 
-  const modalSecondHandler = () => {
-    dispatch(addNewCategory({ totalTask: '', taskCategoryName: textValue }));
-    dispatch(changeStatusToDisable());
-    onChangeText('');
+  const workWithForm = async () => {
+    let status = true;
+    try {
+      await formSchema.validate({ textValue }, { abortEarly: false });
+
+      setErrors({});
+
+      status = true;
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        interface YupErrors {
+          [key: string]: string;
+        }
+
+        const yupErrors: YupErrors = {};
+
+        error.inner.forEach((innerError) => {
+          if (innerError && innerError.path) {
+            yupErrors[innerError.path] = innerError.message;
+          }
+        });
+
+        status = false;
+        setErrors(yupErrors);
+      }
+    }
+
+    return status;
+  };
+
+  const modalSecondHandler = async () => {
+    const status = await workWithForm();
+
+    if (status) {
+      dispatch(addNewCategory({ totalTask: '', taskCategoryName: textValue }));
+      dispatch(changeStatusToDisable());
+      onChangeText('');
+    }
   };
 
   const modalFirstHandler = () => {
@@ -103,8 +113,46 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     onChangeText('');
   };
 
+  const renderItemDateCategory = ({
+    item,
+  }: ListRenderItemInfo<ItemDataButtons>) => {
+    return (
+      <Button
+        boxShadow={false}
+        width={71}
+        height={27}
+        bColor="#646FD4"
+        bRadius={14}
+        onPress={item.onPress}
+      >
+        <DateText>{item.value}</DateText>
+      </Button>
+    );
+  };
+
+  const renderItemTaskCategory = ({
+    item,
+  }: ListRenderItemInfo<CategoryButtonProps>) => {
+    const CATEGORY_IMAGE = Image.resolveAssetSource(item.icon).uri;
+
+    return (
+      <CategoryButton
+        boxShadow={item.boxShadow}
+        width={item.width}
+        height={item.height}
+        bColor={item.bColor}
+        bRadius={item.bRadius}
+        bgColor={item.bgColor}
+        countTasks={item.countTasks}
+        textContent={item.textContent}
+        icon={CATEGORY_IMAGE}
+        onPress={item.onPress}
+      />
+    );
+  };
+
   return (
-    <SafeAreaView>
+    <View>
       {modalVisible && (
         <ModalContainer
           modalFirstHandler={modalFirstHandler}
@@ -112,16 +160,25 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           title="Add your personal activity"
           textContent="You can add tour personal activity ticket"
           modalVisible={modalVisible}
+          modalFirstHandlerText="Cancel"
+          modalSecondHandlerText="Ok"
         >
           <ModalContext>
-            <CategoryText>Category:</CategoryText>
-            <CategoryInput
-              editable
-              value={textValue}
-              onChangeText={handleChangeText}
-              placeholder="Add your category"
-              maxLength={8}
-            />
+            <ModalContextInput>
+              <CategoryText>Category:</CategoryText>
+              <CategoryInput
+                editable
+                value={textValue}
+                onChangeText={handleChangeText}
+                placeholder="Add your category"
+                maxLength={8}
+              />
+            </ModalContextInput>
+            {(errors as ValidationErrors).textValue && (
+              <ErrorTextContent>
+                {(errors as ValidationErrors).textValue}
+              </ErrorTextContent>
+            )}
           </ModalContext>
         </ModalContainer>
       )}
@@ -140,13 +197,25 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               {`you have ${' '}`}
             </TaskInfoTitleItem>
             <TaskInfoTitleItem color="#FFFFFF" fSize={24} lHeight={34.68}>
-              5 you have
+              {`${ALL_TASKS.length} ${
+                ALL_TASKS.length >= 0 && ALL_TASKS.length < 2
+                  ? 'task'
+                  : 'tasks`s'
+              }`}
             </TaskInfoTitleItem>
             <TaskInfoTitleItem color="#363636" fSize={20} lHeight={29.9}>
-              {`${' '} today ! `}
+              {`${' '} ${
+                DATE_CATEGORY === 'Today'
+                  ? 'today'
+                  : DATE_CATEGORY === 'Month'
+                  ? 'in this month'
+                  : DATE_CATEGORY === 'Week'
+                  ? 'in this week'
+                  : 'in all time'
+              } ! `}
             </TaskInfoTitleItem>
           </TaskInfoTitle>
-          <TaskInfoTextContent>Saturday,september 10,2022</TaskInfoTextContent>
+          <TaskInfoTextContent>{actualDate}</TaskInfoTextContent>
         </TaskInfo>
         <HomeScreenSearchBar />
         <DateButtonsWrapper>
@@ -159,27 +228,29 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               keyExtractor={({ value }) => {
                 return value;
               }}
-              renderItem={renderItemDateCatigory}
+              renderItem={renderItemDateCategory}
             />
           </DateButtonsContainer>
         </DateButtonsWrapper>
-        <TaskCatigories>
-          <FlatList
-            horizontal={false}
-            scrollEnabled
-            contentContainerStyle={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-            }}
-            showsHorizontalScrollIndicator
-            data={CATIGORIES_BUTTON_LIST}
-            keyExtractor={({ id }) => {
-              return id;
-            }}
-            renderItem={renderItemTaskCatigory}
-          />
-        </TaskCatigories>
+        <TaskCategoriesContainer>
+          <TaskCategories>
+            <FlatList
+              columnWrapperStyle={{
+                flexWrap: 'wrap',
+                flexDirection: 'row',
+              }}
+              scrollEnabled
+              showsHorizontalScrollIndicator
+              data={CATEGORIES_BUTTON_LIST}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              numColumns={3}
+              renderItem={renderItemTaskCategory}
+            />
+          </TaskCategories>
+        </TaskCategoriesContainer>
       </Main>
-    </SafeAreaView>
+    </View>
   );
 }
