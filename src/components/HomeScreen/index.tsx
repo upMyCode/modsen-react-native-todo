@@ -4,7 +4,7 @@ import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
 import { DrawerActions } from '@react-navigation/native';
 import {
   Button,
-  CatigoryButton,
+  CategoryButton,
   HomeScreenImage,
   HomeScreenSearchBar,
   ManagedStatusBar,
@@ -12,8 +12,8 @@ import {
 } from '@root';
 import { BurgerMenuImg } from '@src/assets';
 import getActualDate from '@src/helpers/getActualDate';
-import type { CatigoryButtonProps } from '@src/hooks/useGetGategoriesList';
-import useGetGategoriesList from '@src/hooks/useGetGategoriesList';
+import type { CategoryButtonProps } from '@src/hooks/useGetCategoriesList';
+import useGetCategoriesList from '@src/hooks/useGetCategoriesList';
 import { addNewCategory } from '@src/slices/categoriesListSlice';
 import { changeStatusToDisable } from '@src/slices/modalSlice';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -33,15 +33,15 @@ import {
   Main,
   ModalContext,
   ModalContextInput,
+  TaskCategories,
   TaskCategoriesContainer,
-  TaskCatigories,
   TaskInfo,
   TaskInfoTextContent,
   TaskInfoTitle,
   TaskInfoTitleItem,
   Title,
 } from './styles';
-import type { NavigationProps } from './types';
+import type { NavigationProps, ValidationErrors } from './types';
 import formSchema from './validate';
 
 export default function HomeScreen({ navigation }: NavigationProps) {
@@ -51,8 +51,8 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const { DATE_BUTTONS } = useGetDateCategoriesButtons();
   const { ALL_TASKS } = useGetTasksCategoriesLists();
   const dispatch = useAppDispatch();
-  const [errors, setErrors] = useState({});
-  const { CATIGORIES_BUTTON_LIST } = useGetGategoriesList();
+  const [errors, setErrors] = useState<ValidationErrors | object>({});
+  const { CATEGORIES_BUTTON_LIST } = useGetCategoriesList();
   const [textValue, onChangeText] = useState('');
   const BURGER_MENU_IMAGE = Image.resolveAssetSource(BurgerMenuImg).uri;
   const modalVisible = useAppSelector((state) => {
@@ -78,9 +78,16 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       status = true;
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
-        const yupErrors = {};
+        interface YupErrors {
+          [key: string]: string;
+        }
+
+        const yupErrors: YupErrors = {};
+
         error.inner.forEach((innerError) => {
-          yupErrors[innerError.path] = innerError.message;
+          if (innerError && innerError.path) {
+            yupErrors[innerError.path] = innerError.message;
+          }
         });
 
         status = false;
@@ -106,7 +113,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     onChangeText('');
   };
 
-  const renderItemDateCatigory = ({
+  const renderItemDateCategory = ({
     item,
   }: ListRenderItemInfo<ItemDataButtons>) => {
     return (
@@ -123,13 +130,13 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     );
   };
 
-  const renderItemTaskCatigory = ({
+  const renderItemTaskCategory = ({
     item,
-  }: ListRenderItemInfo<CatigoryButtonProps>) => {
-    const CATIGORY_IMAGE = Image.resolveAssetSource(item.icon).uri;
+  }: ListRenderItemInfo<CategoryButtonProps>) => {
+    const CATEGORY_IMAGE = Image.resolveAssetSource(item.icon).uri;
 
     return (
-      <CatigoryButton
+      <CategoryButton
         boxShadow={item.boxShadow}
         width={item.width}
         height={item.height}
@@ -138,7 +145,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         bgColor={item.bgColor}
         countTasks={item.countTasks}
         textContent={item.textContent}
-        icon={CATIGORY_IMAGE}
+        icon={CATEGORY_IMAGE}
         onPress={item.onPress}
       />
     );
@@ -167,8 +174,10 @@ export default function HomeScreen({ navigation }: NavigationProps) {
                 maxLength={8}
               />
             </ModalContextInput>
-            {errors.textValue && (
-              <ErrorTextContent>{errors.textValue}</ErrorTextContent>
+            {(errors as ValidationErrors).textValue && (
+              <ErrorTextContent>
+                {(errors as ValidationErrors).textValue}
+              </ErrorTextContent>
             )}
           </ModalContext>
         </ModalContainer>
@@ -219,12 +228,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               keyExtractor={({ value }) => {
                 return value;
               }}
-              renderItem={renderItemDateCatigory}
+              renderItem={renderItemDateCategory}
             />
           </DateButtonsContainer>
         </DateButtonsWrapper>
         <TaskCategoriesContainer>
-          <TaskCatigories>
+          <TaskCategories>
             <FlatList
               columnWrapperStyle={{
                 flexWrap: 'wrap',
@@ -232,14 +241,14 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               }}
               scrollEnabled
               showsHorizontalScrollIndicator
-              data={CATIGORIES_BUTTON_LIST}
+              data={CATEGORIES_BUTTON_LIST}
               keyExtractor={({ id }) => {
                 return id;
               }}
               numColumns={3}
-              renderItem={renderItemTaskCatigory}
+              renderItem={renderItemTaskCategory}
             />
-          </TaskCatigories>
+          </TaskCategories>
         </TaskCategoriesContainer>
       </Main>
     </View>

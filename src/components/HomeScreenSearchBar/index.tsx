@@ -49,10 +49,14 @@ export default function HomeScreenSearchBar() {
       status = true;
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
-        const yupErrors = {};
-
+        interface YupErrors {
+          [key: string]: string;
+        }
+        const yupErrors: YupErrors = {};
         error.inner.forEach((innerError) => {
-          yupErrors[innerError.path] = innerError.message;
+          if (innerError && innerError.path) {
+            yupErrors[innerError.path] = innerError.message;
+          }
         });
 
         status = false;
@@ -107,9 +111,11 @@ export default function HomeScreenSearchBar() {
             width={17.06}
             height={17.06}
           />
-          {searchbarErrors && searchbarErrors.searchText && (
+          {(searchbarErrors as SearchTask).searchText && (
             <ErrorContentWrapper>
-              <ErrorTextContent>{searchbarErrors.searchText}</ErrorTextContent>
+              <ErrorTextContent>
+                {(searchbarErrors as SearchTask).searchText}
+              </ErrorTextContent>
             </ErrorContentWrapper>
           )}
 

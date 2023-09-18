@@ -1,6 +1,6 @@
 export { default as BackButton } from '@components/BackButton';
 export { default as Button } from '@components/Button';
-export { default as CatigoryButton } from '@components/CatigoryButton';
+export { default as CategoryButton } from '@components/CategoryButton';
 export { default as CircleImage } from '@components/CircleImage';
 export { default as ControlledSubTaskItem } from '@components/ControlledSubTaskItem';
 export { default as DrawerContainer } from '@components/DrawerContainer';

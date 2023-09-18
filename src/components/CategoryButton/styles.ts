@@ -1,9 +1,6 @@
 import styled from 'styled-components/native';
 
-interface WrapperProps {
-  isThird: boolean | undefined;
-  isBigDevice: boolean;
-}
+import { WrapperProps } from './types';
 
 export const CounterTaskContainer = styled.View`
   width: 100%;

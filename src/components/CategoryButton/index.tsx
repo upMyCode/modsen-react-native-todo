@@ -8,9 +8,9 @@ import {
   TaskTextContent,
   Wrapper,
 } from './styles';
-import type { CatigoryButtonProps } from './types';
+import type { CategoryButtonProps } from './types';
 
-export default function CatigoryButton({
+export default function CategoryButton({
   countTasks,
   icon,
   textContent,
@@ -22,7 +22,7 @@ export default function CatigoryButton({
   height,
   onPress,
   isThird,
-}: CatigoryButtonProps) {
+}: CategoryButtonProps) {
   const WINDOW_HEIGHT = Dimensions.get('window').height;
   const WINDOW_WIDTH = Dimensions.get('window').width;
   const isBigDevice = WINDOW_HEIGHT / WINDOW_WIDTH >= 2;

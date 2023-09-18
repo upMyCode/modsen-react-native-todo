@@ -80,9 +80,11 @@ export default function useGetTasksCategoriesLists(
   const getCustomCategories = (tasks: Task[]) => {
     for (let i = 0; i < categories.length; i += 1) {
       if (categories[i].taskCategoryName === sortTag) {
-        const CUSTOM = userCategory(tasks, sortTag);
+        if (sortTag) {
+          const CUSTOM = userCategory(tasks, sortTag);
 
-        ALL_TASKS = CUSTOM;
+          ALL_TASKS = CUSTOM;
+        }
       }
     }
   };

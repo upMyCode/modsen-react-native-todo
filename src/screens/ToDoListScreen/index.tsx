@@ -1,8 +1,12 @@
+import { StackScreenProps } from '@react-navigation/stack';
 import { TaskListScreen } from '@root';
 import React from 'react';
 
-import type { NavigationProps } from './types';
+import type { MyStackParamList } from './types';
 
-export default function ToDoListScreen({ route, navigation }: NavigationProps) {
+export default function ToDoListScreen({
+  route,
+  navigation,
+}: StackScreenProps<MyStackParamList, 'ToDoListScreen'>) {
   return <TaskListScreen route={route} navigation={navigation} />;
 }

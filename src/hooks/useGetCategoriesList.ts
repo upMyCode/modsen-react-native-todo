@@ -13,8 +13,9 @@ import {
 import { changeStatusToActive } from '@src/slices/modalSlice';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import type { ImageSourcePropType } from 'react-native';
+import { v4 as uuidv4 } from 'uuid';
 
-export interface CatigoryButtonProps {
+export interface CategoryButtonProps {
   id: string;
   countTasks?: number;
   icon: ImageSourcePropType;
@@ -35,7 +36,7 @@ export type StackScreensParamList = {
   ToDoListScreen: { sortTag: string; searchData: string } | undefined;
 };
 
-export default function useGetGategoriesList() {
+export default function useGetCategoriesList() {
   const { MAIN_MENU_DEFAULT_FILTER_CATEGORIES } = useGetTasksCategoriesLists();
   const navigation =
     useNavigation<StackNavigationProp<StackScreensParamList>>();
@@ -44,7 +45,7 @@ export default function useGetGategoriesList() {
   });
   const dispatch = useAppDispatch();
   const ADD_CATEGORIES_BUTTON = {
-    id: '6',
+    id: uuidv4(),
     icon: PlusImg,
     bgColor: '#FFFFFF',
     bRadius: 16,
@@ -57,9 +58,9 @@ export default function useGetGategoriesList() {
     },
   };
 
-  const CATIGORIES_BUTTON_LIST: CatigoryButtonProps[] = [
+  const CATEGORIES_BUTTON_LIST: CategoryButtonProps[] = [
     {
-      id: '1',
+      id: uuidv4(),
       countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.schoolCategory,
       icon: SchoolImg,
       textContent: 'School',
@@ -76,7 +77,7 @@ export default function useGetGategoriesList() {
       },
     },
     {
-      id: '2',
+      id: uuidv4(),
       countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.workCategory,
       icon: WorkImg,
       textContent: 'Work',
@@ -93,7 +94,7 @@ export default function useGetGategoriesList() {
       },
     },
     {
-      id: '3',
+      id: uuidv4(),
       countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.shopCategory,
       icon: ShopImg,
       textContent: 'Shop',
@@ -110,7 +111,7 @@ export default function useGetGategoriesList() {
       },
     },
     {
-      id: '4',
+      id: uuidv4(),
       countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.readCategory,
       icon: ReadImg,
       textContent: 'Read',
@@ -127,7 +128,7 @@ export default function useGetGategoriesList() {
       },
     },
     {
-      id: '5',
+      id: uuidv4(),
       countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES.workOutCategory,
       icon: WorkOutImg,
       textContent: 'work out',
@@ -145,15 +146,11 @@ export default function useGetGategoriesList() {
     },
   ];
 
-  let id = 6;
-
   for (let i = 0; i < categories.length; i += 1) {
     const taskName = categories[i].taskCategoryName;
 
-    id += 1;
-
-    CATIGORIES_BUTTON_LIST.push({
-      id: id.toString(),
+    CATEGORIES_BUTTON_LIST.push({
+      id: uuidv4(),
       countTasks: MAIN_MENU_DEFAULT_FILTER_CATEGORIES[taskName] ?? 0,
       icon: CustomImg,
       textContent: taskName,
@@ -171,7 +168,7 @@ export default function useGetGategoriesList() {
     });
   }
 
-  CATIGORIES_BUTTON_LIST.push(ADD_CATEGORIES_BUTTON);
+  CATEGORIES_BUTTON_LIST.push(ADD_CATEGORIES_BUTTON);
 
-  return { CATIGORIES_BUTTON_LIST };
+  return { CATEGORIES_BUTTON_LIST };
 }

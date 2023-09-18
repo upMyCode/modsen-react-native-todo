@@ -1,13 +1,8 @@
-import {
-  NavigationProp,
-  ParamListBase,
-  RouteProp,
-} from '@react-navigation/native';
+import { ParamListBase } from '@react-navigation/native';
 
-export interface NavigationProps {
-  navigation: NavigationProp<ParamListBase>;
-  route: RouteProp<
-    { params: { sortTag: string; searchData: string } },
-    'params'
-  >;
+export interface MyStackParamList extends ParamListBase {
+  LoadingScreen: undefined;
+  DrawerScreens: undefined;
+  MainScreen: undefined;
+  ToDoListScreen: { sortTag: string; searchData: string };
 }

@@ -81,7 +81,7 @@ export const TaskCategoriesContainer = styled.View`
   height: 55%;
 `;
 
-export const TaskCatigories = styled.View`
+export const TaskCategories = styled.View`
   max-width: 400px;
   margin-top: 8px;
 `;

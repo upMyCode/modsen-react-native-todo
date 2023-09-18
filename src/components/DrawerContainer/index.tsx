@@ -1,12 +1,12 @@
 import type { TaskItem } from '@hooks/useGetDrawerTaskList';
 import useGetDrawerTaskList from '@hooks/useGetDrawerTaskList';
+import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { BackButton } from '@root';
 import React from 'react';
 import type { ListRenderItemInfo } from 'react-native';
 import { FlatList, Image } from 'react-native';
 
 import { Container, TextContext, Wrapper } from './styles';
-import { NavigationProps } from './types';
 
 const renderItem = ({ item }: ListRenderItemInfo<TaskItem>) => {
   const TASK_IMAGE = Image.resolveAssetSource(item.img).uri;
@@ -18,11 +18,13 @@ const renderItem = ({ item }: ListRenderItemInfo<TaskItem>) => {
   );
 };
 
-export default function DrawerContainer({ navigation }: NavigationProps) {
+export default function DrawerContainer({
+  ...props
+}: DrawerContentComponentProps) {
   const { TASK_LIST } = useGetDrawerTaskList();
   return (
     <Wrapper>
-      <BackButton navigation={navigation} />
+      <BackButton {...props} />
 
       <FlatList
         scrollEnabled={false}

@@ -45,7 +45,7 @@ export const TextContent = styled.Text`
   font-family: 'Signika-Light';
   max-width: 130px;
   color: #cccccc;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 9.86px;
 `;
 
@@ -53,7 +53,7 @@ export const ErrorTextContent = styled.Text`
   font-family: 'Signika-Light';
   width: 300px;
   color: #c70216;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 9.86px;
 `;
 
@@ -96,7 +96,7 @@ export const TextContentInput = styled.TextInput`
   font-family: 'Signika-Light';
   max-width: 130px;
   color: #cccccc;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 9.86px;
 `;
 

@@ -50,32 +50,36 @@ const tasksListSlice = createSlice({
       });
     },
     setTaskAsDone: (state, action) => {
-      const task = state.tasks.filter((task) => {
+      const preloadedTask = state.tasks.filter((task) => {
         if (task.id === action.payload.id) {
           task.doneStatus = true;
           return true;
         }
+
+        return false;
       });
 
       state.tasks = state.tasks.filter((task) => {
         return task.id !== action.payload.id;
       });
 
-      state.doneTasks.push(task[0]);
+      state.doneTasks.push(preloadedTask[0]);
     },
     setTaskAsInProgress: (state, action) => {
-      const task = state.doneTasks.filter((task) => {
+      const preloadedTask = state.doneTasks.filter((task) => {
         if (task.id === action.payload.id) {
           task.doneStatus = false;
           return true;
         }
+
+        return false;
       });
 
       state.doneTasks = state.doneTasks.filter((task) => {
         return task.id !== action.payload.id;
       });
 
-      state.tasks.push(task[0]);
+      state.tasks.push(preloadedTask[0]);
     },
     deleteTask: (state, action) => {
       state.tasks = state.tasks.filter((task) => {
@@ -126,9 +130,10 @@ const tasksListSlice = createSlice({
           }
           task.subTasks = [];
           state.doneTasks.push(task);
-        } else {
-          return true;
+
+          return false;
         }
+        return true;
       });
     },
   },

@@ -1,4 +1,5 @@
 import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   Button,
   ManagedStatusBar,
@@ -19,6 +20,7 @@ import type { ListRenderItemInfo } from 'react-native';
 import { Dimensions, FlatList, Image, SafeAreaView, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Notifications } from 'react-native-notifications';
+import { v4 as uuidv4 } from 'uuid';
 import * as Yup from 'yup';
 
 import {
@@ -37,18 +39,22 @@ import {
   Title,
 } from './styles';
 import type {
+  CategoryItem,
   DateError,
   FormSubTask,
   FormTask,
   ModalDate,
-  NavigationProps,
+  MyStackParamList,
   SubTask,
   Task,
   WorkWithFormProps,
 } from './types';
 import { formSchemaSubTask, formSchemaTask } from './validate';
 
-export default function TaskListScreen({ route, navigation }: NavigationProps) {
+export default function TaskListScreen({
+  route,
+  navigation,
+}: StackScreenProps<MyStackParamList, 'ToDoListScreen'>) {
   const { sortTag, searchData } = route.params;
   const { IMPORTANT_TASK_LIST, DONE_TASKS, ALL_TASKS } =
     useGetTasksCategoriesLists(sortTag, searchData);
@@ -111,10 +117,15 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
       status = true;
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
-        const yupErrors = {};
+        interface YupErrors {
+          [key: string]: string;
+        }
+        const yupErrors: YupErrors = {};
 
         error.inner.forEach((innerError) => {
-          yupErrors[innerError.path] = innerError.message;
+          if (innerError && innerError.path) {
+            yupErrors[innerError.path] = innerError.message;
+          }
         });
 
         status = false;
@@ -247,6 +258,8 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
       });
       return false;
     }
+
+    return false;
   };
 
   const modalEventList = [
@@ -304,24 +317,6 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
         );
         if (isCorrectDate) {
           if (!changeTaskStatus) {
-            Notifications.registerRemoteNotifications();
-
-            Notifications.events().registerNotificationReceivedForeground(
-              (notification: Notification, completion) => {
-                console.log(
-                  `Notification received in foreground: ${notification.title} : ${notification.body}`
-                );
-                completion({ alert: false, sound: false, badge: false });
-              }
-            );
-
-            Notifications.events().registerNotificationOpened(
-              (notification: Notification, completion) => {
-                console.log(`Notification opened: ${notification.payload}`);
-                completion();
-              }
-            );
-
             const localNotification = Notifications.postLocalNotification({
               body: 'Local notification!',
               title: 'Local Notification Title',
@@ -332,24 +327,6 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
               fireDate: new Date(),
             });
 
-            Notifications.ios.checkPermissions().then((currentPermissions) => {
-              console.log(`Badges enabled: ${!!currentPermissions.badge}`);
-              console.log(`Sounds enabled: ${!!currentPermissions.sound}`);
-              console.log(`Alerts enabled: ${!!currentPermissions.alert}`);
-              console.log(`Car Play enabled: ${!!currentPermissions.carPlay}`);
-              console.log(
-                `Critical Alerts enabled: ${!!currentPermissions.criticalAlert}`
-              );
-              console.log(
-                `Provisional enabled: ${!!currentPermissions.provisional}`
-              );
-              console.log(
-                `Provides App Notification Settings enabled: ${!!currentPermissions.providesAppNotificationSettings}`
-              );
-              console.log(
-                `Announcement enabled: ${!!currentPermissions.announcement}`
-              );
-            });
             handleAddNewTask();
             dispatch(changeStatusToDisable());
             setModalName('date');
@@ -703,25 +680,28 @@ export default function TaskListScreen({ route, navigation }: NavigationProps) {
               renderItem={renderItemTask}
             />
           )}
-          {categories.map((item) => {
-            if (item.taskCategoryName === sortTag) {
-              return (
-                <FlatList
-                  nestedScrollEnabled
-                  contentContainerStyle={{
-                    alignItems: 'center',
-                  }}
-                  data={ALL_TASKS}
-                  keyExtractor={({ id }) => {
-                    return id;
-                  }}
-                  renderItem={renderItemTask}
-                />
-              );
-            }
+          {categories
+            .map((item: CategoryItem) => {
+              if (item.taskCategoryName === sortTag) {
+                return (
+                  <FlatList
+                    key={uuidv4()}
+                    nestedScrollEnabled
+                    contentContainerStyle={{
+                      alignItems: 'center',
+                    }}
+                    data={ALL_TASKS}
+                    keyExtractor={({ id }) => {
+                      return id;
+                    }}
+                    renderItem={renderItemTask}
+                  />
+                );
+              }
 
-            return null;
-          })}
+              return null;
+            })
+            .slice(0, 1)}
           {sortTag === 'school' && (
             <FlatList
               nestedScrollEnabled

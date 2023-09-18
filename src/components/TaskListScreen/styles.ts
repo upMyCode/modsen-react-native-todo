@@ -39,7 +39,7 @@ export const DateContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  margin-bottom: 10px;
+  margin-top: 10px;
   transform: scale(0.5, 0.5);
 `;
 

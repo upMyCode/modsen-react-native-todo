@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { DailyImg, DoneImg, ImportantImg } from '@src/assets';
-import React from 'react';
 import type { ImageSourcePropType } from 'react-native';
 
 export interface TaskItem {

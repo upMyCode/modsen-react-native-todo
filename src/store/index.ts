@@ -4,6 +4,7 @@ import addDateCategorySlice from '@src/slices/addDateCategorySlice';
 import categoriesListReducer from '@src/slices/categoriesListSlice';
 import modalStatusReducer from '@src/slices/modalSlice';
 import tasksListSlice from '@src/slices/taskListSlice';
+import { Action } from 'redux';
 import {
   createTransform,
   FLUSH,
@@ -16,22 +17,24 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 
+import { State } from './types';
+
+const TransformDate = createTransform(JSON.stringify, (toRehydrate) => {
+  return JSON.parse(toRehydrate, (key, value) => {
+    return typeof value === 'string' &&
+      value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+      ? new Date(value)
+      : value;
+  });
+});
+
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  transforms: [
-    createTransform(JSON.stringify, (toRehydrate) => {
-      return JSON.parse(toRehydrate, (key, value) => {
-        return typeof value === 'string' &&
-          value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
-          ? new Date(value)
-          : value;
-      });
-    }),
-  ],
+  transforms: [TransformDate],
 };
 
-const rootReducer = combineReducers({
+const rootReducer = combineReducers<State>({
   modalStatusReducer,
   categoriesListReducer,
   tasksListSlice,
@@ -40,7 +43,10 @@ const rootReducer = combineReducers({
 
 export type RootReducer = ReturnType<typeof rootReducer>;
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer<any, RootReducer & Action>(
+  persistConfig,
+  rootReducer
+);
 
 const store = configureStore({
   reducer: persistedReducer,
