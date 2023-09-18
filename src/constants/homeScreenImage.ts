@@ -1,0 +1,33 @@
+import { Dimensions } from 'react-native';
+
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+
+const DEVIATION_FACTOR_HEIGHT = 15;
+
+const FIRST_CIRCLE_PROCENT = 0.3672;
+const SECOND_CIRCLE_PROCENT = 0.436;
+const THIRD_CIRCLE_PROCENT_WIDTH_PROCENT = 1.06;
+const THIRD_CIRCLE_PROCENT_HEIGHT_PROCENT = 0.83;
+
+const FIRST_CIRCLE_HEIGHT =
+  windowHeight * FIRST_CIRCLE_PROCENT + DEVIATION_FACTOR_HEIGHT;
+const SECOND_CIRCLE_HEIGHT =
+  windowHeight * SECOND_CIRCLE_PROCENT + DEVIATION_FACTOR_HEIGHT;
+const FIRST_CIRCLE_WIDTH = windowHeight * FIRST_CIRCLE_PROCENT;
+const SECOND_CIRCLE_WIDTH = windowHeight * SECOND_CIRCLE_PROCENT;
+const THIRD_CIRCLE_PROCENT_WIDTH =
+  windowWidth * THIRD_CIRCLE_PROCENT_WIDTH_PROCENT;
+const THIRD_CIRCLE_PROCENT_HEIGHT =
+  windowHeight * THIRD_CIRCLE_PROCENT_HEIGHT_PROCENT + DEVIATION_FACTOR_HEIGHT;
+
+const CIRCLES_DIMENSIONS = {
+  firstCircleHeight: FIRST_CIRCLE_HEIGHT,
+  secondCircleHeight: SECOND_CIRCLE_HEIGHT,
+  firstCircleWidth: FIRST_CIRCLE_WIDTH,
+  secondCircleWidth: SECOND_CIRCLE_WIDTH,
+  thirdCircleWidth: THIRD_CIRCLE_PROCENT_WIDTH,
+  thirdCircleHeight: THIRD_CIRCLE_PROCENT_HEIGHT,
+};
+
+export default CIRCLES_DIMENSIONS;
