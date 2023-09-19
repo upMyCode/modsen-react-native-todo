@@ -13,7 +13,7 @@ export const Title = styled.Text`
   font-family: 'Jost-Bold';
   font-weight: 600;
   font-size: 20px;
-  line-height: 28.9px;
+  line-height: 29px;
   color: #ffffff;
 `;
 
@@ -35,7 +35,7 @@ export const TaskInfoTextContent = styled.Text`
   font-family: 'Jost-Regular';
   font-weight: 500;
   font-size: 12px;
-  line-height: 17.34px;
+  line-height: 17px;
   color: #363636;
 `;
 
@@ -70,7 +70,7 @@ export const DateButtonsContainer = styled.View`
 export const DateText = styled.Text`
   font-family: 'Jost-Regular';
   font-size: 16px;
-  line-height: 23.12px;
+  line-height: 23px;
   color: #7d7d7d;
 `;
 
@@ -109,7 +109,7 @@ export const CategoryInput = styled.TextInput`
 export const CategoryText = styled.Text`
   font-family: 'Jost-Regular';
   font-size: 16px;
-  line-height: 23.12px;
+  line-height: 23px;
   height: 30px;
   color: #363636;
 `;
@@ -119,5 +119,5 @@ export const ErrorTextContent = styled.Text`
   width: 300px;
   color: #c70216;
   font-size: 8px;
-  line-height: 9.86px;
+  line-height: 10px;
 `;

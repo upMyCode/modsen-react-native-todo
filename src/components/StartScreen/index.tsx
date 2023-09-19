@@ -1,4 +1,5 @@
 import MEASUREMENTS from '@constants/startScreenMeasurements';
+import TextStrings from '@constants/strings';
 import { Button, ManagedStatusBar, StartScreenImage } from '@root';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
@@ -61,12 +62,11 @@ export default function StartScreen({ navigation }: NavigationProps) {
       <ManagedStatusBar />
       <StartScreenImage />
       <TextContainer marginToFromTitleContainer={marginToFromTitleContainer}>
-        <Title>Manage your tasks</Title>
+        <Title>{TextStrings.StartScreenTitle}</Title>
         <TextContent
           marginToFromTextContentContainer={marginToFromTextContentContainer}
         >
-          organize, plan, and collaborate on tasks with Modsen todo list.Your
-          busy life deserves this.you can manage checklist and your goal.
+          {TextStrings.StartScreenDescription}
         </TextContent>
       </TextContainer>
       <RedirectionButtonWrapper
@@ -80,7 +80,9 @@ export default function StartScreen({ navigation }: NavigationProps) {
           bgColor="#9ba3eb"
           onPress={handleRouteToMainScreen}
         >
-          <RedirectionButtonContext>Get started</RedirectionButtonContext>
+          <RedirectionButtonContext>
+            {TextStrings.StartScreenRedirectionButton}
+          </RedirectionButtonContext>
         </Button>
       </RedirectionButtonWrapper>
     </SafeAreaView>

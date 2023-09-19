@@ -1,12 +1,11 @@
 import MEASUREMENTS from '@constants/startScreenMeasurements';
-import { BackgroundImg } from '@src/assets';
+import { BACKGROUND_IMAGE } from '@src/helpers/images';
 import React from 'react';
 import { Image } from 'react-native';
 
 import Wrapper from './styles';
 
 export default function StartScreenImage() {
-  const BACKGROUND_IMAGE = Image.resolveAssetSource(BackgroundImg).uri;
   const { marginToFromImageContainer, windowWidth } = MEASUREMENTS;
 
   return (

@@ -1,3 +1,4 @@
+import TextStrings from '@constants/strings';
 import type { ItemDataButtons } from '@hooks/useGetDateCategoriesButtons';
 import useGetDateCategoriesButtons from '@hooks/useGetDateCategoriesButtons';
 import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
@@ -10,8 +11,8 @@ import {
   ManagedStatusBar,
   ModalContainer,
 } from '@root';
-import { BurgerMenuImg } from '@src/assets';
 import getActualDate from '@src/helpers/getActualDate';
+import { BURGER_MENU_IMAGE } from '@src/helpers/images';
 import type { CategoryButtonProps } from '@src/hooks/useGetCategoriesList';
 import useGetCategoriesList from '@src/hooks/useGetCategoriesList';
 import { addNewCategory } from '@src/slices/categoriesListSlice';
@@ -54,7 +55,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const [errors, setErrors] = useState<ValidationErrors | object>({});
   const { CATEGORIES_BUTTON_LIST } = useGetCategoriesList();
   const [textValue, onChangeText] = useState('');
-  const BURGER_MENU_IMAGE = Image.resolveAssetSource(BurgerMenuImg).uri;
+
   const modalVisible = useAppSelector((state) => {
     return state.modalStatusReducer.status;
   });
@@ -157,20 +158,20 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         <ModalContainer
           modalFirstHandler={modalFirstHandler}
           modalSecondHandler={modalSecondHandler}
-          title="Add your personal activity"
-          textContent="You can add tour personal activity ticket"
+          title={TextStrings.PersonalActivityTitle}
+          textContent={TextStrings.PersonalActivityDescription}
           modalVisible={modalVisible}
-          modalFirstHandlerText="Cancel"
-          modalSecondHandlerText="Ok"
+          modalFirstHandlerText={TextStrings.ModalHandlerTitleCancel}
+          modalSecondHandlerText={TextStrings.ModalHandlerTitleConfirm}
         >
           <ModalContext>
             <ModalContextInput>
-              <CategoryText>Category:</CategoryText>
+              <CategoryText>{TextStrings.Category}</CategoryText>
               <CategoryInput
                 editable
                 value={textValue}
                 onChangeText={handleChangeText}
-                placeholder="Add your category"
+                placeholder={TextStrings.AddCategoryPlaceholder}
                 maxLength={8}
               />
             </ModalContextInput>
@@ -188,30 +189,30 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         <Pressable onPress={handleDrawerMenu}>
           <Image width={24} height={24} source={{ uri: BURGER_MENU_IMAGE }} />
         </Pressable>
-        <Title>Modsen Todo list</Title>
+        <Title>{TextStrings.HomeScreenTitle}</Title>
       </Header>
       <Main>
         <TaskInfo>
           <TaskInfoTitle>
             <TaskInfoTitleItem color="#363636" fSize={20} lHeight={29.9}>
-              {`you have ${' '}`}
+              {TextStrings.TaskInfo}
             </TaskInfoTitleItem>
             <TaskInfoTitleItem color="#FFFFFF" fSize={24} lHeight={34.68}>
               {`${ALL_TASKS.length} ${
                 ALL_TASKS.length >= 0 && ALL_TASKS.length < 2
-                  ? 'task'
-                  : 'tasks`s'
+                  ? TextStrings.Task
+                  : TextStrings.Tasks
               }`}
             </TaskInfoTitleItem>
             <TaskInfoTitleItem color="#363636" fSize={20} lHeight={29.9}>
               {`${' '} ${
-                DATE_CATEGORY === 'Today'
-                  ? 'today'
-                  : DATE_CATEGORY === 'Month'
-                  ? 'in this month'
-                  : DATE_CATEGORY === 'Week'
-                  ? 'in this week'
-                  : 'in all time'
+                DATE_CATEGORY === TextStrings.TodayCategory
+                  ? TextStrings.Today
+                  : DATE_CATEGORY === TextStrings.MonthCategory
+                  ? TextStrings.Month
+                  : DATE_CATEGORY === TextStrings.WeekCategory
+                  ? TextStrings.Week
+                  : TextStrings.AllTime
               } ! `}
             </TaskInfoTitleItem>
           </TaskInfoTitle>

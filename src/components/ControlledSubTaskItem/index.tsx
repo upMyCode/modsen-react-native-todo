@@ -1,5 +1,5 @@
 import { Button } from '@root';
-import { DoneStatusImg } from '@src/assets';
+import { DONE_STATUS_IMAGE } from '@src/helpers/images';
 import { changeSubtasksList } from '@src/slices/taskListSlice';
 import { useAppDispatch } from '@src/store/hooks';
 import React, { useState } from 'react';
@@ -14,8 +14,6 @@ export default function ControlledSubTaskItem({
   idTask,
 }: SubTaskItemProps) {
   const [isDone, setDoneStatus] = useState<boolean>(false);
-  const DONE_STATUS_IMAGE = Image.resolveAssetSource(DoneStatusImg).uri;
-
   const dispatch = useAppDispatch();
 
   const handleDoneStatus = () => {

@@ -1,3 +1,4 @@
+import TextStrings from '@constants/strings';
 import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
@@ -8,7 +9,11 @@ import {
   TaskScreenImage,
   TaskTicket,
 } from '@root';
-import { ArrowDownImg, WhiteArrowImg, WhitePlusImg } from '@src/assets';
+import {
+  ARROW_DOWN_IMAGE,
+  ARROW_IMAGE,
+  WHITE_PLUS_IMAGE,
+} from '@src/helpers/images';
 import {
   changeStatusToActive,
   changeStatusToDisable,
@@ -19,8 +24,6 @@ import React, { useState } from 'react';
 import type { ListRenderItemInfo } from 'react-native';
 import { Dimensions, FlatList, Image, SafeAreaView, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import { Notifications } from 'react-native-notifications';
-import { v4 as uuidv4 } from 'uuid';
 import * as Yup from 'yup';
 
 import {
@@ -68,9 +71,7 @@ export default function TaskListScreen({
   const [modalTitle, setModalTitle] = useState<string>('');
   const [modalAddSubTaskTitle, setModalAddSubTaskTitle] = useState<string>('');
   const [modalTextContent, setModalTextContent] = useState<string>('');
-  const ARROW_IMAGE = Image.resolveAssetSource(WhiteArrowImg).uri;
-  const WHITE_PLUS_IMAGE = Image.resolveAssetSource(WhitePlusImg).uri;
-  const ARROW_DOWN_IMAGE = Image.resolveAssetSource(ArrowDownImg).uri;
+
   const categories = useAppSelector((state) => {
     return state.categoriesListReducer.categories;
   });
@@ -142,6 +143,30 @@ export default function TaskListScreen({
 
   const setChangedTaskStatusToDisable = () => {
     setChangeTaskStatus(false);
+  };
+  const isAllTasksHaveCustomCategory =
+    categories.filter((item: CategoryItem) => {
+      return item.taskCategoryName === sortTag;
+    }).length > 0;
+
+  const handleResetAllStates = () => {
+    setModalName('date');
+    setModalTitle('');
+    setModalTextContent('');
+    setImportantTaskStatus(false);
+    setDate({
+      fromDate: new Date(),
+      tillDate: new Date(),
+      fromTime: new Date(),
+      tillTime: new Date(),
+    });
+    setDateError({
+      dateError: '',
+      timeError: '',
+    });
+    setSubTaskList([]);
+    setChangedTaskStatusToDisable();
+    dispatch(changeStatusToDisable());
   };
 
   const handleChangeTask = () => {
@@ -317,43 +342,11 @@ export default function TaskListScreen({
         );
         if (isCorrectDate) {
           if (!changeTaskStatus) {
-            const localNotification = Notifications.postLocalNotification({
-              body: 'Local notification!',
-              title: 'Local Notification Title',
-              sound: 'chime.aiff',
-              silent: false,
-              category: 'SOME_CATEGORY',
-              userInfo: {},
-              fireDate: new Date(),
-            });
-
             handleAddNewTask();
-            dispatch(changeStatusToDisable());
-            setModalName('date');
-            setModalTitle('');
-            setModalTextContent('');
-            setImportantTaskStatus(false);
-            setDate({
-              fromDate: new Date(),
-              tillDate: new Date(),
-              fromTime: new Date(),
-              tillTime: new Date(),
-            });
-            setSubTaskList([]);
+            handleResetAllStates();
           } else {
             handleChangeTask();
-            dispatch(changeStatusToDisable());
-            setModalName('date');
-            setModalTitle('');
-            setModalTextContent('');
-            setImportantTaskStatus(false);
-            setDate({
-              fromDate: new Date(),
-              tillDate: new Date(),
-              fromTime: new Date(),
-              tillTime: new Date(),
-            });
-            setSubTaskList([]);
+            handleResetAllStates();
           }
         }
       },
@@ -389,22 +382,7 @@ export default function TaskListScreen({
   };
 
   const handleOpenAddTaskMenu = () => {
-    setModalName('date');
-    setModalTitle('');
-    setModalTextContent('');
-    setImportantTaskStatus(false);
-    setDate({
-      fromDate: new Date(),
-      tillDate: new Date(),
-      fromTime: new Date(),
-      tillTime: new Date(),
-    });
-    setDateError({
-      dateError: '',
-      timeError: '',
-    });
-    setSubTaskList([]);
-    setChangedTaskStatusToDisable();
+    handleResetAllStates();
     dispatch(changeStatusToActive());
   };
 
@@ -470,7 +448,7 @@ export default function TaskListScreen({
     <View>
       <ManagedStatusBar />
       <TaskScreenImage />
-      {modalVisible && modalName === 'date' && (
+      {modalVisible && modalName === TextStrings.ModalNameDate && (
         <ModalContainer
           errors={taskModalErrors}
           modalTitle={modalTitle}
@@ -483,16 +461,16 @@ export default function TaskListScreen({
           modalSecondHandler={modalEventList[0].modalSecondHandler}
           title={
             changeTaskStatus
-              ? 'Please, change your task title'
-              : 'Please, add your task title'
+              ? TextStrings.ModalForChangeDateTitle
+              : TextStrings.ModalForAddDateTitle
           }
           textContent={
             changeTaskStatus
-              ? 'Please, change your task text context'
-              : 'Please, add your task text context'
+              ? TextStrings.ModalForChangeDateDescription
+              : TextStrings.ModalForAddDateDescription
           }
-          modalFirstHandlerText="Cancel"
-          modalSecondHandlerText="Ok"
+          modalFirstHandlerText={TextStrings.ModalHandlerTitleCancel}
+          modalSecondHandlerText={TextStrings.ModalHandlerTitleConfirm}
           modalVisible={modalVisible}
           titleMaxSymbol={16}
           textContextMaxSymbol={40}
@@ -500,7 +478,7 @@ export default function TaskListScreen({
           important
         >
           <DateContainer>
-            <DatePeriodText>from</DatePeriodText>
+            <DatePeriodText>{TextStrings.DatePeriodFrom}</DatePeriodText>
             <DatePicker
               style={{ height: 40, width: 300 }}
               mode="date"
@@ -509,7 +487,7 @@ export default function TaskListScreen({
             />
           </DateContainer>
           <DateContainer>
-            <DatePeriodText>till</DatePeriodText>
+            <DatePeriodText>{TextStrings.DatePeriodTill}</DatePeriodText>
             <DatePicker
               style={{ height: 40, width: 300 }}
               mode="date"
@@ -522,7 +500,7 @@ export default function TaskListScreen({
           )}
         </ModalContainer>
       )}
-      {modalVisible && modalName === 'time' && (
+      {modalVisible && modalName === TextStrings.ModalNameTime && (
         <ModalContainer
           modalTitle={modalTitle}
           modalTextContent={modalTextContent}
@@ -532,10 +510,12 @@ export default function TaskListScreen({
           handleImportantTaskStatus={handleImportantTaskStatus}
           modalFirstHandler={modalEventList[2].modalFirstHandler}
           modalSecondHandler={modalEventList[2].modalSecondHandler}
-          title={modalTitle || 'Please, add your task title'}
-          textContent={modalTextContent || 'Please, add your task title'}
-          modalFirstHandlerText="Cancel"
-          modalSecondHandlerText="Ok"
+          title={modalTitle || TextStrings.ModalForAddDateTitle}
+          textContent={
+            modalTextContent || TextStrings.ModalForAddDateDescription
+          }
+          modalFirstHandlerText={TextStrings.ModalHandlerTitleCancel}
+          modalSecondHandlerText={TextStrings.ModalHandlerTitleConfirm}
           modalVisible={modalVisible}
           titleMaxSymbol={16}
           isEditableModal={false}
@@ -543,7 +523,7 @@ export default function TaskListScreen({
           important
         >
           <DateContainer>
-            <DatePeriodText>from</DatePeriodText>
+            <DatePeriodText>{TextStrings.DatePeriodFrom}</DatePeriodText>
             <DatePicker
               style={{ height: 40, width: 300 }}
               mode="time"
@@ -552,7 +532,7 @@ export default function TaskListScreen({
             />
           </DateContainer>
           <DateContainer>
-            <DatePeriodText>till</DatePeriodText>
+            <DatePeriodText>{TextStrings.DatePeriodTill}</DatePeriodText>
             <DatePicker
               style={{ height: 40, width: 300 }}
               mode="time"
@@ -565,20 +545,22 @@ export default function TaskListScreen({
           )}
         </ModalContainer>
       )}
-      {modalVisible && modalName === 'subtask' && (
+      {modalVisible && modalName === TextStrings.ModalNameSubtask && (
         <ModalContainer
           modalTitle={modalTitle}
           modalTextContent={modalTextContent}
           importantTaskStatus={importantTaskStatus}
           handleChangeTitle={handleChangeTitle}
-          title={modalTitle || 'Please, add your task title'}
-          textContent={modalTextContent || 'Please, add your task title'}
+          title={modalTitle || TextStrings.ModalForAddDateTitle}
+          textContent={
+            modalTextContent || TextStrings.ModalForAddDateDescription
+          }
           handleChangeTextContent={handleChangeTextContent}
           handleImportantTaskStatus={handleImportantTaskStatus}
           modalFirstHandler={modalEventList[1].modalFirstHandler}
           modalSecondHandler={modalEventList[1].modalSecondHandler}
-          modalFirstHandlerText="Back"
-          modalSecondHandlerText="Next"
+          modalFirstHandlerText={TextStrings.ModalHandlerTitleBack}
+          modalSecondHandlerText={TextStrings.ModalHandlerTitleNext}
           modalVisible={modalVisible}
           titleMaxSymbol={16}
           isEditableModal={false}
@@ -611,21 +593,23 @@ export default function TaskListScreen({
           </ModalFooter>
         </ModalContainer>
       )}
-      {modalVisible && modalName === 'add-subtask' && (
+      {modalVisible && modalName === TextStrings.ModalNameAddSubtask && (
         <ModalContainer
           errors={subTaskModalErrors}
           modalTitle={modalTitle}
           modalTextContent={modalAddSubTaskTitle}
           importantTaskStatus={importantTaskStatus}
           handleChangeTitle={handleChangeTitle}
-          subTaskTitle="Please, add your subtask title"
-          textContent={modalAddSubTaskTitle || 'Please, add your subtask'}
+          subTaskTitle={TextStrings.ModalForAddSubtaskTitle}
+          textContent={
+            modalAddSubTaskTitle || TextStrings.ModalForAddSubtaskDescription
+          }
           handleChangeTextContent={handleChangeAddSubTaskTextContent}
           handleImportantTaskStatus={handleImportantTaskStatus}
           modalFirstHandler={modalEventList[3].modalFirstHandler}
           modalSecondHandler={modalEventList[3].modalSecondHandler}
-          modalFirstHandlerText="Cancel"
-          modalSecondHandlerText="Ok"
+          modalFirstHandlerText={TextStrings.ModalHandlerTitleCancel}
+          modalSecondHandlerText={TextStrings.ModalHandlerTitleConfirm}
           modalVisible={modalVisible}
           isOpenAddSubtaskMenu
           titleMaxSymbol={16}
@@ -640,21 +624,22 @@ export default function TaskListScreen({
             <Image width={32} height={32} source={{ uri: ARROW_IMAGE }} />
           </BackButton>
           <Title>
-            {sortTag === 'daily'
-              ? 'Today’s task'
-              : DATE_CATEGORY === 'Today'
-              ? 'Today’s task'
-              : DATE_CATEGORY === 'Month'
-              ? 'Month’s task'
-              : DATE_CATEGORY === 'Week'
-              ? 'Weeks’s task'
-              : DATE_CATEGORY === 'all' && sortTag === 'daily'
-              ? 'Today’s task'
-              : 'task in all time'}
+            {sortTag === TextStrings.SortTagTitleDaily
+              ? TextStrings.TodayTasks
+              : DATE_CATEGORY === TextStrings.TodayCategory
+              ? TextStrings.TodayTasks
+              : DATE_CATEGORY === TextStrings.MonthCategory
+              ? TextStrings.MonthTasks
+              : DATE_CATEGORY === TextStrings.WeekCategory
+              ? TextStrings.WeekTasks
+              : DATE_CATEGORY === TextStrings.AllCategory &&
+                sortTag === TextStrings.SortTagTitleDaily
+              ? TextStrings.TodayTasks
+              : TextStrings.TaskInAllTime}
           </Title>
         </Header>
         <Main>
-          {sortTag === 'read' && (
+          {sortTag === TextStrings.SortTagTitleRead && (
             <FlatList
               nestedScrollEnabled
               contentContainerStyle={{
@@ -667,7 +652,7 @@ export default function TaskListScreen({
               renderItem={renderItemTask}
             />
           )}
-          {sortTag === 'search' && (
+          {sortTag === TextStrings.SortTagTitleSearch && (
             <FlatList
               nestedScrollEnabled
               contentContainerStyle={{
@@ -680,29 +665,20 @@ export default function TaskListScreen({
               renderItem={renderItemTask}
             />
           )}
-          {categories
-            .map((item: CategoryItem) => {
-              if (item.taskCategoryName === sortTag) {
-                return (
-                  <FlatList
-                    key={uuidv4()}
-                    nestedScrollEnabled
-                    contentContainerStyle={{
-                      alignItems: 'center',
-                    }}
-                    data={ALL_TASKS}
-                    keyExtractor={({ id }) => {
-                      return id;
-                    }}
-                    renderItem={renderItemTask}
-                  />
-                );
-              }
-
-              return null;
-            })
-            .slice(0, 1)}
-          {sortTag === 'school' && (
+          {isAllTasksHaveCustomCategory && (
+            <FlatList
+              nestedScrollEnabled
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={ALL_TASKS}
+              keyExtractor={({ id }) => {
+                return id;
+              }}
+              renderItem={renderItemTask}
+            />
+          )}
+          {sortTag === TextStrings.SortTagTitleSchool && (
             <FlatList
               nestedScrollEnabled
               contentContainerStyle={{
@@ -716,7 +692,7 @@ export default function TaskListScreen({
               renderItem={renderItemTask}
             />
           )}
-          {sortTag === 'work' && (
+          {sortTag === TextStrings.SortTagTitleWork && (
             <FlatList
               nestedScrollEnabled
               contentContainerStyle={{
@@ -730,7 +706,7 @@ export default function TaskListScreen({
               renderItem={renderItemTask}
             />
           )}
-          {sortTag === 'workout' && (
+          {sortTag === TextStrings.SortTagTitleWorkout && (
             <FlatList
               nestedScrollEnabled
               contentContainerStyle={{
@@ -744,7 +720,7 @@ export default function TaskListScreen({
               renderItem={renderItemTask}
             />
           )}
-          {sortTag === 'shop' && (
+          {sortTag === TextStrings.SortTagTitleShop && (
             <FlatList
               nestedScrollEnabled
               contentContainerStyle={{
@@ -758,35 +734,37 @@ export default function TaskListScreen({
               renderItem={renderItemTask}
             />
           )}
-          {sortTag === 'daily' && isTaskListDoneOpened && (
-            <FlatList
-              nestedScrollEnabled
-              contentContainerStyle={{
-                alignItems: 'center',
-              }}
-              data={DONE_TASKS}
-              extraData={DONE_TASKS}
-              keyExtractor={({ id }) => {
-                return id;
-              }}
-              renderItem={renderItemTask}
-            />
-          )}
-          {sortTag === 'daily' && !isTaskListDoneOpened && (
-            <FlatList
-              nestedScrollEnabled
-              contentContainerStyle={{
-                alignItems: 'center',
-              }}
-              data={ALL_TASKS}
-              extraData={ALL_TASKS}
-              keyExtractor={({ id }) => {
-                return id;
-              }}
-              renderItem={renderItemTask}
-            />
-          )}
-          {sortTag === 'important' && (
+          {sortTag === TextStrings.SortTagTitleDaily &&
+            isTaskListDoneOpened && (
+              <FlatList
+                nestedScrollEnabled
+                contentContainerStyle={{
+                  alignItems: 'center',
+                }}
+                data={DONE_TASKS}
+                extraData={DONE_TASKS}
+                keyExtractor={({ id }) => {
+                  return id;
+                }}
+                renderItem={renderItemTask}
+              />
+            )}
+          {sortTag === TextStrings.SortTagTitleDaily &&
+            !isTaskListDoneOpened && (
+              <FlatList
+                nestedScrollEnabled
+                contentContainerStyle={{
+                  alignItems: 'center',
+                }}
+                data={ALL_TASKS}
+                extraData={ALL_TASKS}
+                keyExtractor={({ id }) => {
+                  return id;
+                }}
+                renderItem={renderItemTask}
+              />
+            )}
+          {sortTag === TextStrings.SortTagTitleImportant && (
             <FlatList
               nestedScrollEnabled
               contentContainerStyle={{
@@ -800,7 +778,7 @@ export default function TaskListScreen({
               renderItem={renderItemTask}
             />
           )}
-          {sortTag === 'done' && (
+          {sortTag === TextStrings.SortTagTitleDone && (
             <FlatList
               contentContainerStyle={{
                 alignItems: 'center',
@@ -814,14 +792,15 @@ export default function TaskListScreen({
               renderItem={renderItemTask}
             />
           )}
-          {sortTag === 'daily' && <LineDevider />}
-          {sortTag === 'daily' && (
+          {sortTag === TextStrings.SortTagTitleDaily && <LineDevider />}
+          {sortTag === TextStrings.SortTagTitleDaily && (
             <TaskSwitcher>
-              {sortTag === 'daily' && isTaskListDoneOpened ? (
+              {sortTag === TextStrings.SortTagTitleDaily &&
+              isTaskListDoneOpened ? (
                 <TaskSwitcherText>{`tasks in progress (${ALL_TASKS.length})`}</TaskSwitcherText>
               ) : (
                 <TaskSwitcherText>
-                  {`done tasks (${DONE_TASKS.length})`}
+                  {`${TextStrings.DoneTasks} (${DONE_TASKS.length})`}
                 </TaskSwitcherText>
               )}
 

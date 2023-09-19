@@ -89,9 +89,62 @@ export default function useGetTasksCategoriesLists(
     }
   };
 
+  function sortByTagCategory(
+    tag: string,
+    taskListByDate: Task[],
+    doneTaskListByDate: Task[]
+  ) {
+    switch (tag) {
+      case 'important':
+        IMPORTANT_TASK_LIST = importantTaskListFilter(taskListByDate);
+        break;
+      case 'done': {
+        DONE_TASKS = doneTaskListByDate;
+        break;
+      }
+      case 'daily': {
+        const DONE_TASK_IN_CURRENT_DAY =
+          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
+        const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
+
+        ALL_TASKS = TASK_IN_CURRENT_DAY;
+        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
+        break;
+      }
+      case 'read': {
+        ALL_TASKS = searchReadCategory(taskListByDate);
+        break;
+      }
+      case 'school': {
+        ALL_TASKS = searchSchoolCategory(taskListByDate);
+        break;
+      }
+      case 'work': {
+        ALL_TASKS = searchWorkCategory(taskListByDate);
+        break;
+      }
+      case 'shop': {
+        ALL_TASKS = searchShopCategory(taskListByDate);
+        break;
+      }
+      case 'workout': {
+        ALL_TASKS = workOutCategory(taskListByDate);
+        break;
+      }
+      case 'search': {
+        if (searchData) {
+          ALL_TASKS = userCategory(taskListByDate, searchData);
+        }
+        break;
+      }
+      default:
+        getCustomCategories(taskListByDate);
+    }
+  }
+
   if (DATE_CATEGORY === 'Today') {
     const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
-
+    const TASK_IN_CURRENT_DAY_DONE = taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
     ALL_TASKS = TASK_IN_CURRENT_DAY;
 
     MAIN_MENU_DEFAULT_FILTER_CATEGORIES = {
@@ -105,67 +158,12 @@ export default function useGetTasksCategoriesLists(
     addCategory(TASK_IN_CURRENT_DAY);
 
     if (sortTag) {
-      if (sortTag === 'important') {
-        IMPORTANT_TASK_LIST = importantTaskListFilter(TASK_IN_CURRENT_DAY);
-      }
-      if (sortTag === 'done') {
-        const DONE_TASK_IN_CURRENT_DAY =
-          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
-
-        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
-      }
-      if (sortTag === 'daily') {
-        const DONE_TASK_IN_CURRENT_DAY =
-          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY;
-        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
-      }
-      if (sortTag === 'read') {
-        const TASK_IN_CURRENT_DAY_READ =
-          searchReadCategory(TASK_IN_CURRENT_DAY);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_READ;
-      }
-
-      if (sortTag === 'school') {
-        const TASK_IN_CURRENT_DAY_SCHOOL =
-          searchSchoolCategory(TASK_IN_CURRENT_DAY);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_SCHOOL;
-      }
-
-      if (sortTag === 'work') {
-        const TASK_IN_CURRENT_DAY_WORK =
-          searchWorkCategory(TASK_IN_CURRENT_DAY);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_WORK;
-      }
-
-      if (sortTag === 'shop') {
-        const TASK_IN_CURRENT_DAY_SHOP =
-          searchShopCategory(TASK_IN_CURRENT_DAY);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_SHOP;
-      }
-
-      if (sortTag === 'workout') {
-        const TASK_IN_CURRENT_DAY_WORKOUT =
-          workOutCategory(TASK_IN_CURRENT_DAY);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_WORKOUT;
-      }
-
-      if (sortTag === 'search') {
-        if (searchData) {
-          ALL_TASKS = userCategory(TASK_IN_CURRENT_DAY, searchData);
-        }
-      }
-
-      getCustomCategories(TASK_IN_CURRENT_DAY);
+      sortByTagCategory(sortTag, TASK_IN_CURRENT_DAY, TASK_IN_CURRENT_DAY_DONE);
     }
   } else if (DATE_CATEGORY === 'Month') {
     const TASK_IN_CURRENT_MONTH = taskInCurrentMonthFilter(ALL_TASKS_PRELOAD);
+    const TASK_IN_CURRENT_MONTH_DONE =
+      taskInCurrentMonthFilter(DONE_TASKS_PRELOAD);
 
     ALL_TASKS = TASK_IN_CURRENT_MONTH;
 
@@ -180,74 +178,16 @@ export default function useGetTasksCategoriesLists(
     addCategory(TASK_IN_CURRENT_MONTH);
 
     if (sortTag) {
-      if (sortTag === 'important') {
-        IMPORTANT_TASK_LIST = importantTaskListFilter(TASK_IN_CURRENT_MONTH);
-      }
-      if (sortTag === 'done') {
-        const DONE_TASK_IN_CURRENT_MONTH =
-          taskInCurrentMonthFilter(DONE_TASKS_PRELOAD);
-
-        DONE_TASKS = DONE_TASK_IN_CURRENT_MONTH;
-      }
-      if (sortTag === 'daily') {
-        const DONE_TASK_IN_CURRENT_DAY =
-          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
-        const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY;
-        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
-      }
-
-      if (sortTag === 'read') {
-        const TASK_IN_CURRENT_MONTH_READ = searchReadCategory(
-          TASK_IN_CURRENT_MONTH
-        );
-
-        ALL_TASKS = TASK_IN_CURRENT_MONTH_READ;
-      }
-
-      if (sortTag === 'school') {
-        const TASK_IN_CURRENT_MONTH_SCHOOL = searchSchoolCategory(
-          TASK_IN_CURRENT_MONTH
-        );
-
-        ALL_TASKS = TASK_IN_CURRENT_MONTH_SCHOOL;
-      }
-
-      if (sortTag === 'work') {
-        const TASK_IN_CURRENT_MONTH_WORK = searchWorkCategory(
-          TASK_IN_CURRENT_MONTH
-        );
-
-        ALL_TASKS = TASK_IN_CURRENT_MONTH_WORK;
-      }
-
-      if (sortTag === 'shop') {
-        const TASK_IN_CURRENT_MONTH_SHOP = searchShopCategory(
-          TASK_IN_CURRENT_MONTH
-        );
-
-        ALL_TASKS = TASK_IN_CURRENT_MONTH_SHOP;
-      }
-
-      if (sortTag === 'workout') {
-        const TASK_IN_CURRENT_MONTH_WORKOUT = workOutCategory(
-          TASK_IN_CURRENT_MONTH
-        );
-
-        ALL_TASKS = TASK_IN_CURRENT_MONTH_WORKOUT;
-      }
-
-      if (sortTag === 'search') {
-        if (searchData) {
-          ALL_TASKS = userCategory(TASK_IN_CURRENT_MONTH, searchData);
-        }
-      }
-
-      getCustomCategories(TASK_IN_CURRENT_MONTH);
+      sortByTagCategory(
+        sortTag,
+        TASK_IN_CURRENT_MONTH,
+        TASK_IN_CURRENT_MONTH_DONE
+      );
     }
   } else if (DATE_CATEGORY === 'Week') {
     const TASK_IN_CURRENT_WEEK = taskInCurrentWeekFilter(ALL_TASKS_PRELOAD);
+    const TASK_IN_CURRENT_WEEK_DONE =
+      taskInCurrentWeekFilter(DONE_TASKS_PRELOAD);
 
     ALL_TASKS = TASK_IN_CURRENT_WEEK;
 
@@ -262,127 +202,15 @@ export default function useGetTasksCategoriesLists(
     addCategory(TASK_IN_CURRENT_WEEK);
 
     if (sortTag) {
-      if (sortTag === 'read') {
-        const TASK_IN_CURRENT_WEEK_READ =
-          searchReadCategory(TASK_IN_CURRENT_WEEK);
-
-        ALL_TASKS = TASK_IN_CURRENT_WEEK_READ;
-      }
-
-      if (sortTag === 'school') {
-        const TASK_IN_CURRENT_WEEK_SCHOOL =
-          searchSchoolCategory(TASK_IN_CURRENT_WEEK);
-
-        ALL_TASKS = TASK_IN_CURRENT_WEEK_SCHOOL;
-      }
-
-      if (sortTag === 'work') {
-        const TASK_IN_CURRENT_WEEK_WORK =
-          searchWorkCategory(TASK_IN_CURRENT_WEEK);
-
-        ALL_TASKS = TASK_IN_CURRENT_WEEK_WORK;
-      }
-
-      if (sortTag === 'shop') {
-        const TASK_IN_CURRENT_WEEK_SHOP =
-          searchShopCategory(TASK_IN_CURRENT_WEEK);
-
-        ALL_TASKS = TASK_IN_CURRENT_WEEK_SHOP;
-      }
-
-      if (sortTag === 'workout') {
-        const TASK_IN_CURRENT_WEEK_WORKOUT =
-          workOutCategory(TASK_IN_CURRENT_WEEK);
-
-        ALL_TASKS = TASK_IN_CURRENT_WEEK_WORKOUT;
-      }
-
-      if (sortTag === 'important') {
-        IMPORTANT_TASK_LIST = importantTaskListFilter(TASK_IN_CURRENT_WEEK);
-      }
-
-      if (sortTag === 'done') {
-        const DONE_TASK_IN_CURRENT_WEEK =
-          taskInCurrentWeekFilter(DONE_TASKS_PRELOAD);
-
-        DONE_TASKS = DONE_TASK_IN_CURRENT_WEEK;
-      }
-
-      if (sortTag === 'daily') {
-        const DONE_TASK_IN_CURRENT_DAY =
-          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
-        const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY;
-        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
-      }
-
-      if (sortTag === 'search') {
-        if (searchData) {
-          ALL_TASKS = userCategory(TASK_IN_CURRENT_WEEK, searchData);
-        }
-      }
-
-      getCustomCategories(TASK_IN_CURRENT_WEEK);
+      sortByTagCategory(
+        sortTag,
+        TASK_IN_CURRENT_WEEK,
+        TASK_IN_CURRENT_WEEK_DONE
+      );
     }
   } else if (DATE_CATEGORY === 'all') {
     if (sortTag) {
-      if (sortTag === 'important') {
-        IMPORTANT_TASK_LIST = importantTaskListFilter(ALL_TASKS_PRELOAD);
-      }
-      if (sortTag === 'done') {
-        const DONE_TASK_IN_CURRENT_DAY =
-          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
-
-        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
-      }
-      if (sortTag === 'read') {
-        const TASK_IN_CURRENT_DAY_READ = searchReadCategory(ALL_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_READ;
-      }
-
-      if (sortTag === 'daily') {
-        const DONE_TASK_IN_CURRENT_DAY =
-          taskInCurrentDayFilter(DONE_TASKS_PRELOAD);
-        const TASK_IN_CURRENT_DAY = taskInCurrentDayFilter(ALL_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY;
-        DONE_TASKS = DONE_TASK_IN_CURRENT_DAY;
-      }
-
-      if (sortTag === 'school') {
-        const TASK_IN_CURRENT_DAY_SCHOOL =
-          searchSchoolCategory(ALL_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_SCHOOL;
-      }
-
-      if (sortTag === 'work') {
-        const TASK_IN_CURRENT_DAY_WORK = searchWorkCategory(ALL_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_WORK;
-      }
-
-      if (sortTag === 'shop') {
-        const TASK_IN_CURRENT_DAY_SHOP = searchShopCategory(ALL_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_SHOP;
-      }
-
-      if (sortTag === 'workout') {
-        const TASK_IN_CURRENT_DAY_WORKOUT = workOutCategory(ALL_TASKS_PRELOAD);
-
-        ALL_TASKS = TASK_IN_CURRENT_DAY_WORKOUT;
-      }
-
-      if (sortTag === 'search') {
-        if (searchData) {
-          ALL_TASKS = userCategory(ALL_TASKS_PRELOAD, searchData);
-        }
-      }
-
-      getCustomCategories(ALL_TASKS_PRELOAD);
+      sortByTagCategory(sortTag, ALL_TASKS_PRELOAD, DONE_TASKS_PRELOAD);
     }
   }
 

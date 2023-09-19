@@ -6,7 +6,7 @@ export interface ButtonProps {
   bgColor?: string;
   bRadius?: number;
   bColor?: string;
-  children?: ReactNode[] | ReactElement | undefined;
+  children?: ReactNode[] | ReactElement | undefined | ReactNode;
   onPress: undefined | (() => void);
   boxShadow?: boolean;
   mt?: number;

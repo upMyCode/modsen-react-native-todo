@@ -78,6 +78,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'prettier/prettier': 'error',
     'import/no-cycle': 'off',
+    'no-shadow': 'off',
     '@typescript-eslint/no-var-requires': 0,
     'no-confusing-arrow': 0,
     'arrow-body-style': ['error', 'always'],

@@ -1,9 +1,9 @@
+import TextStrings from '@constants/strings';
 import { useNavigation } from '@react-navigation/core';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { SearchImg } from '@src/assets';
+import { SEARCH_IMAGE } from '@src/helpers/images';
 import React, { useState } from 'react';
 import {
-  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -27,7 +27,7 @@ import SearchSchemaTask from './validate';
 
 export default function HomeScreenSearchBar() {
   const [searchText, onChangeSearchText] = useState('');
-  const SEARCH_IMAGE = Image.resolveAssetSource(SearchImg).uri;
+
   const navigation =
     useNavigation<StackNavigationProp<StackScreensParamList>>();
   const [searchbarErrors, setSearchbarErrors] = useState<object | SearchTask>(
@@ -127,7 +127,7 @@ export default function HomeScreenSearchBar() {
             autoCorrect={false}
             value={searchText}
             onChangeText={handleChangeText}
-            placeholder="Search tasks"
+            placeholder={TextStrings.SearchBarPlaceholder}
             maxLength={80}
             onSubmitEditing={handleSubmit}
           />
