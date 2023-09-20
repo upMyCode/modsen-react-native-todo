@@ -25,7 +25,7 @@ export const TimeText = styled.Text`
 `;
 
 export const Container = styled.View`
-  padding: 16px 22.5px 16px 16px;
+  padding: 16px 23px 16px 16px;
   display: flex;
   flex-direction: row;
 `;
@@ -35,7 +35,7 @@ export const MainContent = styled.View`
   flex-direction: row;
   width: 223px;
   height: 37px;
-  margin-left: 8.5px;
+  margin-left: 9px;
 `;
 
 export const ImageWrapper = styled.View`
@@ -47,21 +47,21 @@ export const ImageWrapper = styled.View`
 export const Title = styled.Text`
   font-size: 13px;
   font-family: 'Signika-Light';
-  line-height: 16.02px;
+  line-height: 16px;
   color: #363636;
 `;
 
 export const Description = styled.Text`
   font-size: 8px;
   font-family: 'Signika-Light';
-  line-height: 9.86px;
+  line-height: 10px;
   color: #e7e7e7;
 `;
 
 export const SpreadMenuButtonContext = styled.Text`
   font-size: 10px;
   font-family: 'Signika-Light';
-  line-height: 9.86px;
+  line-height: 10px;
   color: #194aa6;
 `;
 

@@ -1,14 +1,12 @@
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { Button } from '@root';
-import { ArrowImg } from '@src/assets';
+import { ARROW_IMG } from '@src/helpers/images';
 import React from 'react';
 import { Image } from 'react-native';
 
 export default function BackButton({
   navigation,
 }: DrawerContentComponentProps) {
-  const ARROW_IMG = Image.resolveAssetSource(ArrowImg).uri;
-
   const handleBackToLoadingScreen = () => {
     navigation.navigate('LoadingScreen');
   };

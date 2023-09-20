@@ -11,14 +11,14 @@ export const CounterTaskContainer = styled.View`
 export const CounterTaskTextContent = styled.Text`
   font-family: 'Jost-Regular';
   font-size: 16px;
-  line-height: 23.12px;
+  line-height: 23px;
   color: #ffffff;
 `;
 
 export const TaskTextContent = styled.Text`
   font-family: 'Jost-Medium';
   font-size: 16px;
-  line-height: 23.12px;
+  line-height: 23px;
   color: #ffffff;
   margin-top: 8px;
 `;

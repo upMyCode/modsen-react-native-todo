@@ -1,7 +1,8 @@
+import TextStrings from '@constants/strings';
 import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
 import { Button, ControlledSubTaskItem } from '@root';
-import { DoneStatusImg, SpreadImg } from '@src/assets';
 import getTime from '@src/helpers/getTime';
+import { DONE_STATUS_IMAGE, SPREAD_IMAGE } from '@src/helpers/images';
 import { changeStatusToActive } from '@src/slices/modalSlice';
 import {
   deleteTask,
@@ -62,8 +63,7 @@ export default function TaskTicket({
   const [isTaskTicketHaveSubtasks, setTicketHaveSubtasksStatus] =
     useState<boolean>(false);
   const [isOpenedSpreadMenu, setOpenSpreadMenu] = useState<boolean>(false);
-  const DONE_STATUS_IMAGE = Image.resolveAssetSource(DoneStatusImg).uri;
-  const SPREAD_IMAGE = Image.resolveAssetSource(SpreadImg).uri;
+
   const WINDOW_PROC = 0.91;
   const totalTaskWidth = windowWidth * WINDOW_PROC;
   const dispatch = useAppDispatch();
@@ -109,11 +109,7 @@ export default function TaskTicket({
     }
   };
 
-  const handleOpenChangeTaskMenu = () => {
-    handleCloseSpreadMenu();
-    dispatch(changeStatusToActive());
-    setModalName('date');
-    setChangedTaskStatusToActive();
+  const handleSetStateOfCurrentTask = () => {
     handleSetId(id);
     setDate({
       fromDate: taskDateFrom,
@@ -126,6 +122,14 @@ export default function TaskTicket({
     setTicketForChangeDoneStatus(isDone);
     setImportantTaskStatus(taskImportantStatus);
     setModalTextContent(taskDescription);
+  };
+
+  const handleOpenChangeTaskMenu = () => {
+    handleCloseSpreadMenu();
+    dispatch(changeStatusToActive());
+    setModalName('date');
+    setChangedTaskStatusToActive();
+    handleSetStateOfCurrentTask();
   };
 
   const renderItemSubTask = ({ item }: ListRenderItemInfo<SubTask>) => {
@@ -159,7 +163,7 @@ export default function TaskTicket({
           <SpreadMenu>
             <SpreadMenuContainer>
               <SpreadMenuContainerText>
-                Choose what do you need
+                {TextStrings.SpreadMenuTitle}
               </SpreadMenuContainerText>
               <SpreadMenuContainerButtons>
                 <Button
@@ -169,7 +173,9 @@ export default function TaskTicket({
                   bColor="#29a8ff"
                   onPress={handleCloseSpreadMenu}
                 >
-                  <SpreadMenuButtonContext>Cancel</SpreadMenuButtonContext>
+                  <SpreadMenuButtonContext>
+                    {TextStrings.SpreadMenuCancel}
+                  </SpreadMenuButtonContext>
                 </Button>
                 <ButtonListContainer>
                   <Button
@@ -180,7 +186,7 @@ export default function TaskTicket({
                     onPress={handleDeleteTask}
                   >
                     <SpreadMenuButtonContext>
-                      Delete Task
+                      {TextStrings.SpreadMenuDelete}
                     </SpreadMenuButtonContext>
                   </Button>
                   <Button
@@ -191,7 +197,7 @@ export default function TaskTicket({
                     onPress={handleOpenChangeTaskMenu}
                   >
                     <SpreadMenuButtonContext>
-                      Change Task
+                      {TextStrings.SpreadMenuChange}
                     </SpreadMenuButtonContext>
                   </Button>
                 </ButtonListContainer>
@@ -213,14 +219,12 @@ export default function TaskTicket({
                 bColor="#E7E7E7"
                 onPress={handleDoneStatus}
               >
-                {isDone ? (
+                {isDone && (
                   <Image
                     width={14}
                     height={10}
                     source={{ uri: DONE_STATUS_IMAGE }}
                   />
-                ) : (
-                  <View />
                 )}
               </Button>
             </ImageWrapper>

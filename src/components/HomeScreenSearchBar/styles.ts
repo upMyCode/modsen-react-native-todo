@@ -12,7 +12,7 @@ export const SearchBar = styled.TextInput`
   border-radius: 12px;
   background-color: #ffffff;
   color: #888888;
-  padding: 12.5px 20px 12.5px 48px;
+  padding: 13px 20px 13px 48px;
   box-shadow: 0 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -40,6 +40,6 @@ export const ErrorTextContent = styled.Text`
   font-family: 'Signika-Light';
   color: #c70216;
   font-size: 10px;
-  line-height: 9.86px;
+  line-height: 10px;
   padding: 10px 5px;
 `;

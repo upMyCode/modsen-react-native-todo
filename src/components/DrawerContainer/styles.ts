@@ -18,7 +18,7 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
 export const TextContext = styled.Text`
   font-family: 'Jost-Regular';
   font-size: 12px;
-  line-height: 17.34px;
+  line-height: 17px;
   color: #888888;
   margin-left: 2px;
 `;

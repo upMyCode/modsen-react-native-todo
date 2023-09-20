@@ -1,5 +1,5 @@
 import { Button } from '@root';
-import { AsteriskOff, AsteriskOn } from '@src/assets';
+import { ASTERISK_OFF_IMAGE, ASTERISK_ON_IMAGE } from '@src/helpers/images';
 import { changeStatusToDisable } from '@src/slices/modalSlice';
 import { useAppDispatch } from '@src/store/hooks';
 import React from 'react';
@@ -47,8 +47,6 @@ export default function ModalContainer({
   errors,
   isNullChildren,
 }: ModalProps) {
-  const ASTERISK_ON_IMAGE = Image.resolveAssetSource(AsteriskOn).uri;
-  const ASTERISK_OFF_IMAGE = Image.resolveAssetSource(AsteriskOff).uri;
   const dispatch = useAppDispatch();
 
   return (
@@ -128,11 +126,11 @@ export default function ModalContainer({
               disabled={!isEditableModal}
               width={32}
               height={32}
-              mt={15.2}
+              mt={15}
               boxShadow={false}
               onPress={handleImportantTaskStatus}
             >
-              {important ? (
+              {important && (
                 <Image
                   width={32}
                   height={32}
@@ -142,8 +140,6 @@ export default function ModalContainer({
                       : ASTERISK_OFF_IMAGE,
                   }}
                 />
-              ) : (
-                <View />
               )}
             </Button>
           </ContentHeader>

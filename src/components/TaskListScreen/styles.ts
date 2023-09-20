@@ -5,7 +5,7 @@ import { FooterProps } from './types';
 export const Header = styled.View`
   display: flex;
   flex-direction: row;
-  margin: 9.5px 16px 0 16px;
+  margin: 10px 16px 0 16px;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -15,7 +15,7 @@ export const Title = styled.Text`
   font-family: 'Jost-Bold';
   font-weight: 600;
   font-size: 20px;
-  line-height: 28.9px;
+  line-height: 29px;
   color: #ffffff;
 `;
 
@@ -46,7 +46,7 @@ export const DateContainer = styled.View`
 export const DatePeriodText = styled.Text`
   font-family: 'Signika-Light';
   font-size: 16px;
-  line-height: 16.02px;
+  line-height: 16px;
   color: #888888;
 `;
 
@@ -64,7 +64,7 @@ export const ModalFooter = styled.View`
 `;
 
 export const SubTaskList = styled.View`
-  height: 50.68%;
+  height: 51%;
 `;
 
 export const LineDevider = styled.View`
@@ -84,7 +84,7 @@ export const TaskSwitcher = styled.View`
 export const TaskSwitcherText = styled.Text`
   font-family: 'Jost-Regular';
   font-size: 16px;
-  line-height: 23.12px;
+  line-height: 23px;
   color: #363636;
 `;
 
@@ -93,7 +93,7 @@ export const ErrorTextContent = styled.Text`
   font-family: 'Signika-Light';
   color: #c70216;
   font-size: 12px;
-  line-height: 9.86px;
+  line-height: 10px;
   padding: 10px 5px;
   top: 95%;
   left: 20%;
