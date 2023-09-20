@@ -1,5 +1,6 @@
 import TextStrings from '@constants/strings';
 import useGetTasksCategoriesLists from '@hooks/useGetTasksCategoriesLists';
+import notifee from '@notifee/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   Button,
@@ -287,6 +288,35 @@ export default function TaskListScreen({
     return false;
   };
 
+  const handleLocalNotification = async (
+    title: string,
+    body: string,
+    isUpdateTask: boolean
+  ) => {
+    await notifee.requestPermission();
+
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+    });
+
+    await notifee.displayNotification({
+      title: isUpdateTask
+        ? `You updated task to title ${title}`
+        : `You created task with title ${title}`,
+      body: isUpdateTask
+        ? `You updated task to description ${body}`
+        : `You created task with description ${body}`,
+      android: {
+        channelId,
+        smallIcon: ARROW_DOWN_IMAGE,
+        pressAction: {
+          id: 'default',
+        },
+      },
+    });
+  };
+
   const modalEventList = [
     {
       modalFirstHandler: () => {
@@ -334,7 +364,7 @@ export default function TaskListScreen({
         dispatch(changeStatusToDisable());
         setChangedTaskStatusToDisable();
       },
-      modalSecondHandler: () => {
+      modalSecondHandler: async () => {
         const isCorrectDate = checkIsDateCorrect(
           modalDate.fromTime,
           modalDate.tillTime,
@@ -344,9 +374,19 @@ export default function TaskListScreen({
           if (!changeTaskStatus) {
             handleAddNewTask();
             handleResetAllStates();
+            handleLocalNotification(
+              modalTitle,
+              modalTextContent,
+              changeTaskStatus
+            );
           } else {
             handleChangeTask();
             handleResetAllStates();
+            handleLocalNotification(
+              modalTitle,
+              modalTextContent,
+              changeTaskStatus
+            );
           }
         }
       },
